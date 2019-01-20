@@ -1,0 +1,2 @@
+<http://data.example.com/employee/7369> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> "http://example.com/ns#Employee".
+<http://data.example.com/employee/7369> <http://example.com/ns#name> "SMITH".
