@@ -1,12 +1,64 @@
 # r2graph-api
 
-Part of component (1/3) (CONVERT) of web-semantics parent side project  [ws-projects](https://github.com/jiefenn8/ws-projects).
+A Java prototype implementation of a RDB to Graph mapping API.
 
-A relational database to graph mapping API. Mapping relational database from a provided interface to statements resulting in an accessible output dataset graph.
+[![Build status](https://travis-ci.org/jiefenn8/r2graph-api.svg?branch=master)](https://travis-ci.org/jiefenn8/r2graph-api)
 
-![r2graph-api](https://user-images.githubusercontent.com/42923689/53297173-0fe24580-387f-11e9-8b77-06c1e5046760.png)
+## Description
 
-## Main dependencies
+Part of CONVERT component for web and graph parent side project [ws-projects](https://github.com/jiefenn8/ws-projects).
+
+A relational database to graph mapping API. Mapping relational database data from a provided interface and mapping rules to generate a graph output dataset. 
+
+Overview of r2graph-api process:
+
+![r2graph-api](https://user-images.githubusercontent.com/42923689/53843879-c1fcd880-4008-11e9-8919-0b6b5e620f8c.png)
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See the prerequisties and deployment notes below on how to use the project on a development environment.
+
+### Prerequisites
+
+ * Make sure to have [Java 8 SDK](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed.
+
+### Installation
+
+Download the zip 
+
+or
+
+Clone the repository with cmd (or terminal) with git.
+```
+cd <install directory of choice>
+git clone https://github.com/jiefenn8/r2graph-api.git
+```
+
+### Usage example
+
+Supply the Processor with a implementation of InputDatabase interface and a R2RML mapping document with InputStream.
+```
+//Quick example
+
+InputDatabase inputDb = new YourInputDatabaseImpl();
+//Code handling InputDatabase implementation
+
+InputStream io = new FileInputStream("my_rmrml.ttl");
+
+//Map data
+Processor processor = new Processor();
+processor.mapToGraph(inputDb, io);
+
+//Get graph output dataset
+Model output = processor.getGraph();
+
+//Code handling output. e.g. To file or graph database
+```
+
+## Built With
 
 * [Apache Jena](https://jena.apache.org/ "Apache Jena - Java") 
 
+## License
+
+This project is licensed under the Apache License - see the [LICENSE.md](LICENSE.md) file for details
