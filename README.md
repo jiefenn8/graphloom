@@ -24,11 +24,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installation
 
-Download the zip 
+[Download](https://github.com/jiefenn8/r2graph-api/archive/master.zip) and extract the repository zip to install directory
 
-or
+OR
 
-Clone the repository with cmd (or terminal) with git.
+Clone the repository with cmd (or terminal) with Git installed.
 ```
 cd <install directory of choice>
 git clone https://github.com/jiefenn8/r2graph-api.git
@@ -41,7 +41,7 @@ Supply the Processor with a implementation of InputDatabase interface and a R2RM
 //Quick example
 
 InputDatabase inputDb = new YourInputDatabaseImpl();
-//Code handling InputDatabase implementation
+//Your Code handling InputDatabase impl with database.
 
 InputStream io = new FileInputStream("my_rmrml.ttl");
 
@@ -52,7 +52,7 @@ processor.mapToGraph(inputDb, io);
 //Get graph output dataset
 Model output = processor.getGraph();
 
-//Code handling output. e.g. To file or graph database
+//Your code handling output. e.g. To file or graph database
 ```
 
 ## Built With
