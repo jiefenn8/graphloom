@@ -54,6 +54,7 @@ Model output = mapper.mapToGraph(inputDb, r2rml);
 ```
 
 ### Plans
+
 * Add R2RML implementation
 * Output to file 
 * Output to graph db/triplestore
