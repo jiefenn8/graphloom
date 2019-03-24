@@ -1,26 +1,24 @@
 package r2graph.mapper.impl;
 
-import org.apache.jena.ext.com.google.common.base.Preconditions;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import r2graph.mapper.Mapper;
-import r2graph.r2rml.PredicateObjectMap;
-import r2graph.r2rml.R2RML;
-import r2graph.r2rml.TriplesMap;
+import r2graph.configmap.PredicateObjectMap;
+import r2graph.configmap.ConfigMap;
+import r2graph.configmap.EntityMap;
 import r2graph.util.InputDatabase;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.*;
 
 /**
- * Process R2RML map and Input Database to RDF Triples.
+ * Process ConfigMap map and Input Database to RDF Triples.
  */
 public class MapperCom implements Mapper {
     private final static Logger LOGGER = LoggerFactory.getLogger(MapperCom.class.getName());
@@ -30,19 +28,17 @@ public class MapperCom implements Mapper {
     private boolean cancelled = false;
 
     /**
-     * Main mapping function converting RDF SQL database data to RDF triples using r2graph.r2rml.R2RML map tree.
+     * Main mapping function converting RDF SQL database data to RDF triples using r2graph.r2rml.ConfigMap map tree.
      * <p>
      * @param input of the sql database to send query to retrieve data.
-     * @param r2rmlmap to configure the mapping of data from database into RDF triples.
+     * @param configMap to configure the mapping of data from database into RDF triples.
      */
-    public Model mapToGraph(InputDatabase input, R2RML r2rmlmap) {
+    public Model mapToGraph(InputDatabase input, ConfigMap configMap) {
         checkNotNull(input);
-        checkNotNull(r2rmlmap);
+        checkNotNull(configMap);
 
         rdfGraph = ModelFactory.createDefaultModel();
-        r2rmlmap.listTriplesMap().forEach((key, triplesMap) -> {
-            processRow(input, triplesMap);
-        });
+        configMap.listTriplesMap().forEach((key, triplesMap) -> processRow(input, triplesMap));
 
         LOGGER.info("Mapping complete");
         return rdfGraph;
@@ -52,17 +48,17 @@ public class MapperCom implements Mapper {
      * Generate Triple for subject and for its properties.
      * <p>
      * @param input database interface to query sql data from.
-     * @param triplesMap configuration specifying what data to map to Triples.
+     * @param entityMap configuration specifying what data to map to Triples.
      */
-    private void processRow(InputDatabase input, TriplesMap triplesMap ){
-        for (Map<String, String> row : input.getRows(triplesMap.getTableName())) {
+    private void processRow(InputDatabase input, EntityMap entityMap){
+        for (Map<String, String> row : input.getRows(entityMap.getEntitySource())) {
             if (cancelled) break;
 
-            String subjectURI = generateURIFromTemplate(triplesMap.getTemplate(), row);
+            String subjectURI = generateURIFromTemplate(entityMap.getTemplate(), row);
             if (subjectURI.isEmpty()) break;
 
-            Resource subject = rdfGraph.createResource(subjectURI).addProperty(RDF.type, triplesMap.getClassType());
-            generateTriplesFromRowColumns(subject, row, triplesMap.getPredicateObjectMaps());
+            Resource subject = rdfGraph.createResource(subjectURI).addProperty(RDF.type, entityMap.getClassType());
+            generateTriplesFromRowColumns(subject, row, entityMap.getPredicateObjectMaps());
         }
     }
 
