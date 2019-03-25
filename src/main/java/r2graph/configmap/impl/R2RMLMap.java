@@ -8,18 +8,18 @@ import java.util.Map;
 
 public class R2RMLMap implements ConfigMap {
 
-    private Map<String, EntityMap> triplesMap = new HashMap<>();
+    private Map<String, EntityMap> entityMap = new HashMap<>();
 
     protected R2RMLMap(){}
 
     @Override
-    public EntityMap addTriplesMap(String id, EntityMap tripleMap){
-        return triplesMap.put(id, tripleMap);
+    public EntityMap addEntityMap(String id, EntityMap triplesMap){
+        return entityMap.put(id, triplesMap);
     }
 
     @Override
-    public Map<String, EntityMap> listTriplesMap() {
-        return triplesMap;
+    public Map<String, EntityMap> listEntityMaps() {
+        return entityMap;
     }
 
 }

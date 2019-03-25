@@ -38,7 +38,7 @@ public class MapperCom implements Mapper {
         checkNotNull(configMap);
 
         rdfGraph = ModelFactory.createDefaultModel();
-        configMap.listTriplesMap().forEach((key, triplesMap) -> processRow(input, triplesMap));
+        configMap.listEntityMaps().forEach((key, triplesMap) -> processRow(input, triplesMap));
 
         LOGGER.info("Mapping complete");
         return rdfGraph;
@@ -58,7 +58,7 @@ public class MapperCom implements Mapper {
             if (subjectURI.isEmpty()) break;
 
             Resource subject = rdfGraph.createResource(subjectURI).addProperty(RDF.type, entityMap.getClassType());
-            generateTriplesFromRowColumns(subject, row, entityMap.getPredicateObjectMaps());
+            generateTriplesFromRowColumns(subject, row, entityMap.listPredicateObjectMaps());
         }
     }
 
@@ -87,7 +87,7 @@ public class MapperCom implements Mapper {
     private void generateTriplesFromRowColumns(Resource subject, Map<String, String> row, List<PredicateObjectMap> poms) {
         poms.forEach((pom) -> {
             Property predicate = rdfGraph.createProperty(pom.getPredicate());
-            RDFNode object = rdfGraph.createLiteral(row.get(pom.getColumnName()));
+            RDFNode object = rdfGraph.createLiteral(row.get(pom.getObjectSource()));
             subject.addProperty(predicate, object);
         });
     }

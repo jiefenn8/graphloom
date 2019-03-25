@@ -25,12 +25,12 @@ public abstract class AbstractConfigMapTest {
     @Before
     public void setUp() throws Exception {
         configMap = createInstance();
-        configMap.addTriplesMap(id, entityMap);
     }
 
     @Test
     public void WhenTriplesMapExists_ShouldReturnMap() {
-        Map<String, EntityMap> result = configMap.listTriplesMap();
+        configMap.addEntityMap(id, entityMap);
+        Map<String, EntityMap> result = configMap.listEntityMaps();
         assertThat(result, is(notNullValue()));
     }
 }

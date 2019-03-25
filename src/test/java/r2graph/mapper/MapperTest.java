@@ -52,16 +52,16 @@ public class MapperTest {
         EntityMap entityMap = mock(EntityMap.class);
         PredicateObjectMap predicateObjectMap = mock(PredicateObjectMap.class);
 
-        when(configMap.listTriplesMap()).thenReturn(Stream.of(
+        when(configMap.listEntityMaps()).thenReturn(Stream.of(
                 new AbstractMap.SimpleImmutableEntry<>("TriplesMap1", entityMap))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
         when(entityMap.getEntitySource()).thenReturn("EMP");
         when(database.getRows("EMP")).thenReturn(empTable);
         when(entityMap.getTemplate()).thenReturn("http://data.example.com/employee/{EMPNO}");
         when(entityMap.getClassType()).thenReturn("http://example.com/ns#Employee");
-        when(entityMap.getPredicateObjectMaps()).thenReturn(Arrays.asList(predicateObjectMap));
+        when(entityMap.listPredicateObjectMaps()).thenReturn(Arrays.asList(predicateObjectMap));
         when(predicateObjectMap.getPredicate()).thenReturn("http://example.com/ns#name");
-        when(predicateObjectMap.getColumnName()).thenReturn("ENAME");
+        when(predicateObjectMap.getObjectSource()).thenReturn("ENAME");
     }
 
     private List<Map<String, String>> parseCSVData(InputStream in) throws Exception {

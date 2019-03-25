@@ -5,24 +5,28 @@ import java.util.Map;
 /**
  * A Configuration Map
  * <p>
- *     This interfaces defines the base methods to express the rules
- *     from many configurations that will map data in relational
- *     structure and serialisation to a graph model.
+ * This interface defines the base methods to express the rules
+ * from many configurations that will map data in relational
+ * structure and serialisation to a graph model.
  */
 public interface ConfigMap {
-    /**
-     * Add an entity map the configuration map.
-     *
-     * @param id the name of the entity map
-     * @param entityMap the EntityMap to add
-     * @return the given entityMap when successful
-     */
-    EntityMap addTriplesMap(String id, EntityMap entityMap);
 
     /**
-     * Return map of all entity maps in the configuration map.
+     * Appends {@code EntityMap} to the map that will be used to configure
+     * the mapping rules of entity, predicate and objects specified in each
+     * EntityMap.
      *
-     * @return the map containing all the entity maps
+     * @param id the id name of the entity map
+     * @param entityMap the {@code EntityMap} to appended to map
+     * @return the given {@code EntityMap} when successfully appended
      */
-    Map<String, EntityMap> listTriplesMap();
+    EntityMap addEntityMap(String id, EntityMap entityMap);
+
+    /**
+     * Returns map of all {@code EntityMap} that contains the configuration
+     * rules for the generation of entity, predicate and object results.
+     *
+     * @return the map containing all {@code EntityMap}
+     */
+    Map<String, EntityMap> listEntityMaps();
 }
