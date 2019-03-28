@@ -6,6 +6,9 @@ import r2graph.configmap.PredicateObjectMap;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of {@link EntityMap} interface.
+ */
 public class TriplesMap implements EntityMap {
 
     private String entitySource;
@@ -13,6 +16,7 @@ public class TriplesMap implements EntityMap {
     private String classType;
     private List<PredicateObjectMap> predicateObjectMaps = new ArrayList();
 
+    //Default constructor
     protected TriplesMap(){}
 
     @Override

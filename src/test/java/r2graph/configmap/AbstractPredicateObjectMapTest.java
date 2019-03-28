@@ -2,13 +2,14 @@ package r2graph.configmap;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
+/**
+ * Tests for ConfigMapFactory code. Currently skeletal till further
+ * iteration of the project or feature.
+ */
 public abstract class AbstractPredicateObjectMapTest {
 
     private final String predicate = "http://example.com/ns#name";
@@ -22,6 +23,10 @@ public abstract class AbstractPredicateObjectMapTest {
         predicateObjectMap = createInstance();
     }
 
+    /**
+     * Tests that the PredicateObjectMap instance returns a valid predicate String
+     * set by {@code PredicateObjectMap} interface.
+     */
     @Test
     public void WhenPredicateExists_ShouldReturnValue(){
         predicateObjectMap.setPredicate(predicate);
@@ -29,6 +34,10 @@ public abstract class AbstractPredicateObjectMapTest {
         assertThat(result, is(predicate));
     }
 
+    /**
+     * Tests that the PredicateObjectMap instance returns a valid object source
+     * String set by {@code PredicateObjectMap} interface.
+     */
     @Test
     public void WhenObjectSourceExists_ShouldReturnValue(){
         predicateObjectMap.setObjectSource(objectSource);
