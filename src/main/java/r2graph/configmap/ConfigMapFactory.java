@@ -1,6 +1,6 @@
 package r2graph.configmap;
 
-import r2graph.configmap.impl.R2RMLMap;
+import r2graph.r2rml.R2RMLMap;
 
 /**
  * ConfigMapFactory provides methods for creating Config implementations.

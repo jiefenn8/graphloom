@@ -1,7 +1,7 @@
 package r2graph.configmap;
 
 import org.junit.Test;
-import r2graph.configmap.impl.R2RMLMap;
+import r2graph.r2rml.R2RMLMap;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
