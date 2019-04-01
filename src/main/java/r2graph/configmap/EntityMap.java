@@ -11,6 +11,14 @@ import java.util.List;
 public interface EntityMap {
 
     /**
+     * Returns the name of this entity source where the entity data is located.
+     * The name should  be a reference to a database table or file name.
+     *
+     * @return the String of the entity source name
+     */
+    String getEntitySource();
+
+    /**
      * Sets the entity source name. Depending on the type of source, the name
      * should be a reference to a database table name or a file name storing
      * the data of this entity.
@@ -20,12 +28,11 @@ public interface EntityMap {
     void setEntitySource(String source);
 
     /**
-     * Returns the name of this entity source where the entity data is located.
-     * The name should  be a reference to a database table or file name.
+     * Returns the template pattern to be used to generate URIs of this entity.
      *
-     * @return the String of the entity source name
+     * @return the String containing template pattern
      */
-    String getEntitySource();
+    String getTemplate();
 
     /**
      * Sets the template to use as a pattern to generate URIs of this entity.
@@ -35,11 +42,13 @@ public interface EntityMap {
     void setTemplate(String template);
 
     /**
-     * Returns the template pattern to be used to generate URIs of this entity.
+     * Returns the class type that is associated with the entity, or
+     * {@code null} if the entity has no class type.
      *
-     * @return the String containing template pattern
+     * @return the class type String associated with the entity, or
+     * {@code null} if this entity is has no class type
      */
-    String getTemplate();
+    String getClassType();
 
     /**
      * Sets the class type to associate the entity with. This method is optional
@@ -50,27 +59,18 @@ public interface EntityMap {
     void setClassType(String classType);
 
     /**
-     * Returns the class type that is associated with the entity, or
-     * {@code null} if the entity has no class type.
-     *
-     * @return the class type String associated with the entity, or
-     *          {@code null} if this entity is has no class type
-     */
-    String getClassType();
-
-    /**
      * Appends a {@code PredicateObjectMap} to the list that will be used to
      * configure the generation rules of specified predicate and object in each
      * PredicateObjectMap for this entity.
      *
      * @param predicateObjectMap the {@code PredicateObjectMap} to be appended
-     *                          to the config list
+     *                           to the config list
      */
     void addPredicateObjectMap(PredicateObjectMap predicateObjectMap);
 
     /**
-     *  Returns list of {code PredicateObjectMap} that contains the configuration
-     *  rules for the generation of each predicate and object for this entity.
+     * Returns list of {code PredicateObjectMap} that contains the configuration
+     * rules for the generation of each predicate and object for this entity.
      *
      * @return list of {@code PredicateObjectMap} configs
      */

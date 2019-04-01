@@ -4,10 +4,10 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import r2graph.mapper.Mapper;
-import r2graph.configmap.PredicateObjectMap;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
+import r2graph.configmap.PredicateObjectMap;
+import r2graph.mapper.Mapper;
 import r2graph.util.InputDatabase;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.apache.jena.ext.com.google.common.base.Preconditions.*;
+import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Process ConfigMap map and Input Database to RDF Triples.
@@ -29,8 +29,8 @@ public class MapperCom implements Mapper {
 
     /**
      * Main mapping function converting RDF SQL database data to RDF triples using r2graph.r2rml.ConfigMap map tree.
-     * <p>
-     * @param input of the sql database to send query to retrieve data.
+     *
+     * @param input     of the sql database to send query to retrieve data.
      * @param configMap to configure the mapping of data from database into RDF triples.
      */
     public Model mapToGraph(InputDatabase input, ConfigMap configMap) {
@@ -46,11 +46,11 @@ public class MapperCom implements Mapper {
 
     /**
      * Generate Triple for subject and for its properties.
-     * <p>
-     * @param input database interface to query sql data from.
+     *
+     * @param input     database interface to query sql data from.
      * @param entityMap configuration specifying what data to map to Triples.
      */
-    private void processRow(InputDatabase input, EntityMap entityMap){
+    private void processRow(InputDatabase input, EntityMap entityMap) {
         for (Map<String, String> row : input.getRows(entityMap.getEntitySource())) {
             if (cancelled) break;
 
@@ -64,25 +64,25 @@ public class MapperCom implements Mapper {
 
     /**
      * Generate uri for a row using provided template and data.
-     * <p>
+     *
      * @param template to use to generate the uri.
-     * @param row containing the row data.
+     * @param row      containing the row data.
      * @return String uri of subject.
      */
-    private String generateURIFromTemplate(String template, Map<String, String> row){
+    private String generateURIFromTemplate(String template, Map<String, String> row) {
         Matcher matcher = pattern.matcher(template);
-        if(matcher.find()) {
-            return template.replace(matcher.group(0),  row.get(matcher.group(1)));
+        if (matcher.find()) {
+            return template.replace(matcher.group(0), row.get(matcher.group(1)));
         }
         return "";
     }
 
     /**
      * Generate RDF Triples for each Column of a single Row that is specified in each PredicateObjectMap.
-     * <p>
+     *
      * @param subject of the Row (Or known as row/record id)
-     * @param row containing the row data to map to Triples.
-     * @param poms list to use to determine what data to map to Triples.
+     * @param row     containing the row data to map to Triples.
+     * @param poms    list to use to determine what data to map to Triples.
      */
     private void generateTriplesFromRowColumns(Resource subject, Map<String, String> row, List<PredicateObjectMap> poms) {
         poms.forEach((pom) -> {

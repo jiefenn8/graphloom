@@ -28,7 +28,7 @@ public abstract class AbstractPredicateObjectMapTest {
      * set by {@code PredicateObjectMap} interface.
      */
     @Test
-    public void WhenPredicateExists_ShouldReturnValue(){
+    public void WhenPredicateExists_ShouldReturnValue() {
         predicateObjectMap.setPredicate(predicate);
         String result = predicateObjectMap.getPredicate();
         assertThat(result, is(predicate));
@@ -39,7 +39,7 @@ public abstract class AbstractPredicateObjectMapTest {
      * String set by {@code PredicateObjectMap} interface.
      */
     @Test
-    public void WhenObjectSourceExists_ShouldReturnValue(){
+    public void WhenObjectSourceExists_ShouldReturnValue() {
         predicateObjectMap.setObjectSource(objectSource);
         String result = predicateObjectMap.getObjectSource();
         assertThat(result, is(objectSource));

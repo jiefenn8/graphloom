@@ -13,24 +13,24 @@ public class R2RMLMap implements ConfigMap {
 
     private Map<String, EntityMap> entityMaps = new HashMap<>();
 
-    public R2RMLMap(){}
+    public R2RMLMap() {
+    }
 
     /**
-     * @see ConfigMap#addEntityMap(String, EntityMap)
-     *
-     * @param id the id name of the entity map
-     * @param entityMap
+     * @param id        the id name of the entity map
+     * @param entityMap the {@code EntityMap} to appended to map
      * @return the given {@code EntityMap} when successfully appended
+     * @see ConfigMap#addEntityMap(String, EntityMap)
      */
     @Override
-    public EntityMap addEntityMap(String id, EntityMap entityMap){
+    public EntityMap addEntityMap(String id, EntityMap entityMap) {
         return entityMaps.put(id, entityMap);
     }
 
     /**
-     * @see ConfigMap#listEntityMaps()
-     *
      * @return the map containing all {@code EntityMap}
+     * @link{ ConfigMap#listEntityMaps()}
+     * @see ConfigMap#listEntityMaps()
      */
     @Override
     public Map<String, EntityMap> listEntityMaps() {

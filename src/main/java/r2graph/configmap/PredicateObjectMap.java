@@ -10,14 +10,6 @@ package r2graph.configmap;
 public interface PredicateObjectMap {
 
     /**
-     * Sets the String to use for predicate URI generation and to describe
-     * the relationship between the parent entity and objects.
-     *
-     * @param predicate the predicate String to use for generation
-     */
-    void setPredicate(String predicate);
-
-    /**
      * Returns the predicate String used to describe the predicate (relationship)
      * between the parent entity and object.
      *
@@ -26,13 +18,12 @@ public interface PredicateObjectMap {
     String getPredicate();
 
     /**
-     * Sets the object source name. Depending on the type of source, the name
-     * should be a reference to a database table column or a child id in a file
-     * that is storing the object data.
+     * Sets the String to use for predicate URI generation and to describe
+     * the relationship between the parent entity and objects.
      *
-     * @param objectSource the String of the object source to use as reference
+     * @param predicate the predicate String to use for generation
      */
-    void setObjectSource(String objectSource);
+    void setPredicate(String predicate);
 
     /**
      * Returns the name of the source where the object data is located.
@@ -42,4 +33,13 @@ public interface PredicateObjectMap {
      * @return the String of the object source name
      */
     String getObjectSource();
+
+    /**
+     * Sets the object source name. Depending on the type of source, the name
+     * should be a reference to a database table column or a child id in a file
+     * that is storing the object data.
+     *
+     * @param objectSource the String of the object source to use as reference
+     */
+    void setObjectSource(String objectSource);
 }

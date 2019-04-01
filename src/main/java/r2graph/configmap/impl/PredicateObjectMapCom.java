@@ -11,22 +11,12 @@ public class PredicateObjectMapCom implements PredicateObjectMap {
     private String objectSource;
 
     //Default constructor
-    protected PredicateObjectMapCom(){}
-
-    /**
-     * @see PredicateObjectMap#setPredicate(String)
-     *
-     * @param predicate the predicate String to use for generation
-     */
-    @Override
-    public void setPredicate(String predicate) {
-        this.predicate = predicate;
+    protected PredicateObjectMapCom() {
     }
 
     /**
+     * @return the String of the predicate name
      * @see PredicateObjectMap#getPredicate()
-     *
-     * @return
      */
     @Override
     public String getPredicate() {
@@ -34,22 +24,29 @@ public class PredicateObjectMapCom implements PredicateObjectMap {
     }
 
     /**
-     * @see PredicateObjectMap#setObjectSource(String)
-     *
-     * @param objectSource the String of the object source to use as reference
+     * @param predicate the predicate String to use for generation
+     * @see PredicateObjectMap#setPredicate(String)
      */
     @Override
-    public void setObjectSource(String objectSource) {
-        this.objectSource = objectSource;
+    public void setPredicate(String predicate) {
+        this.predicate = predicate;
     }
 
     /**
-     * @see PredicateObjectMap#getObjectSource()
-     *
      * @return
+     * @see PredicateObjectMap#getObjectSource()
      */
     @Override
     public String getObjectSource() {
         return objectSource;
+    }
+
+    /**
+     * @param objectSource the String of the object source to use as reference
+     * @see PredicateObjectMap#setObjectSource(String)
+     */
+    @Override
+    public void setObjectSource(String objectSource) {
+        this.objectSource = objectSource;
     }
 }

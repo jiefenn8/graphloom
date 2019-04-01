@@ -16,7 +16,7 @@ public interface ConfigMap {
      * the mapping rules of entity, predicate and objects specified in each
      * EntityMap.
      *
-     * @param id the id name of the entity map
+     * @param id        the id name of the entity map
      * @param entityMap the {@code EntityMap} to appended to map
      * @return the given {@code EntityMap} when successfully appended
      */

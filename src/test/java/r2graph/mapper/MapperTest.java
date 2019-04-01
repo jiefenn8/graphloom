@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
-import r2graph.configmap.PredicateObjectMap;
 import r2graph.configmap.EntityMap;
+import r2graph.configmap.PredicateObjectMap;
 import r2graph.mapper.impl.MapperCom;
 import r2graph.util.InputDatabase;
 

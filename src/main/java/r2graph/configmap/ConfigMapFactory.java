@@ -9,6 +9,7 @@ public class ConfigMapFactory {
 
     /**
      * Returns a new instance of R2RMLMap class.
+     *
      * @return a {@code R2RMLMap} instance
      */
     public static ConfigMap createR2RMLMap() {

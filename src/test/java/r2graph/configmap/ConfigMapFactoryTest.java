@@ -17,7 +17,7 @@ public class ConfigMapFactoryTest {
      * implementation.
      */
     @Test
-    public void WhenCreateR2RMLMap_ShouldReturnR2RMLInstance(){
+    public void WhenCreateR2RMLMap_ShouldReturnR2RMLInstance() {
         ConfigMap result = ConfigMapFactory.createR2RMLMap();
         assertThat(result, instanceOf(R2RMLMap.class));
     }
