@@ -11,7 +11,7 @@ public class PredicateObjectMapCom implements PredicateObjectMap {
     private String objectSource;
 
     //Default constructor
-    protected PredicateObjectMapCom() {
+    public PredicateObjectMapCom() {
     }
 
     /**

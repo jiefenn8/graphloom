@@ -54,6 +54,5 @@ public abstract class AbstractEntityMapTest {
         entityMap.addPredicateObjectMap(predicateObjectMap);
         List<PredicateObjectMap> result = entityMap.listPredicateObjectMaps();
         assertThat(result.isEmpty(), is(false));
-        assertThat(result.size(), is(1));
     }
 }
