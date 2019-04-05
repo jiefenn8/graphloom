@@ -13,7 +13,8 @@ import r2graph.configmap.PredicateObjectMap;
 import r2graph.configmap.impl.PredicateObjectMapCom;
 import r2graph.util.MappingDocument;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 import static org.mockito.Mockito.when;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLParserTest {
 
+    private final String r2rmlFileName = "../../r2rml_input_tableName_singlePom_01.ttl";
     private final String triplesMap = "TriplesMap1";
     private final String entitySource = "EMP";
     private final String classType = "http://example.com/ns#Employee";
@@ -42,12 +44,11 @@ public class R2RMLParserTest {
         r2rmlParser = new R2RMLParser();
         setupFakeTriplesMap();
 
-        Model r2rmlInput = ModelFactory.createDefaultModel();
-        r2rmlInput.read(getClass().getResourceAsStream("../../r2rml_input_tableName_singlePom_01.ttl"), "http://example.com/ns#", "TTL");
+        Model r2rmlInput = ModelFactory.createDefaultModel().read(getClass().getResourceAsStream(r2rmlFileName), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(r2rmlInput);
     }
 
-    private void setupFakeTriplesMap(){
+    private void setupFakeTriplesMap() {
         expectedResult = new TriplesMap();
         expectedResult.setEntitySource(entitySource);
         expectedResult.setClassType(classType);
