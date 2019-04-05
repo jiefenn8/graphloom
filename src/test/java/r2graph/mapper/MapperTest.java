@@ -13,7 +13,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
 import r2graph.configmap.PredicateObjectMap;
-import r2graph.mapper.impl.MapperCom;
 import r2graph.util.InputDatabase;
 
 import java.io.BufferedReader;
@@ -33,7 +32,7 @@ import static org.mockito.Mockito.when;
 public class MapperTest {
 
     private final String baseNs = "http://data.example.org/ns#";
-    private Mapper mapperCom;
+    private Mapper mapper;
 
     @Mock
     private InputDatabase database;
@@ -43,7 +42,7 @@ public class MapperTest {
 
     @Before
     public void setUp() throws Exception {
-        mapperCom = new MapperCom();
+        mapper = new Mapper();
         empTable = parseCSVData(getClass().getResourceAsStream("../../EMP.csv"));
 
     }
@@ -84,7 +83,7 @@ public class MapperTest {
 
     @Test
     public void mapToGraph_Invoked_ModelNotNull() {
-        Model result = mapperCom.mapToGraph(database, configMap);
+        Model result = mapper.mapToGraph(database, configMap);
 
         assertThat(result, is(notNullValue()));
     }
@@ -95,7 +94,7 @@ public class MapperTest {
         Model expectedResult = ModelFactory.createDefaultModel().read(in, baseNs, "N3");
         setUpBasicR2RMLResponse();
 
-        Model result = mapperCom.mapToGraph(database, configMap);
+        Model result = mapper.mapToGraph(database, configMap);
 
         //result.write(System.out, "N3");
         assertThat(result.isIsomorphicWith(expectedResult), is(true));
