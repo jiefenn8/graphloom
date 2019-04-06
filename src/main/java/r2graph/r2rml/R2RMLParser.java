@@ -8,7 +8,7 @@ import r2graph.configmap.ConfigMapFactory;
 import r2graph.configmap.EntityMap;
 import r2graph.configmap.PredicateObjectMap;
 import r2graph.configmap.impl.PredicateObjectMapCom;
-import r2graph.util.MappingDocument;
+import r2graph.io.MappingDocument;
 
 /**
  * R2RML Parser

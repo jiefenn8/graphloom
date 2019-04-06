@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
 import r2graph.configmap.PredicateObjectMap;
-import r2graph.util.InputDatabase;
+import r2graph.io.InputDatabase;
 
 import java.util.List;
 import java.util.Map;

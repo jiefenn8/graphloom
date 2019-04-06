@@ -1,4 +1,4 @@
-package r2graph.util;
+package r2graph.io;
 
 import java.util.List;
 import java.util.Map;

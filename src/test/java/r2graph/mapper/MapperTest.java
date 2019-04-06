@@ -13,7 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
 import r2graph.configmap.PredicateObjectMap;
-import r2graph.util.InputDatabase;
+import r2graph.io.InputDatabase;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
