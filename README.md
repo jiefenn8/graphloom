@@ -43,19 +43,23 @@ Supply the Processor with a implementation of InputDatabase interface and a R2RM
 InputDatabase inputDb = new YourInputDatabaseImpl();
 //Your Code handling InputDatabase impl with database.
 
-//Your R2RML implementation 
-R2RML r2rml = new R2RMLImpl("my-rmrl.ttl");
+//Load R2RML document 
+MappingDocument myR2rmlDoc = new MappingDocument("my-rmrl.ttl");
+
+//Parse the R2RML file
+R2RMLParser r2rmlParser = new R2RMLParser();
+ConfigMap r2rmlMap = r2rmlParser.parse(myR2RmlDoc);
 
 //Map data
-Mapper mapper = new MapperCom();
-Model output = mapper.mapToGraph(inputDb, r2rml);
+Mapper mapper = new Mapper();
+Model output = mapper.mapToGraph(inputDb, r2rmlMap);
 
-//Your code handling output. e.g. To file or graph database
+//Rest of your code handling output. e.g. To file or graph database
 ```
 
 ### Plans
 
-* Add R2RML implementation
+* ~~Add R2RML implementation~~
 * Output to file 
 * Output to graph db/triplestore
 
