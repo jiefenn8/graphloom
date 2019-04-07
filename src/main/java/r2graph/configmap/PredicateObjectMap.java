@@ -7,6 +7,7 @@ package r2graph.configmap;
  * configuration of predicate and any objects related to parent entity
  * by the specified predicate.
  */
+@Deprecated
 public interface PredicateObjectMap {
 
     /**

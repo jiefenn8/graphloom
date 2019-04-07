@@ -5,6 +5,7 @@ import r2graph.configmap.PredicateObjectMap;
 /**
  * Implementation of {@link PredicateObjectMap} interface.
  */
+@Deprecated
 public class PredicateObjectMapCom implements PredicateObjectMap {
 
     private String predicate;

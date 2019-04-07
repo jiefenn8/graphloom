@@ -10,6 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Tests for PredicateObjectMap code. Currently skeletal till further
  * iteration of the project or feature.
  */
+@Deprecated
 public abstract class AbstractPredicateObjectMapTest {
 
     private final String predicate = "http://example.com/ns#name";
