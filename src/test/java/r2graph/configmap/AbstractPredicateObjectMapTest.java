@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Tests for ConfigMapFactory code. Currently skeletal till further
+ * Tests for PredicateObjectMap code. Currently skeletal till further
  * iteration of the project or feature.
  */
 public abstract class AbstractPredicateObjectMapTest {
