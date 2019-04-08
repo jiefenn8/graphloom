@@ -66,6 +66,7 @@ public interface EntityMap {
      * @param predicateObjectMap the {@code PredicateObjectMap} to be appended
      *                           to the config list
      */
+    @Deprecated
     void addPredicateObjectMap(PredicateObjectMap predicateObjectMap);
 
     /**
@@ -75,5 +76,6 @@ public interface EntityMap {
      *
      * @return list of {@code PredicateObjectMap} configs
      */
+    @Deprecated
     List<PredicateObjectMap> listPredicateObjectMaps();
 }
