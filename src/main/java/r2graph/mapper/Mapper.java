@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
-import r2graph.configmap.PredicateObjectMap;
+import r2graph.configmap.PredicateMap;
 import r2graph.io.InputDatabase;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public class Mapper {
             if (subjectURI.isEmpty()) break;
 
             Resource subject = rdfGraph.createResource(subjectURI).addProperty(RDF.type, entityMap.getClassType());
-            generateTriplesFromRowColumns(subject, row, entityMap.listPredicateObjectMaps());
+            generateTriplesFromRowColumns(subject, row, entityMap.listPredicateMaps());
         }
     }
 
@@ -77,16 +77,17 @@ public class Mapper {
     }
 
     /**
-     * Generate RDF Triples for each Column of a single Row that is specified in each PredicateObjectMap.
+     * Generate RDF Triples for each Column of a single Row that is specified in each predicate and
+     * {@code ObjectMap}.
      *
      * @param subject of the Row (Or known as row/record id)
      * @param row     containing the row data to map to Triples.
-     * @param poms    list to use to determine what data to map to Triples.
+     * @param pms     list to use to determine what data to map to Triples.
      */
-    private void generateTriplesFromRowColumns(Resource subject, Map<String, String> row, List<PredicateObjectMap> poms) {
-        poms.forEach((pom) -> {
-            Property predicate = rdfGraph.createProperty(pom.getPredicate());
-            RDFNode object = rdfGraph.createLiteral(row.get(pom.getObjectSource()));
+    private void generateTriplesFromRowColumns(Resource subject, Map<String, String> row, List<PredicateMap> pms) {
+        pms.forEach((pm) -> {
+            Property predicate = rdfGraph.createProperty(pm.getPredicate());
+            RDFNode object = rdfGraph.createLiteral(row.get(pm.getObjectMap().getObjectSource()));
             subject.addProperty(predicate, object);
         });
     }

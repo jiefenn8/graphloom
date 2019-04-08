@@ -1,7 +1,7 @@
 package r2graph.r2rml;
 
 import r2graph.configmap.EntityMap;
-import r2graph.configmap.PredicateObjectMap;
+import r2graph.configmap.PredicateMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ public class TriplesMap implements EntityMap {
     private String entitySource;
     private String template;
     private String classType;
-    private List<PredicateObjectMap> predicateObjectMaps = new ArrayList();
+    private List<PredicateMap> predicateMaps = new ArrayList();
 
     //Default constructor
     protected TriplesMap() {
@@ -76,20 +76,20 @@ public class TriplesMap implements EntityMap {
     }
 
     /**
-     * @param predicateObjectMap the {@code PredicateObjectMap} to be appended
-     * @see EntityMap#addPredicateObjectMap(PredicateObjectMap)
+     * @param predicateMap the {@code PredicateMap} to be appended
+     * @see EntityMap#addPredicateMap(PredicateMap) (PredicateMap)
      */
     @Override
-    public void addPredicateObjectMap(PredicateObjectMap predicateObjectMap) {
-        predicateObjectMaps.add(predicateObjectMap);
+    public void addPredicateMap(PredicateMap predicateMap) {
+        predicateMaps.add(predicateMap);
     }
 
     /**
-     * @return list of {@code PredicateObjectMap} configs
-     * @see EntityMap#listPredicateObjectMaps()
+     * @return list of {@code PredicateMap} configs
+     * @see EntityMap#listPredicateMaps() ()
      */
     @Override
-    public List<PredicateObjectMap> listPredicateObjectMaps() {
-        return predicateObjectMaps;
+    public List<PredicateMap> listPredicateMaps() {
+        return predicateMaps;
     }
 }

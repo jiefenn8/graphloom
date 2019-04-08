@@ -59,23 +59,20 @@ public interface EntityMap {
     void setClassType(String classType);
 
     /**
-     * Appends a {@code PredicateObjectMap} to the list that will be used to
-     * configure the generation rules of specified predicate and object in each
-     * PredicateObjectMap for this entity.
+     * Appends a {@code PredicateMap} to the list that will be used to configure
+     * the generation rules of specified predicate and object in each pair for
+     * this entity.
      *
-     * @param predicateObjectMap the {@code PredicateObjectMap} to be appended
-     *                           to the config list
+     * @param predicateMap the {@code PredicateMap} to be appended to the map
      */
-    @Deprecated
-    void addPredicateObjectMap(PredicateObjectMap predicateObjectMap);
+    void addPredicateMap(PredicateMap predicateMap);
 
     /**
-     * Returns list of {code PredicateObjectMap} that contains the configuration
-     * Returns list of {@code PredicateObjectMap} that contains the configuration
-     * rules for the generation of each predicate and object for this entity.
+     * Returns list of {@code PredicateMap} that contains the configuration rules
+     * for the generation of each predicate and object for this entity.
      *
-     * @return list of {@code PredicateObjectMap} configs
+     * @return list of {@code PredicateMap} containing predicate and any
+     * {@code ObjectMap} configs.
      */
-    @Deprecated
-    List<PredicateObjectMap> listPredicateObjectMaps();
+    List<PredicateMap> listPredicateMaps();
 }

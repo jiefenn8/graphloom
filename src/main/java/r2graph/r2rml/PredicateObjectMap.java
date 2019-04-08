@@ -38,7 +38,25 @@ public class PredicateObjectMap implements PredicateMap, ObjectMap {
     }
 
     /**
-     * @return
+     * @return the {@code ObjectMap} containing object mapping configs
+     * @see PredicateMap#getObjectMap()
+     */
+    @Override
+    public ObjectMap getObjectMap() {
+        return this;
+    }
+
+    /**
+     * @param objectMap the {@code ObjectMap} storing the object configs
+     * @see PredicateMap#setPredicate(String)
+     */
+    @Override
+    public void setObjectMap(ObjectMap objectMap) {
+        objectSource = objectMap.getObjectSource();
+    }
+
+    /**
+     * @return the String of the object source name
      * @see ObjectMap#getObjectSource()
      */
     @Override

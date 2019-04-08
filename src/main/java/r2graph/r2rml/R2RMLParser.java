@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.ConfigMapFactory;
 import r2graph.configmap.EntityMap;
-import r2graph.configmap.PredicateObjectMap;
-import r2graph.configmap.impl.PredicateObjectMapCom;
 import r2graph.io.MappingDocument;
 
 /**
@@ -99,7 +97,7 @@ public class R2RMLParser {
                 Resource res4 = res.getPropertyResourceValue(predicateObjectMapProp);
                 LOGGER.debug(" : " + res4.getId());
 
-                PredicateObjectMap predicateObjectMap = new PredicateObjectMapCom();
+                PredicateObjectMap predicateObjectMap = new PredicateObjectMap();
 
                 //Check if predicate object map have predicate
                 if (res4.hasProperty(predicateProp)) {
@@ -119,7 +117,7 @@ public class R2RMLParser {
                     LOGGER.debug("   : " + stmt.getPredicate() + " : " + column);
                     predicateObjectMap.setObjectSource(column);
                 }
-                triplesMap.addPredicateObjectMap(predicateObjectMap);
+                triplesMap.addPredicateMap(predicateObjectMap);
             }
             configMap.addEntityMap(res.getLocalName(), triplesMap);
         }

@@ -12,7 +12,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
-import r2graph.configmap.PredicateObjectMap;
+import r2graph.configmap.ObjectMap;
+import r2graph.configmap.PredicateMap;
 import r2graph.io.InputDatabase;
 
 import java.io.BufferedReader;
@@ -49,18 +50,24 @@ public class MapperTest {
 
     public void setUpBasicR2RMLResponse() {
         EntityMap entityMap = mock(EntityMap.class);
-        PredicateObjectMap predicateObjectMap = mock(PredicateObjectMap.class);
+        PredicateMap predicateMap = mock(PredicateMap.class);
+        ObjectMap objectMap = mock(ObjectMap.class);
 
-        when(configMap.listEntityMaps()).thenReturn(Stream.of(
-                new AbstractMap.SimpleImmutableEntry<>("TriplesMap1", entityMap))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        when(configMap.listEntityMaps())
+                .thenReturn(Stream.of(new AbstractMap.SimpleImmutableEntry<>("TriplesMap1", entityMap))
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+
         when(entityMap.getEntitySource()).thenReturn("EMP");
         when(database.getRows("EMP")).thenReturn(empTable);
         when(entityMap.getTemplate()).thenReturn("http://data.example.com/employee/{EMPNO}");
         when(entityMap.getClassType()).thenReturn("http://example.com/ns#Employee");
-        when(entityMap.listPredicateObjectMaps()).thenReturn(Arrays.asList(predicateObjectMap));
-        when(predicateObjectMap.getPredicate()).thenReturn("http://example.com/ns#name");
-        when(predicateObjectMap.getObjectSource()).thenReturn("ENAME");
+
+        when(entityMap.listPredicateMaps())
+                .thenReturn(Arrays.asList(predicateMap));
+
+        when(predicateMap.getPredicate()).thenReturn("http://example.com/ns#name");
+        when(predicateMap.getObjectMap()).thenReturn(objectMap);
+        when(objectMap.getObjectSource()).thenReturn("ENAME");
     }
 
     private List<Map<String, String>> parseCSVData(InputStream in) throws Exception {

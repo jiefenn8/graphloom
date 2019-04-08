@@ -19,7 +19,7 @@ public abstract class AbstractEntityMapTest {
     private final String classType = "http://example.com/ns#Employee";
     private EntityMap entityMap;
     @Mock
-    private PredicateObjectMap predicateObjectMap;
+    private PredicateMap predicateMap;
 
     public abstract EntityMap createInstance();
 
@@ -51,8 +51,8 @@ public abstract class AbstractEntityMapTest {
 
     @Test
     public void WhenPredicateObjectMapExits_ShouldReturnList() {
-        entityMap.addPredicateObjectMap(predicateObjectMap);
-        List<PredicateObjectMap> result = entityMap.listPredicateObjectMaps();
+        entityMap.addPredicateMap(predicateMap);
+        List<PredicateMap> result = entityMap.listPredicateMaps();
         assertThat(result.isEmpty(), is(false));
     }
 }

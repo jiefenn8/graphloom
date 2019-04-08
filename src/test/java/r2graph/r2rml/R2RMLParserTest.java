@@ -9,8 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
-import r2graph.configmap.PredicateObjectMap;
-import r2graph.configmap.impl.PredicateObjectMapCom;
 import r2graph.io.MappingDocument;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -53,10 +51,10 @@ public class R2RMLParserTest {
         expectedResult.setEntitySource(entitySource);
         expectedResult.setClassType(classType);
         expectedResult.setTemplate(template);
-        PredicateObjectMap predicateObjectMap = new PredicateObjectMapCom();
+        PredicateObjectMap predicateObjectMap = new PredicateObjectMap();
         predicateObjectMap.setPredicate(predicate);
         predicateObjectMap.setObjectSource(column);
-        expectedResult.addPredicateObjectMap(predicateObjectMap);
+        expectedResult.addPredicateMap(predicateObjectMap);
     }
 
     /**
