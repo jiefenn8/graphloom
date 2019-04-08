@@ -70,6 +70,7 @@ public interface EntityMap {
 
     /**
      * Returns list of {code PredicateObjectMap} that contains the configuration
+     * Returns list of {@code PredicateObjectMap} that contains the configuration
      * rules for the generation of each predicate and object for this entity.
      *
      * @return list of {@code PredicateObjectMap} configs
