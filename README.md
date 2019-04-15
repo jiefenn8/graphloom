@@ -2,7 +2,7 @@
 
 A Java prototype implementation of a RDB to Graph mapping API.
 
-[![Build status](https://travis-ci.org/jiefenn8/r2graph-api.svg?branch=master)](https://travis-ci.org/jiefenn8/r2graph-api)
+[![build](https://travis-ci.org/jiefenn8/r2graph-api.svg?branch=master)](https://travis-ci.org/jiefenn8/r2graph-api)[![coverage](https://codecov.io/gh/jiefenn8/r2graph-api/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/r2graph-api)
 
 ## Description
 
