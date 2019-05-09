@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.ConfigMapFactory;
 import r2graph.configmap.EntityMap;
-import r2graph.exceptions.ParserException;
-import r2graph.exceptions.ValidatorException;
+import r2graph.exceptions.base.FeijoaParserException;
+import r2graph.exceptions.base.FeijoaValidatorException;
 import r2graph.io.MappingDocument;
 
 /**
@@ -40,7 +40,7 @@ public class R2RMLParser {
      * @param validateDocument whether to validate the document in advance before parsing
      * @return the R2RMLMap containing the mapping components
      */
-    public ConfigMap parse(MappingDocument document, boolean validateDocument) throws ParserException, ValidatorException {
+    public ConfigMap parse(MappingDocument document, boolean validateDocument) throws FeijoaParserException, FeijoaValidatorException {
         MappingDocument current = document;
         if (validateDocument) {
             current = r2rmlValidator.validate(current);
@@ -54,7 +54,7 @@ public class R2RMLParser {
             r2rmlPrefixURI = this.mappingGraph.getNsPrefixURI(r2rmlPrefix);
             return findTriplesMaps();
         } catch (Exception e) {
-            throw new ParserException(e);
+            throw new FeijoaParserException(e);
         }
     }
 

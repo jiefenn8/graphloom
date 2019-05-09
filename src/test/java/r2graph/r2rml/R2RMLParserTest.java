@@ -9,8 +9,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
-import r2graph.exceptions.ParserException;
-import r2graph.exceptions.ValidatorException;
+import r2graph.exceptions.base.FeijoaValidatorException;
+import r2graph.exceptions.base.FeijoaParserException;
 import r2graph.io.MappingDocument;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -83,19 +83,19 @@ public class R2RMLParserTest {
     }
 
     /**
-     * Tests that the R2RMLParser throws an ParserException when a given
+     * Tests that the R2RMLParser throws an FeijoaParserException when a given
      * {@code MappingDocument} does not exist (null).
      */
-    @Test(expected = ParserException.class)
+    @Test(expected = FeijoaParserException.class)
     public void WhenParseInvalidMappingDocument_ShouldThrowException(){
         r2rmlParser.parse(null, false);
     }
 
     /**
-     * Tests that the R2RMLParser throws a ValidatorException when a given
+     * Tests that the R2RMLParser throws a FeijoaValidatorException when a given
      * {@code MappingDocument} does not exist (null).
      */
-    @Test(expected = ValidatorException.class)
+    @Test(expected = FeijoaValidatorException.class)
     public void WhenParseWithValidateInvalidMappingDocument_ShouldThrowException(){
         r2rmlParser.parse(null, true );
     }
