@@ -9,10 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
+import r2graph.exceptions.ParserException;
 import r2graph.io.MappingDocument;
+import sun.security.validator.ValidatorException;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 import static org.mockito.Mockito.when;
@@ -20,6 +21,9 @@ import static org.mockito.Mockito.when;
 /**
  * Tests for R2RMLParser code. Currently skeletal till further
  * iteration of the project or feature.
+ *
+ * All tests assumes any validation check done by {@code R2RMLValidator}
+ * is not enabled unless specified by test case.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLParserTest {
@@ -42,7 +46,8 @@ public class R2RMLParserTest {
         r2rmlParser = new R2RMLParser();
         setupFakeTriplesMap();
 
-        Model r2rmlInput = ModelFactory.createDefaultModel().read(getClass().getResourceAsStream(r2rmlFileName), null, "TTL");
+        Model r2rmlInput = ModelFactory.createDefaultModel().read(
+                getClass().getResourceAsStream(r2rmlFileName), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(r2rmlInput);
     }
 
@@ -63,17 +68,35 @@ public class R2RMLParserTest {
      */
     @Test
     public void WhenParseMappingDocument_ShouldReturnR2RMLMap() {
-        ConfigMap result = r2rmlParser.parse(mappingDocument);
+        ConfigMap result = r2rmlParser.parse(mappingDocument, false);
         assertThat(result, is(notNullValue()));
     }
 
     /**
-     * Tests that the R2RMLParser returns a populated {@code R2RMLMap} from data
-     * in {@code MappingDocument}. Note: Only a shallow comparision atm.
+     * Tests that the R2RMLParser returns a populated {@code R2RMLMap} from
+     * data in {@code MappingDocument}. Note: Only a shallow comparision atm.
      */
     @Test
     public void WhenParseValidMappingDocument_ShouldReturnPopulatedR2RMLMap() {
-        EntityMap result = r2rmlParser.parse(mappingDocument).listEntityMaps().get(triplesMap);
+        EntityMap result = r2rmlParser.parse(mappingDocument, false).listEntityMaps().get(triplesMap);
         assertThat(result, samePropertyValuesAs(expectedResult));
+    }
+
+    /**
+     * Tests that the R2RMLParser throws an ParserException when a given
+     * {@code MappingDocument} does not exist (null).
+     */
+    @Test(expected = ParserException.class)
+    public void WhenParseInvalidMappingDocument_ShouldThrowException(){
+        r2rmlParser.parse(null, false);
+    }
+
+    /**
+     * Tests that the R2RMLParser throws a ValidatorException when a given
+     * {@code MappingDocument} does not exist (null).
+     */
+    @Test(expected = ValidatorException.class)
+    public void WhenParseWithValidateInvalidMappingDocument_ShouldThrowValidatorException(){
+        r2rmlParser.parse(null, true );
     }
 }

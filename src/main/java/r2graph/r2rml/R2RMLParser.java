@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.ConfigMapFactory;
 import r2graph.configmap.EntityMap;
+import r2graph.exceptions.ParserException;
+import r2graph.exceptions.ValidatorException;
 import r2graph.io.MappingDocument;
 
 /**
  * R2RML Parser
  * <p>
- * This interface defines the base methods that manages the mapping
+ * This class defines the base methods that manages the mapping
  * configuration of predicate and any objects related to parent entity
  * by the specified predicate.
  */
@@ -21,6 +23,7 @@ public class R2RMLParser {
     private final String r2rmlPrefix = "rr";
     private Model mappingGraph;
     private String r2rmlPrefixURI;
+    private R2RMLValidator r2rmlValidator = new R2RMLValidator();
 
     /**
      * Parses and returns the R2RML mapping configuration stored in
@@ -33,17 +36,26 @@ public class R2RMLParser {
      * and gather the required properties and values to generate a R2RMLMap for
      * the mapping document.
      *
-     * @param mappingDoc the document containing the mapping configuration
+     * @param document         the document containing the mapping configuration
+     * @param validateDocument whether to validate the document in advance before parsing
      * @return the R2RMLMap containing the mapping components
      */
-    public ConfigMap parse(MappingDocument mappingDoc) {
-        setupParser(mappingDoc.getMappingGraph());
-        return findTriplesMaps();
+    public ConfigMap parse(MappingDocument document, boolean validateDocument) throws ParserException, ValidatorException {
+        MappingDocument current = document;
+        if (validateDocument) {
+            current = r2rmlValidator.validate(current);
+        }
+        return initParser(current);
     }
 
-    private void setupParser(Model mappingGraph) {
-        this.mappingGraph = mappingGraph;
-        r2rmlPrefixURI = this.mappingGraph.getNsPrefixURI(r2rmlPrefix);
+    private ConfigMap initParser(MappingDocument document) {
+        try {
+            this.mappingGraph = document.getMappingGraph();
+            r2rmlPrefixURI = this.mappingGraph.getNsPrefixURI(r2rmlPrefix);
+            return findTriplesMaps();
+        } catch (Exception e) {
+            throw new ParserException(e);
+        }
     }
 
     private ConfigMap findTriplesMaps() {

@@ -5,8 +5,19 @@ package r2graph.exceptions.base;
  */
 public class FeijoaException extends RuntimeException {
 
-    public FeijoaException(){super();}
-    public FeijoaException(String message){super(message);}
-    public FeijoaException(Throwable cause){super(cause);}
-    public FeijoaException(String message, Throwable cause) {super(message, cause);}
+    public FeijoaException() {
+        super();
+    }
+
+    public FeijoaException(String message) {
+        super(message);
+    }
+
+    public FeijoaException(Throwable cause) {
+        super(cause);
+    }
+
+    public FeijoaException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
