@@ -10,8 +10,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.EntityMap;
 import r2graph.exceptions.ParserException;
+import r2graph.exceptions.ValidatorException;
 import r2graph.io.MappingDocument;
-import sun.security.validator.ValidatorException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -96,7 +96,7 @@ public class R2RMLParserTest {
      * {@code MappingDocument} does not exist (null).
      */
     @Test(expected = ValidatorException.class)
-    public void WhenParseWithValidateInvalidMappingDocument_ShouldThrowValidatorException(){
+    public void WhenParseWithValidateInvalidMappingDocument_ShouldThrowException(){
         r2rmlParser.parse(null, true );
     }
 }

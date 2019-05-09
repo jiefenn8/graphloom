@@ -1,5 +1,6 @@
 package r2graph.r2rml;
 
+import org.apache.jena.rdf.model.Model;
 import r2graph.exceptions.ValidatorException;
 import r2graph.io.MappingDocument;
 
@@ -23,6 +24,9 @@ public class R2RMLValidator {
      */
     public MappingDocument validate(MappingDocument document) {
         try {
+            Model r2rml = document.getMappingGraph();
+            //perform validation checks here
+
             return document;
         } catch (Exception e) {
             throw new ValidatorException(e);
