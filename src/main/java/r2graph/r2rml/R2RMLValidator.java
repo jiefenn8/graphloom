@@ -2,7 +2,7 @@ package r2graph.r2rml;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ResIterator;
-import r2graph.exceptions.base.FeijoaValidatorException;
+import r2graph.exceptions.base.FeijoaException;
 import r2graph.exceptions.RuleClassNotFoundException;
 import r2graph.io.MappingDocument;
 
@@ -29,25 +29,22 @@ public class R2RMLValidator {
      * @return          the document given if fully passes the validation
      */
     public MappingDocument validate(MappingDocument document) {
-        try {
-            Model r2rml = document.getMappingGraph();
-            //perform validation checks here
-            initValidator(r2rml);
+        findR2RMLGraph(document);
+        findR2rmlPrefix();
+        validateTriplesMaps();
+        return document;
+    }
 
-            return document;
-        } catch (Exception e) {
-            throw new FeijoaValidatorException(e);
+    private void findR2RMLGraph(MappingDocument document){
+        try{
+            this.r2rml = document.getMappingGraph();
+        }catch(NullPointerException e){
+            throw new FeijoaException("Mapping document does not exist.");
         }
     }
 
-    private void initValidator(Model r2rml) {
-        try{
-            this.r2rml = r2rml;
-            r2rmlPrefixURI = this.r2rml.getNsPrefixURI(r2rmlPrefix);
-            validateTriplesMaps();
-        }catch(Exception e){
-            throw new FeijoaValidatorException(e);
-        }
+    private void findR2rmlPrefix(){
+        r2rmlPrefixURI = r2rml.getNsPrefixURI(r2rmlPrefix);
     }
 
     /**

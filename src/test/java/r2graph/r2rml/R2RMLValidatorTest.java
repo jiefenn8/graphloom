@@ -9,10 +9,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.exceptions.RuleClassNotFoundException;
-import r2graph.exceptions.base.FeijoaValidatorException;
+import r2graph.exceptions.base.FeijoaException;
 import r2graph.io.MappingDocument;
 
-import static org.hamcrest.CoreMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,9 +21,6 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLValidatorTest {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private R2RMLValidator r2rmlValidator;
 
@@ -43,19 +39,25 @@ public class R2RMLValidatorTest {
         Model graph = ModelFactory.createDefaultModel().read(
                 getClass().getResourceAsStream(r2rmlFile), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(graph);
+
         r2rmlValidator.validate(mappingDocument);
     }
 
     /**
-     * Tests that the R2RMLValidator throws a FeijoaValidatorException when a given
+     * Tests that the R2RMLValidator throws a {@code FeijoaException} when a given
      * {@code MappingDocument} does not exist (null).
      */
-    @Test(expected = FeijoaValidatorException.class)
+    @Test(expected = FeijoaException.class)
     public void WhenValidateInvalidMappingDocument_ShouldThrowException(){
         MappingDocument mappingDocument = null;
         r2rmlValidator.validate(mappingDocument);
     }
 
+    /**
+     * Tests that the R2RMLValidator throws a {@code RuleClassNotFoundException}
+     * when the validator cannot find any triples maps from checking if there is
+     * any logical table property (Which a TriplesMap should have).
+     */
     @Test(expected = RuleClassNotFoundException.class)
     public void WhenValidateInvalidTriplesMap_ShouldThrowException(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
@@ -64,9 +66,6 @@ public class R2RMLValidatorTest {
                 getClass().getResourceAsStream(r2rmlFile), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(graph);
 
-        final String error = "No TriplesMap found.";
-        //thrown.expect(isA(RuleClassNotFoundException.class));
-        //thrown.expectMessage(error);
         r2rmlValidator.validate(mappingDocument);
     }
 }
