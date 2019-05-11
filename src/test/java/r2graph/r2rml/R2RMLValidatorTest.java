@@ -43,6 +43,7 @@ public class R2RMLValidatorTest {
         Model graph = ModelFactory.createDefaultModel().read(
                 getClass().getResourceAsStream(r2rmlFile), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(graph);
+        r2rmlValidator.validate(mappingDocument);
     }
 
     /**
