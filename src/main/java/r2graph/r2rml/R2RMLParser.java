@@ -6,8 +6,7 @@ import org.slf4j.LoggerFactory;
 import r2graph.configmap.ConfigMap;
 import r2graph.configmap.ConfigMapFactory;
 import r2graph.configmap.EntityMap;
-import r2graph.exceptions.base.FeijoaParserException;
-import r2graph.exceptions.base.FeijoaValidatorException;
+import r2graph.exceptions.base.FeijoaException;
 import r2graph.io.MappingDocument;
 
 /**
@@ -21,7 +20,7 @@ public class R2RMLParser {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(R2RMLParser.class.getName());
     private final String r2rmlPrefix = "rr";
-    private Model mappingGraph;
+    private Model r2rml;
     private String r2rmlPrefixURI;
     private R2RMLValidator r2rmlValidator = new R2RMLValidator();
 
@@ -40,27 +39,31 @@ public class R2RMLParser {
      * @param validateDocument whether to validate the document in advance before parsing
      * @return the R2RMLMap containing the mapping components
      */
-    public ConfigMap parse(MappingDocument document, boolean validateDocument) throws FeijoaParserException, FeijoaValidatorException {
+    public ConfigMap parse(MappingDocument document, boolean validateDocument) {
         MappingDocument current = document;
         if (validateDocument) {
             current = r2rmlValidator.validate(current);
         }
-        return initParser(current);
+        findR2RMLGraph(current);
+        findR2rmlPrefix();
+        return findTriplesMaps();
     }
 
-    private ConfigMap initParser(MappingDocument document) {
-        try {
-            this.mappingGraph = document.getMappingGraph();
-            r2rmlPrefixURI = this.mappingGraph.getNsPrefixURI(r2rmlPrefix);
-            return findTriplesMaps();
-        } catch (Exception e) {
-            throw new FeijoaParserException(e);
+    private void findR2RMLGraph(MappingDocument document){
+        try{
+            this.r2rml = document.getMappingGraph();
+        }catch(NullPointerException e){
+            throw new FeijoaException("Mapping document does not exist.");
         }
+    }
+
+    private void findR2rmlPrefix(){
+        r2rmlPrefixURI = r2rml.getNsPrefixURI(r2rmlPrefix);
     }
 
     private ConfigMap findTriplesMaps() {
         ConfigMap configMap = ConfigMapFactory.createR2RMLMap();
-        ResIterator itr = mappingGraph.listSubjectsWithProperty(mappingGraph.getProperty(r2rmlPrefixURI, "logicalTable"));
+        ResIterator itr = r2rml.listSubjectsWithProperty(r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
         while (itr.hasNext()) {
             Resource res = itr.nextResource();
             EntityMap triplesMap = new TriplesMap();
@@ -75,10 +78,10 @@ public class R2RMLParser {
     }
 
     private void findPredicateObjectMaps(Resource resource, EntityMap triplesMap) {
-        Property predicateObjectMapProp = mappingGraph.getProperty(r2rmlPrefixURI, "predicateObjectMap");
-        Property objectMapProp = mappingGraph.getProperty(r2rmlPrefixURI, "objectMap");
-        Property predicateProp = mappingGraph.getProperty(r2rmlPrefixURI, "predicate");
-        Property columnProp = mappingGraph.getProperty(r2rmlPrefixURI, "column");
+        Property predicateObjectMapProp = r2rml.getProperty(r2rmlPrefixURI, "predicateObjectMap");
+        Property objectMapProp = r2rml.getProperty(r2rmlPrefixURI, "objectMap");
+        Property predicateProp = r2rml.getProperty(r2rmlPrefixURI, "predicate");
+        Property columnProp = r2rml.getProperty(r2rmlPrefixURI, "column");
 
         if (resource.hasProperty(predicateObjectMapProp)) {
             //Check if any predicate object map exists
@@ -103,9 +106,9 @@ public class R2RMLParser {
     }
 
     private boolean findSubjectMap(Resource resource, EntityMap triplesMap) {
-        Property subjectMapProp = mappingGraph.getProperty(r2rmlPrefixURI, "subjectMap");
-        Property templateProp = mappingGraph.getProperty(r2rmlPrefixURI, "template");
-        Property classProp = mappingGraph.getProperty(r2rmlPrefixURI, "class");
+        Property subjectMapProp = r2rml.getProperty(r2rmlPrefixURI, "subjectMap");
+        Property templateProp = r2rml.getProperty(r2rmlPrefixURI, "template");
+        Property classProp = r2rml.getProperty(r2rmlPrefixURI, "class");
 
         //Check if any subject map exist
         Resource subjectResource = resource.getPropertyResourceValue(subjectMapProp);
@@ -126,11 +129,11 @@ public class R2RMLParser {
     }
 
     private void findLogicalTable(Resource resource, EntityMap triplesMap) {
-        Property tableNameProp = mappingGraph.getProperty(r2rmlPrefixURI, "tableName");
+        Property tableNameProp = r2rml.getProperty(r2rmlPrefixURI, "tableName");
 
         //Check if any logical map exist
         Resource logicalTableResource = resource.getPropertyResourceValue(
-                mappingGraph.getProperty(r2rmlPrefixURI, "logicalTable"));
+                r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
 
         //Check if logical table have table name
         if (logicalTableResource.hasProperty(tableNameProp)) {

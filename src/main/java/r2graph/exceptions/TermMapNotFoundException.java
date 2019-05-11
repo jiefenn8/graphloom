@@ -1,8 +1,6 @@
 package r2graph.exceptions;
 
-import r2graph.exceptions.base.FeijoaValidatorException;
-
-public class TermMapNotFoundException extends FeijoaValidatorException {
+public class TermMapNotFoundException extends RuntimeException {
 
     /**
      * The term map does not exist.

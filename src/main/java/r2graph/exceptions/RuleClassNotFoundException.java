@@ -1,8 +1,6 @@
 package r2graph.exceptions;
 
-import r2graph.exceptions.base.FeijoaValidatorException;
-
-public class RuleClassNotFoundException extends FeijoaValidatorException {
+public class RuleClassNotFoundException extends RuntimeException {
 
     /**
      * The rule class does not exist.
