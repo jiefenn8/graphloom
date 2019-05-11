@@ -9,6 +9,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import r2graph.exceptions.RuleClassNotFoundException;
+import r2graph.exceptions.TermMapNotFoundException;
 import r2graph.exceptions.base.FeijoaException;
 import r2graph.io.MappingDocument;
 
@@ -62,6 +63,17 @@ public class R2RMLValidatorTest {
     public void WhenValidateInvalidTriplesMap_ShouldThrowException(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
         String r2rmlFile = "../../r2rml_no_triplesMap.ttl";
+        Model graph = ModelFactory.createDefaultModel().read(
+                getClass().getResourceAsStream(r2rmlFile), null, "TTL");
+        when(mappingDocument.getMappingGraph()).thenReturn(graph);
+
+        r2rmlValidator.validate(mappingDocument);
+    }
+
+    @Test(expected = TermMapNotFoundException.class)
+    public void WhenValidateInvalidSubjectMap_ShouldThrowException(){
+        MappingDocument mappingDocument = mock(MappingDocument.class);
+        String r2rmlFile = "../../r2rml_no_subjectMap.ttl";
         Model graph = ModelFactory.createDefaultModel().read(
                 getClass().getResourceAsStream(r2rmlFile), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(graph);

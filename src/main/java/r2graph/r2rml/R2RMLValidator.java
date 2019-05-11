@@ -1,7 +1,10 @@
 package r2graph.r2rml;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
+import r2graph.exceptions.TermMapNotFoundException;
 import r2graph.exceptions.base.FeijoaException;
 import r2graph.exceptions.RuleClassNotFoundException;
 import r2graph.io.MappingDocument;
@@ -11,6 +14,11 @@ import r2graph.io.MappingDocument;
  * <p>
  * This class defines the base methods that manages the validation
  * of a loaded R2RML {@Model} in {@code MappingDocument}.
+ * <p>
+ * The validator works to validate the entire R2RML mapping document
+ * as much as possible in order to reduce error that would occur during
+ * parsing of the document.
+ *
  */
 public class R2RMLValidator {
 
@@ -55,6 +63,19 @@ public class R2RMLValidator {
         ResIterator iter = r2rml.listSubjectsWithProperty(r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
         if(!iter.hasNext()){
             throw new RuleClassNotFoundException("No TriplesMap found.");
+        }
+
+        while(iter.hasNext()){
+            Resource res = iter.nextResource();
+            validateSubjectMap(res);
+        }
+    }
+
+    private void validateSubjectMap(Resource res){
+        Property subjectMapProp = r2rml.getProperty(r2rmlPrefixURI, "subjectMap");
+        Resource subjectResource = res.getPropertyResourceValue(subjectMapProp);
+        if( subjectResource == null) {
+            throw new TermMapNotFoundException("No SubjectMap found.");
         }
     }
 }
