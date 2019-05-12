@@ -4,7 +4,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
-import r2graph.exceptions.TermMapNotFoundException;
 import r2graph.exceptions.base.FeijoaException;
 import r2graph.exceptions.RuleClassNotFoundException;
 import r2graph.io.MappingDocument;
@@ -75,7 +74,7 @@ public class R2RMLValidator {
         Property subjectMapProp = r2rml.getProperty(r2rmlPrefixURI, "subjectMap");
         Resource subjectResource = res.getPropertyResourceValue(subjectMapProp);
         if( subjectResource == null) {
-            throw new TermMapNotFoundException("No SubjectMap found.");
+            throw new RuleClassNotFoundException("No SubjectMap found.");
         }
     }
 }

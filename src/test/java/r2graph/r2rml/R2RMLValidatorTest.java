@@ -3,13 +3,11 @@ package r2graph.r2rml;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
+import r2graph.exceptions.InvalidRuleClassException;
 import r2graph.exceptions.RuleClassNotFoundException;
-import r2graph.exceptions.TermMapNotFoundException;
 import r2graph.exceptions.base.FeijoaException;
 import r2graph.io.MappingDocument;
 
@@ -60,7 +58,7 @@ public class R2RMLValidatorTest {
      * any logical table property (Which a TriplesMap should have).
      */
     @Test(expected = RuleClassNotFoundException.class)
-    public void WhenValidateInvalidTriplesMap_ShouldThrowException(){
+    public void WhenValidateMissingTriplesMap_ShouldThrowException(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
         String r2rmlFile = "../../r2rml_no_triplesMap.ttl";
         Model graph = ModelFactory.createDefaultModel().read(
@@ -70,8 +68,12 @@ public class R2RMLValidatorTest {
         r2rmlValidator.validate(mappingDocument);
     }
 
-    @Test(expected = TermMapNotFoundException.class)
-    public void WhenValidateInvalidSubjectMap_ShouldThrowException(){
+    /**
+     * Tests that the R2RMLValidator throws a {@code RuleClassNotFoundException}
+     * when the validator cannot find any subject map.
+     */
+    @Test(expected = RuleClassNotFoundException.class)
+    public void WhenValidateMissingSubjectMap_ShouldThrowException(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
         String r2rmlFile = "../../r2rml_no_subjectMap.ttl";
         Model graph = ModelFactory.createDefaultModel().read(
