@@ -6,8 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import r2graph.exceptions.InvalidRuleClassException;
-import r2graph.exceptions.RuleClassNotFoundException;
+import r2graph.exceptions.InvalidMappingDocumentException;
 import r2graph.exceptions.base.FeijoaException;
 import r2graph.io.MappingDocument;
 
@@ -34,7 +33,7 @@ public class R2RMLValidatorTest {
     @Test
     public void WhenValidateValidMappingDocument_ShouldReturnMappingDocument(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
-        String r2rmlFile = "../../r2rml_input_tableName_singlePom_01.ttl";
+        String r2rmlFile = "../../r2rml_input_01.ttl";
         Model graph = ModelFactory.createDefaultModel().read(
                 getClass().getResourceAsStream(r2rmlFile), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(graph);
@@ -53,11 +52,11 @@ public class R2RMLValidatorTest {
     }
 
     /**
-     * Tests that the R2RMLValidator throws a {@code RuleClassNotFoundException}
+     * Tests that the R2RMLValidator throws a {@code InvalidMappingDocumentException}
      * when the validator cannot find any triples maps from checking if there is
      * any logical table property (Which a TriplesMap should have).
      */
-    @Test(expected = RuleClassNotFoundException.class)
+    @Test(expected = InvalidMappingDocumentException.class)
     public void WhenValidateMissingTriplesMap_ShouldThrowException(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
         String r2rmlFile = "../../r2rml_no_triplesMap.ttl";
@@ -69,13 +68,28 @@ public class R2RMLValidatorTest {
     }
 
     /**
-     * Tests that the R2RMLValidator throws a {@code RuleClassNotFoundException}
+     * Tests that the R2RMLValidator throws a {@code InvalidMappingDocumentException}
      * when the validator cannot find any subject map.
      */
-    @Test(expected = RuleClassNotFoundException.class)
+    @Test(expected = InvalidMappingDocumentException.class)
     public void WhenValidateMissingSubjectMap_ShouldThrowException(){
         MappingDocument mappingDocument = mock(MappingDocument.class);
         String r2rmlFile = "../../r2rml_no_subjectMap.ttl";
+        Model graph = ModelFactory.createDefaultModel().read(
+                getClass().getResourceAsStream(r2rmlFile), null, "TTL");
+        when(mappingDocument.getMappingGraph()).thenReturn(graph);
+
+        r2rmlValidator.validate(mappingDocument);
+    }
+
+    /**
+     * Tests that the R2RMLValidator throws a {@code InvalidMappingDocumentException}
+     * when a logical table is invalid.
+     */
+    @Test(expected = InvalidMappingDocumentException.class)
+    public void WhenValidateInvalidLogicalTable_ShouldThrowException(){
+        MappingDocument mappingDocument = mock(MappingDocument.class);
+        String r2rmlFile = "../../r2rml_invalid_logicalTable.ttl";
         Model graph = ModelFactory.createDefaultModel().read(
                 getClass().getResourceAsStream(r2rmlFile), null, "TTL");
         when(mappingDocument.getMappingGraph()).thenReturn(graph);
