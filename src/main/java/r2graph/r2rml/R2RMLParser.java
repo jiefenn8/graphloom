@@ -23,6 +23,7 @@ public class R2RMLParser {
     private Model r2rml;
     private String r2rmlPrefixURI;
     private R2RMLValidator r2rmlValidator = new R2RMLValidator();
+    private boolean validationEnabled = true;
 
     /**
      * Parses and returns the R2RML mapping configuration stored in
@@ -36,22 +37,29 @@ public class R2RMLParser {
      * the mapping document.
      *
      * @param document         the document containing the mapping configuration
-     * @param validateDocument whether to validate the document in advance before parsing
      * @return the R2RMLMap containing the mapping components
      */
-    public ConfigMap parse(MappingDocument document, boolean validateDocument) {
-        MappingDocument current = document;
-        if (validateDocument) {
-            current = r2rmlValidator.validate(current);
-        }
-        findR2RMLGraph(current);
+    public ConfigMap parse(MappingDocument document) throws FeijoaException {
+        this.r2rml = validateDocument(document);
         findR2rmlPrefix();
         return findTriplesMaps();
     }
 
-    private void findR2RMLGraph(MappingDocument document){
-        try{
-            this.r2rml = document.getMappingGraph();
+    /**
+     * Sets the validation flag to enable the r2rml validator to pre check the
+     * MappingDocument before parsing it. Default value is true.
+     * @param flag false to disable validation checks
+     */
+    public void disableValidation(boolean flag){
+        validationEnabled = !flag;
+    }
+
+    private Model validateDocument(MappingDocument document){
+        try {
+            if (validationEnabled) {
+                return r2rmlValidator.validate(document);
+            }
+            return document.getMappingGraph();
         }catch(NullPointerException e){
             throw new FeijoaException("Mapping document does not exist.");
         }

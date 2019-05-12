@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class MappingDocumentTest {
 
-    private final String r2rmlFilename = "../../r2rml_input_tableName_singlePom_01.ttl";
+    private final String r2rmlFilename = "../../r2rml_input_01.ttl";
     private MappingDocument mappingDocument;
 
     @Before

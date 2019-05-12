@@ -1,11 +1,10 @@
 package r2graph.r2rml;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import r2graph.exceptions.InvalidMappingDocumentException;
 import r2graph.exceptions.base.FeijoaException;
-import r2graph.exceptions.RuleClassNotFoundException;
 import r2graph.io.MappingDocument;
 
 /**
@@ -21,6 +20,7 @@ import r2graph.io.MappingDocument;
  */
 public class R2RMLValidator {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(R2RMLValidator.class.getName());
     private String r2rmlPrefix = "rr";
     private Model r2rml;
     private String r2rmlPrefixURI;
@@ -35,11 +35,11 @@ public class R2RMLValidator {
      * @param document  the document containing the mapping configuration to validate
      * @return          the document given if fully passes the validation
      */
-    public MappingDocument validate(MappingDocument document) {
+    public Model validate(MappingDocument document) {
         findR2RMLGraph(document);
         findR2rmlPrefix();
         validateTriplesMaps();
-        return document;
+        return r2rml;
     }
 
     private void findR2RMLGraph(MappingDocument document){
@@ -61,20 +61,47 @@ public class R2RMLValidator {
     private void validateTriplesMaps() {
         ResIterator iter = r2rml.listSubjectsWithProperty(r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
         if(!iter.hasNext()){
-            throw new RuleClassNotFoundException("No TriplesMap found.");
+            throw new InvalidMappingDocumentException("No TriplesMap found.");
         }
 
         while(iter.hasNext()){
             Resource res = iter.nextResource();
+            validateLogicalTable(res);
             validateSubjectMap(res);
         }
     }
 
     private void validateSubjectMap(Resource res){
         Property subjectMapProp = r2rml.getProperty(r2rmlPrefixURI, "subjectMap");
-        Resource subjectResource = res.getPropertyResourceValue(subjectMapProp);
-        if( subjectResource == null) {
-            throw new RuleClassNotFoundException("No SubjectMap found.");
+        if(!res.hasProperty(subjectMapProp)){
+            throw new InvalidMappingDocumentException("No SubjectMap found.");
         }
+        //Validate subject map properties here
+    }
+
+    private Resource validateLogicalTable(Resource res){
+        Resource ltRes = res.getPropertyResourceValue(
+                r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
+        if(!findBaseTableOrView(ltRes) & !findR2RMLView(ltRes)){
+            throw new InvalidMappingDocumentException("Both BaseTableOrView and R2RMLView properties defined.");
+        }
+        return res;
+    }
+
+    private boolean findBaseTableOrView(Resource res){
+        Property tableNameProp = r2rml.getProperty(r2rmlPrefixURI, "tableName");
+        if(!res.hasProperty(tableNameProp)){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean findR2RMLView(Resource res) {
+        Property sqlQueryProp = r2rml.getProperty(r2rmlPrefixURI, "sqlQuery");
+        Property sqlVerProp = r2rml.getProperty(r2rmlPrefixURI, "sqlVersion");
+        if(!res.hasProperty(sqlQueryProp) || !res.hasProperty(sqlVerProp)){
+            return false;
+        }
+        return true;
     }
 }

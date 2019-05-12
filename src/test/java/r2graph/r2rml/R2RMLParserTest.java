@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLParserTest {
 
-    private final String r2rmlFileName = "../../r2rml_input_tableName_singlePom_01.ttl";
+    private final String r2rmlFileName = "../../r2rml_input_01.ttl";
     private final String triplesMap = "TriplesMap1";
     private final String entitySource = "EMP";
     private final String classType = "http://example.com/ns#Employee";
@@ -67,7 +67,7 @@ public class R2RMLParserTest {
      */
     @Test
     public void WhenParseMappingDocument_ShouldReturnR2RMLMap() {
-        ConfigMap result = r2rmlParser.parse(mappingDocument, false);
+        ConfigMap result = r2rmlParser.parse(mappingDocument);
         assertThat(result, is(notNullValue()));
     }
 
@@ -77,7 +77,7 @@ public class R2RMLParserTest {
      */
     @Test
     public void WhenParseValidMappingDocument_ShouldReturnPopulatedR2RMLMap() {
-        EntityMap result = r2rmlParser.parse(mappingDocument, false).listEntityMaps().get(triplesMap);
+        EntityMap result = r2rmlParser.parse(mappingDocument).listEntityMaps().get(triplesMap);
         assertThat(result, samePropertyValuesAs(expectedResult));
     }
 
@@ -87,15 +87,6 @@ public class R2RMLParserTest {
      */
     @Test(expected = FeijoaException.class)
     public void WhenParseInvalidMappingDocument_ShouldThrowException(){
-        r2rmlParser.parse(null, false);
-    }
-
-    /**
-     * Tests that the R2RMLParser throws a FeijoaException when a given
-     * {@code MappingDocument} does not exist (null) when validating it.
-     */
-    @Test(expected = FeijoaException.class)
-    public void WhenParseWithValidateInvalidMappingDocument_ShouldThrowException(){
-        r2rmlParser.parse(null, true );
+        r2rmlParser.parse(null);
     }
 }
