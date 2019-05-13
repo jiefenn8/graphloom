@@ -61,7 +61,7 @@ public class R2RMLParser {
             }
             return document.getMappingGraph();
         }catch(NullPointerException e){
-            throw new FeijoaException("Mapping document does not exist.");
+            throw new FeijoaException("Mapping document does not exist.", e);
         }
     }
 

@@ -1,6 +1,9 @@
 package r2graph.r2rml;
 
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResIterator;
+import org.apache.jena.rdf.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import r2graph.exceptions.InvalidMappingDocumentException;
@@ -16,7 +19,6 @@ import r2graph.io.MappingDocument;
  * The validator works to validate the entire R2RML mapping document
  * as much as possible in order to reduce error that would occur during
  * parsing of the document.
- *
  */
 public class R2RMLValidator {
 
@@ -32,25 +34,26 @@ public class R2RMLValidator {
      * The {@code MappingDocument} will be returned once it passes all validations checks
      * or a {@code FeijoaValidatorException} will be thrown if it fails.
      *
-     * @param document  the document containing the mapping configuration to validate
-     * @return          the document given if fully passes the validation
+     * @param document the document containing the mapping configuration to validate
+     * @return the document given if fully passes the validation
      */
-    public Model validate(MappingDocument document) {
+    public Model validate(MappingDocument document) throws InvalidMappingDocumentException {
+        LOGGER.info("Setting up validator");
         findR2RMLGraph(document);
         findR2rmlPrefix();
         validateTriplesMaps();
         return r2rml;
     }
 
-    private void findR2RMLGraph(MappingDocument document){
-        try{
+    private void findR2RMLGraph(MappingDocument document) {
+        try {
             this.r2rml = document.getMappingGraph();
-        }catch(NullPointerException e){
-            throw new FeijoaException("Mapping document does not exist.");
+        } catch (NullPointerException e) {
+            throw new FeijoaException("Mapping document does not exist.", e);
         }
     }
 
-    private void findR2rmlPrefix(){
+    private void findR2rmlPrefix() {
         r2rmlPrefixURI = r2rml.getNsPrefixURI(r2rmlPrefix);
     }
 
@@ -59,49 +62,57 @@ public class R2RMLValidator {
      * is no valid TriplesMap at all.
      */
     private void validateTriplesMaps() {
+        LOGGER.info("Validating document");
         ResIterator iter = r2rml.listSubjectsWithProperty(r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
-        if(!iter.hasNext()){
+        if (!iter.hasNext()) {
             throw new InvalidMappingDocumentException("No TriplesMap found.");
         }
 
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             Resource res = iter.nextResource();
             validateLogicalTable(res);
-            validateSubjectMap(res);
+            findSubjectMap(res);
         }
     }
 
-    private void validateSubjectMap(Resource res){
-        Property subjectMapProp = r2rml.getProperty(r2rmlPrefixURI, "subjectMap");
-        if(!res.hasProperty(subjectMapProp)){
+    private Resource findSubjectMap(Resource res) {
+        Resource subRes = res.getPropertyResourceValue(r2rml.getProperty(r2rmlPrefixURI, "subjectMap"));
+        if (subRes == null) {
             throw new InvalidMappingDocumentException("No SubjectMap found.");
         }
-        //Validate subject map properties here
+        //Check for properties
+        if(!findTemplate(subRes)){
+            throw new InvalidMappingDocumentException("Template not defined.");
+        }
+        //todo:Check for column and constant term map
+        return subRes;
     }
 
-    private Resource validateLogicalTable(Resource res){
+    private boolean findTemplate(Resource res) {
+        return res.hasProperty(r2rml.getProperty(r2rmlPrefixURI, "template"));
+    }
+
+    private Resource validateLogicalTable(Resource res) {
         Resource ltRes = res.getPropertyResourceValue(
                 r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
-        if(!findBaseTableOrView(ltRes) & !findR2RMLView(ltRes)){
-            throw new InvalidMappingDocumentException("Both BaseTableOrView and R2RMLView properties defined.");
+        boolean isDefined;
+        if((isDefined = findBaseTableOrView(ltRes)) == findR2RMLView(ltRes)){
+            String message = "Both BaseTableOrView and R2RMLView defined.";
+            if(!isDefined){
+                message = "BaseTableOrView or R2RMLView not defined.";
+            }
+            throw new InvalidMappingDocumentException(message);
         }
         return res;
     }
 
-    private boolean findBaseTableOrView(Resource res){
-        Property tableNameProp = r2rml.getProperty(r2rmlPrefixURI, "tableName");
-        if(!res.hasProperty(tableNameProp)){
-            return false;
-        }
-        return true;
+    private boolean findBaseTableOrView(Resource res) {
+        return res.hasProperty(r2rml.getProperty(r2rmlPrefixURI, "tableName"));
     }
 
     private boolean findR2RMLView(Resource res) {
         Property sqlQueryProp = r2rml.getProperty(r2rmlPrefixURI, "sqlQuery");
         Property sqlVerProp = r2rml.getProperty(r2rmlPrefixURI, "sqlVersion");
-        if(!res.hasProperty(sqlQueryProp) || !res.hasProperty(sqlVerProp)){
-            return false;
-        }
-        return true;
+        return res.hasProperty(sqlQueryProp) && res.hasProperty(sqlVerProp);
     }
 }

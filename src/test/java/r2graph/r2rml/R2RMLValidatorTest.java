@@ -96,4 +96,19 @@ public class R2RMLValidatorTest {
 
         r2rmlValidator.validate(mappingDocument);
     }
+
+    /**
+     * Tests that the R2RMLValidator throws a {@code InvalidMappingDocumentException}
+     * when a subject map is invalid.
+     */
+    @Test(expected = InvalidMappingDocumentException.class)
+    public void WhenValidateInvalidSubjectMap_ShouldThrowException(){
+        MappingDocument mappingDocument = mock(MappingDocument.class);
+        String r2rmlFile = "../../r2rml_invalid_subjectMap.ttl";
+        Model graph = ModelFactory.createDefaultModel().read(
+                getClass().getResourceAsStream(r2rmlFile), null, "TTL");
+        when(mappingDocument.getMappingGraph()).thenReturn(graph);
+
+        r2rmlValidator.validate(mappingDocument);
+    }
 }
