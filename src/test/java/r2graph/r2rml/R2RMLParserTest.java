@@ -43,6 +43,7 @@ public class R2RMLParserTest {
     @Before
     public void setUp() throws Exception {
         r2rmlParser = new R2RMLParser();
+        r2rmlParser.disableValidation(true);
         setupFakeTriplesMap();
 
         Model r2rmlInput = ModelFactory.createDefaultModel().read(
