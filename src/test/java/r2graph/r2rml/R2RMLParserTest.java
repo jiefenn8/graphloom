@@ -12,7 +12,8 @@ import r2graph.configmap.EntityMap;
 import r2graph.exceptions.base.FeijoaException;
 import r2graph.io.MappingDocument;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
 import static org.mockito.Mockito.when;
@@ -20,7 +21,7 @@ import static org.mockito.Mockito.when;
 /**
  * Tests for R2RMLParser code. Currently skeletal till further
  * iteration of the project or feature.
- *
+ * <p>
  * All tests assumes any validation check done by {@code R2RMLValidator}
  * is not enabled unless specified by test case.
  */
@@ -87,7 +88,7 @@ public class R2RMLParserTest {
      * {@code MappingDocument} does not exist (null).
      */
     @Test(expected = FeijoaException.class)
-    public void WhenParseInvalidMappingDocument_ShouldThrowException(){
+    public void WhenParseInvalidMappingDocument_ShouldThrowException() {
         r2rmlParser.parse(null);
     }
 }

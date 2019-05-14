@@ -36,7 +36,7 @@ public class R2RMLParser {
      * and gather the required properties and values to generate a R2RMLMap for
      * the mapping document.
      *
-     * @param document         the document containing the mapping configuration
+     * @param document the document containing the mapping configuration
      * @return the R2RMLMap containing the mapping components
      */
     public ConfigMap parse(MappingDocument document) throws FeijoaException {
@@ -48,24 +48,25 @@ public class R2RMLParser {
     /**
      * Sets the validation flag to enable the r2rml validator to pre check the
      * MappingDocument before parsing it. Default value is true.
+     *
      * @param flag false to disable validation checks
      */
-    public void disableValidation(boolean flag){
+    public void disableValidation(boolean flag) {
         validationEnabled = !flag;
     }
 
-    private Model validateDocument(MappingDocument document){
+    private Model validateDocument(MappingDocument document) {
         try {
             if (validationEnabled) {
                 return r2rmlValidator.validate(document);
             }
             return document.getMappingGraph();
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             throw new FeijoaException("Mapping document does not exist.", e);
         }
     }
 
-    private void findR2rmlPrefix(){
+    private void findR2rmlPrefix() {
         r2rmlPrefixURI = r2rml.getNsPrefixURI(r2rmlPrefix);
     }
 

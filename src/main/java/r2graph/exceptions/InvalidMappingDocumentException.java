@@ -6,5 +6,7 @@ public class InvalidMappingDocumentException extends FeijoaException {
     /**
      * The MappingDocument is not valid.
      */
-    public InvalidMappingDocumentException(String document){super(document);}
+    public InvalidMappingDocumentException(String document) {
+        super(document);
+    }
 }

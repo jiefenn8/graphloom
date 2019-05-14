@@ -8,7 +8,5 @@
         rr:class ex:Employee;
     ];
     rr:predicateObjectMap [
-        rr:predicate ex:name;
         rr:objectMap [ rr:column "ENAME" ];
     ].
-

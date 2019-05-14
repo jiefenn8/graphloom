@@ -1,9 +1,6 @@
 package r2graph.r2rml;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.ResIterator;
-import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import r2graph.exceptions.InvalidMappingDocumentException;
@@ -72,16 +69,20 @@ public class R2RMLValidator {
             Resource res = iter.nextResource();
             validateLogicalTable(res);
             findSubjectMap(res);
+            StmtIterator pomIter = findPredicateObjectMap(res);
+            while (pomIter.hasNext()) {
+                validatePredicateObjectMap(pomIter.nextStatement().getObject().asResource());
+            }
         }
     }
 
     private Resource findSubjectMap(Resource res) {
         Resource subRes = res.getPropertyResourceValue(r2rml.getProperty(r2rmlPrefixURI, "subjectMap"));
         if (subRes == null) {
-            throw new InvalidMappingDocumentException("No SubjectMap found.");
+            throw new InvalidMappingDocumentException("SubjectMap not found.");
         }
         //Check for properties
-        if(!findTemplate(subRes)){
+        if (!findTemplate(subRes)) {
             throw new InvalidMappingDocumentException("Template not defined.");
         }
         //todo:Check for column and constant term map
@@ -92,18 +93,17 @@ public class R2RMLValidator {
         return res.hasProperty(r2rml.getProperty(r2rmlPrefixURI, "template"));
     }
 
-    private Resource validateLogicalTable(Resource res) {
+    private void validateLogicalTable(Resource res) {
         Resource ltRes = res.getPropertyResourceValue(
                 r2rml.getProperty(r2rmlPrefixURI, "logicalTable"));
         boolean isDefined;
-        if((isDefined = findBaseTableOrView(ltRes)) == findR2RMLView(ltRes)){
+        if ((isDefined = findBaseTableOrView(ltRes)) == findR2RMLView(ltRes)) {
             String message = "Both BaseTableOrView and R2RMLView defined.";
-            if(!isDefined){
+            if (!isDefined) {
                 message = "BaseTableOrView or R2RMLView not defined.";
             }
             throw new InvalidMappingDocumentException(message);
         }
-        return res;
     }
 
     private boolean findBaseTableOrView(Resource res) {
@@ -111,8 +111,31 @@ public class R2RMLValidator {
     }
 
     private boolean findR2RMLView(Resource res) {
-        Property sqlQueryProp = r2rml.getProperty(r2rmlPrefixURI, "sqlQuery");
-        Property sqlVerProp = r2rml.getProperty(r2rmlPrefixURI, "sqlVersion");
-        return res.hasProperty(sqlQueryProp) && res.hasProperty(sqlVerProp);
+        return res.hasProperty(r2rml.getProperty(r2rmlPrefixURI, "sqlQuery"));
+    }
+
+    private StmtIterator findPredicateObjectMap(Resource res) {
+        return res.listProperties(r2rml.getProperty(r2rmlPrefixURI, "predicateObjectMap"));
+    }
+
+    private void validatePredicateObjectMap(Resource res) {
+        if (!findPredicateMap(res)) {
+            throw new InvalidMappingDocumentException("PredicateMap not found.");
+        }
+        if (!findObjectMap(res)) {
+            throw new InvalidMappingDocumentException("ObjectMap not found.");
+        }
+    }
+
+    private boolean findPredicateMap(Resource res) {
+        Property predicateMap = r2rml.getProperty(r2rmlPrefixURI, "predicateMap");
+        Property predicate = r2rml.getProperty(r2rmlPrefixURI, "predicate");
+        return res.hasProperty(predicateMap) || res.hasProperty(predicate);
+    }
+
+    private boolean findObjectMap(Resource res) {
+        Property objectMap = r2rml.getProperty(r2rmlPrefixURI, "objectMap");
+        Property object = r2rml.getProperty(r2rmlPrefixURI, "object");
+        return res.hasProperty(objectMap) || res.hasProperty(object);
     }
 }
