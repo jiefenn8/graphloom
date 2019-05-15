@@ -92,24 +92,27 @@ public class R2RMLParser {
         Property predicateProp = r2rml.getProperty(r2rmlPrefixURI, "predicate");
         Property columnProp = r2rml.getProperty(r2rmlPrefixURI, "column");
 
-        if (resource.hasProperty(predicateObjectMapProp)) {
-            //Check if any predicate object map exists
-            Resource res4 = resource.getPropertyResourceValue(predicateObjectMapProp);
+        StmtIterator pomIter = resource.listProperties(predicateObjectMapProp);
+        while(pomIter.hasNext()){
+            Resource pomRes = pomIter.nextStatement().getObject().asResource();
             PredicateObjectMap predicateObjectMap = new PredicateObjectMap();
 
             //Check if predicate object map have predicate
-            if (res4.hasProperty(predicateProp)) {
-                Statement stmt = res4.getProperty(predicateProp);
-                predicateObjectMap.setPredicate(stmt.getResource().getURI());
+            Resource predicateMapRes = pomRes.getPropertyResourceValue(predicateProp);
+            if(predicateMapRes == null){
+                throw new FeijoaException("PredicateMap not found.");
             }
+            predicateObjectMap.setPredicate(predicateMapRes.getURI());
 
             //Check if predicate object map have object map
-            Resource objectResource = res4.getPropertyResourceValue(objectMapProp);
-
-            if (objectResource.hasProperty(columnProp)) {
-                Statement stmt = objectResource.getProperty(columnProp);
-                predicateObjectMap.setObjectSource(stmt.getLiteral().toString());
+            Resource objectResource = pomRes.getPropertyResourceValue(objectMapProp);
+            if(objectResource == null){
+                throw new FeijoaException("ObjectMap not found.");
             }
+
+            Statement stmt = objectResource.getProperty(columnProp);
+            predicateObjectMap.setObjectSource(stmt.getLiteral().toString());
+
             triplesMap.addPredicateMap(predicateObjectMap);
         }
     }
@@ -121,6 +124,10 @@ public class R2RMLParser {
 
         //Check if any subject map exist
         Resource subjectResource = resource.getPropertyResourceValue(subjectMapProp);
+
+        if(subjectResource == null){
+            throw new FeijoaException("SubjectMap not found.");
+        }
 
         //Check if subject map have template
         if (subjectResource.hasProperty(templateProp)) {

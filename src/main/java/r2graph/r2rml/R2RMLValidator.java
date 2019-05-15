@@ -85,7 +85,7 @@ public class R2RMLValidator {
         if (!findTemplate(subRes)) {
             throw new InvalidMappingDocumentException("Template not defined.");
         }
-        //todo:Check for column and constant term map
+        //todo:Add checks for column and constant term map
         return subRes;
     }
 
