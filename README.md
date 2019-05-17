@@ -2,7 +2,7 @@
 
 A Java implementation of a RDB to Semantic Graph mapping API. 
 
-[![build](https://travis-ci.org/jiefenn8/r2graph-api.svg?branch=master)](https://travis-ci.org/jiefenn8/r2graph-api)[![coverage](https://codecov.io/gh/jiefenn8/r2graph-api/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/r2graph-api)
+[![Build Status](https://travis-ci.org/jiefenn8/GraphLoom.svg?branch=master)](https://travis-ci.org/jiefenn8/GraphLoom)[![codecov](https://codecov.io/gh/jiefenn8/GraphLoom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/GraphLoom)
 
 ## Description
 
