@@ -28,6 +28,7 @@ Clone the repository with cmd (or terminal) with Git installed.
 ```
 cd <install directory of choice>
 git clone https://github.com/jiefenn8/graphloom.git
+```
 
 ### Usage example
 
