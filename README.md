@@ -2,7 +2,7 @@
 
 A Java implementation of a RDB to Semantic Graph mapping API. 
 
-[![Build Status](https://travis-ci.org/jiefenn8/GraphLoom.svg?branch=master)](https://travis-ci.org/jiefenn8/GraphLoom)[![codecov](https://codecov.io/gh/jiefenn8/GraphLoom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/GraphLoom)
+[![Build Status](https://travis-ci.org/jiefenn8/graphloom.svg?branch=master)](https://travis-ci.org/jiefenn8/graphloom)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
 
 ## Description
 
@@ -20,15 +20,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installation
 
-[Download](https://github.com/jiefenn8/r2graph-api/archive/master.zip) and extract the repository zip to install directory
+Get the latest version from [releases](https://github.com/jiefenn8/graphloom/releases)
 
 OR
 
 Clone the repository with cmd (or terminal) with Git installed.
 ```
 cd <install directory of choice>
-git clone https://github.com/jiefenn8/r2graph-api.git
-```
+git clone https://github.com/jiefenn8/graphloom.git
 
 ### Usage example
 
@@ -58,8 +57,8 @@ Model output = mapper.mapToGraph(inputDb, r2rmlMap);
 * ~~Add [R2RML](https://www.w3.org/TR/r2rml/) implementation~~
 * Add graph RDF file output support
 * Add graph to graph-db/triplestore support
-* Add (RML)[rml.io] implementation (JSON, CSV and XML data source)
-* Remove dependency from Jena to Common RDF.
+* Add [RML](rml.io) implementation (JSON, CSV and XML data source)
+* Remove dependency from Jena to Common RDF
 
 ## Built With
 
