@@ -61,10 +61,10 @@ Model output = mapper.mapToGraph(inputDb, r2rmlMap);
 * Add [RML](rml.io) implementation (JSON, CSV and XML data source)
 * Remove dependency from Jena to Common RDF
 
-## Built With
+## Third Party Software
 
-* [Apache Jena](https://jena.apache.org/ "Apache Jena - Java") 
+See [NOTICE](./NOTICE.md) and [THIRD-PARTY-LICENSE](./THIRD-PARTY-LICENSE.md) for more information on third party software used.
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the terms of [Apache 2.0 License](./LICENSE.md). 
