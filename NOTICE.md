@@ -6,7 +6,7 @@
 This product may include a number of third party software with separate 
 copyright notices and license terms. Your use of the source code for
 these libraries is subject to the terms and conditions of the library's
-license, as listed in [LICENSE-THIRD-PARTY](./LICENSE-THIRD-PARTY.md).
+license, as listed in [LICENSE-THIRD-PARTY](./LICENSE-3RD-PARTY.md).
 
 ## Third Party Software
     

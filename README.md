@@ -63,7 +63,7 @@ Model output = mapper.mapToGraph(inputDb, r2rmlMap);
 
 ## Third Party Software
 
-See [NOTICE](./NOTICE.md) and [THIRD-PARTY-LICENSE](./THIRD-PARTY-LICENSE.md) for more information on third party software used.
+See [NOTICE](./NOTICE.md) and [THIRD-PARTY-LICENSE](./LICENSE-3RD-PARTY.md) for more information on third party software used.
 
 ## License
 
