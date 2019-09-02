@@ -1,6 +1,6 @@
 ## Third Party Licenses
                         
-Most of the source code to this product is licensed under the terms 
+Most of the source code in this product is licensed under the terms 
 of [Apache 2.0 License](./LICENSE.md). 
 
 The remainder of the software where third party software have been 
