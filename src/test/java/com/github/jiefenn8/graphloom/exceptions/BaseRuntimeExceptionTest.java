@@ -35,7 +35,7 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class BaseRuntimeExceptionTest {
 
-    @Rule private ExpectedException exceptionRule = ExpectedException.none();
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
     private Class sutClass;
 
     public BaseRuntimeExceptionTest(Class sut) {
