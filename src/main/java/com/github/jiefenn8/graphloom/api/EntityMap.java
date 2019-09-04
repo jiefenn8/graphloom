@@ -36,7 +36,7 @@ public interface EntityMap extends SourceMap, PropertyMap {
      * Returns the {@code NodeMap} associated with the {@code RelationMap}.
      *
      * @param relationMap key to search for paired ObjectMap.
-     * @return the {@code NodeMap} found with {@param relationMap} key.
+     * @return the {@code NodeMap} found with {@code relationMap} key.
      */
     NodeMap getNodeMapWithRelation(RelationMap relationMap);
 

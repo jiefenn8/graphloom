@@ -31,7 +31,7 @@ public interface GraphMapper {
      * using {@code ConfigMaps}.
      *
      * @param source  containing the data to map over to graph.
-     * @param configs to manage the retrieval  and mapping of data from {@param source}.
+     * @param configs to manage the retrieval  and mapping of data from {@code source}.
      * @return the {@code Model} containing the mapped source as a graph model.
      */
     Model mapToGraph(InputSource source, ConfigMaps configs);
