@@ -18,7 +18,8 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.*;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.FileManager;
 
@@ -123,7 +124,7 @@ public class R2RMLParser {
                 .getProperty(objectMap)
                 .getResource();
 
-        return new Pair<>(new PredicateMap(predicateProp), mapToObjectMap(objNode));
+        return new ImmutablePair<>(new PredicateMap(predicateProp), mapToObjectMap(objNode));
     }
 
     private ObjectMap mapToObjectMap(Resource omNode) {

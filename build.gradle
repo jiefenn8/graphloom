@@ -47,7 +47,8 @@ dependencies {
     //Core
     implementation group: 'org.apache.jena', name: 'jena-core', version: '3.5.0'
 
-    //Misc
+    //Utils
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
     implementation 'com.google.guava:guava:27.0.1-jre'
 }
 
