@@ -19,13 +19,11 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
@@ -49,14 +47,14 @@ public class PredicateMapTest {
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsProperty() {
         Property constant = ResourceFactory.createProperty("Predicate_1");
         predicateMap = new PredicateMap(TermMapType.CONSTANT, constant);
-        RDFNode result = predicateMap.getRelationTerm();
+        RDFNode result = predicateMap.generateRelationTerm(mockRow);
         assertThat(result, is(instanceOf(Property.class)));
     }
 
     @Test
     public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
         predicateMap = new PredicateMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
-        boolean result = predicateMap.getRelationTerm(mockRow).isResource();
+        boolean result = predicateMap.generateRelationTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 }

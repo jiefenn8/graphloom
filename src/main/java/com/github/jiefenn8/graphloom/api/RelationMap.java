@@ -27,12 +27,14 @@ import java.util.Map;
  * of relation to their graph relation term.
  */
 public interface RelationMap {
-    /**
-     * Returns the RelationMap's relation as a term {@code Property}.
-     *
-     * @return the term {@code Property} created from relation.
-     */
-    Property getRelationTerm();
 
-    Property getRelationTerm(Map<String, String> row);
+    /**
+     * Returns a generated relation term as {@code Property}
+     * for an entity property using the provided entity properties
+     * collection.
+     *
+     * @param entityProps the entity properties collection to use.
+     * @return the term {@code Property} generated.
+     */
+    Property generateRelationTerm(Map<String, String> entityProps);
 }

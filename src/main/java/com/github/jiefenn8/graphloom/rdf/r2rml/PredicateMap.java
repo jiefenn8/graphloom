@@ -34,19 +34,13 @@ public class PredicateMap extends BaseTermMap implements RelationMap {
     }
 
     //Template PredicateMap
-    public PredicateMap(TermMapType type, String template){
+    public PredicateMap(TermMapType type, String template) {
         super(type, template, TermType.IRI);
     }
 
     @Override
-    public Property getRelationTerm() {
-        Property property = ResourceFactory.createProperty(generateRDFTerm(null).asResource().getURI());
-        return property;
-    }
-
-    @Override
-    public Property getRelationTerm(Map<String, String> row) {
-        Property property = ResourceFactory.createProperty(generateRDFTerm(row).asResource().getURI());
+    public Property generateRelationTerm(Map<String, String> entityRecords) {
+        Property property = ResourceFactory.createProperty(generateRDFTerm(entityRecords).asResource().getURI());
         return property;
     }
 }

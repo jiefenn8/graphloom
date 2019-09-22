@@ -18,7 +18,6 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.Map;
 
@@ -34,22 +33,17 @@ public class ObjectMap extends BaseTermMap implements NodeMap {
     }
 
     //Template ObjectMap
-    public ObjectMap(TermMapType type, String template){
+    public ObjectMap(TermMapType type, String template) {
         super(type, template, TermType.IRI);
     }
 
     //Column ObjectMap
-    public ObjectMap(TermMapType type, String column, boolean isRef){
+    public ObjectMap(TermMapType type, String column, boolean isRef) {
         super(type, column, TermType.LITERAL, isRef);
     }
 
     @Override
     public RDFNode generateNodeTerm(Map<String, String> row) {
         return generateRDFTerm(row);
-    }
-
-    @Override
-    public RDFNode generateNodeTerm() {
-        return generateRDFTerm(null);
     }
 }

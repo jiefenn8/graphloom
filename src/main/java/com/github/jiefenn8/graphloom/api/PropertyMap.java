@@ -29,13 +29,14 @@ import java.util.Map;
  */
 public interface PropertyMap {
     /**
-     * Returns a generated entity term object using the value found with
-     * the column_name specified in template using record given.
+     * Returns a generated entity term as {@code Resource}
+     * for an entity using the provided entity properties
+     * collection.
      *
-     * @param entityRow the entity record to find the entity id value.
-     * @return term object generated from row id.
+     * @param entityProps the entity properties collection to use.
+     * @return the term {@code Resource} generated.
      */
-    Resource generateEntityTerm(Map<String, String> entityRow);
+    Resource generateEntityTerm(Map<String, String> entityProps);
 
     /**
      * Returns an enumerator of all class associated with the entity.

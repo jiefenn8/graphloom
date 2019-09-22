@@ -48,7 +48,7 @@ public class ObjectMapTest {
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
         Resource rdfNode = ResourceFactory.createResource("constant");
         objectMap = new ObjectMap(TermMap.TermMapType.CONSTANT, rdfNode);
-        boolean result = objectMap.generateNodeTerm().isURIResource();
+        boolean result = objectMap.generateNodeTerm(mockRow).isURIResource();
         assertThat(result, is(true));
     }
 

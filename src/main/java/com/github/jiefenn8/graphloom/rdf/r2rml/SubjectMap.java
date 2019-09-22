@@ -17,17 +17,13 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.PropertyMap;
-import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
@@ -38,7 +34,7 @@ public class SubjectMap extends BaseTermMap implements PropertyMap {
     private List<Resource> classes = new ArrayList<>();
 
     //Constant SubjectMap
-    public SubjectMap(TermMapType type, RDFNode constant){
+    public SubjectMap(TermMapType type, RDFNode constant) {
         super(type, constant);
     }
 
@@ -48,7 +44,7 @@ public class SubjectMap extends BaseTermMap implements PropertyMap {
     }
 
     //Column SubjectMap
-    public SubjectMap(TermMapType type, String column, boolean isRef){
+    public SubjectMap(TermMapType type, String column, boolean isRef) {
         super(type, column, TermType.IRI, isRef);
     }
 
@@ -62,8 +58,8 @@ public class SubjectMap extends BaseTermMap implements PropertyMap {
     }
 
     @Override
-    public Resource generateEntityTerm(Map<String, String> entityRow) {
-        return generateRDFTerm(entityRow).asResource();
+    public Resource generateEntityTerm(Map<String, String> entityProps) {
+        return generateRDFTerm(entityProps).asResource();
     }
 
     @Override

@@ -74,7 +74,7 @@ public class RDFMapper implements GraphMapper {
             triplesMap.listRelationMaps().forEach(
                     (k) -> entityGraph.add(
                             subject,
-                            k.getRelationTerm(),
+                            k.generateRelationTerm(r),
                             triplesMap.getNodeMapWithRelation(k).generateNodeTerm(r)));
         });
         return entityGraph;

@@ -17,10 +17,10 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import org.apache.jena.rdf.model.*;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.Map;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +30,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 
 /**
  * Implementation of R2RML Map using {@link TermMap} interface using
+ *
  * @code{Function<String,RDFNode>} to determine best type to return.
  */
 public class BaseTermMap implements TermMap {
@@ -44,20 +45,20 @@ public class BaseTermMap implements TermMap {
 
     //todo: replace the function to use RDF vocabulary instead. More safe.
     //Constant-value term map
-    public BaseTermMap(TermMapType mapType, RDFNode constantValue){
+    public BaseTermMap(TermMapType mapType, RDFNode constantValue) {
         termMapType = checkNotNull(mapType);
         constant = checkNotNull(constantValue);
     }
 
     //Template-value term map
-    public BaseTermMap(TermMapType termMapType, String templateValue, TermType termType){
+    public BaseTermMap(TermMapType termMapType, String templateValue, TermType termType) {
         this.termMapType = checkNotNull(termMapType);
         template = checkNotNull(templateValue);
         rdfTermType = checkNotNull(termType);
     }
 
     //Column-valued term map
-    public BaseTermMap(TermMapType termMapType, String columnValue, TermType termType, boolean isRef){
+    public BaseTermMap(TermMapType termMapType, String columnValue, TermType termType, boolean isRef) {
         this.termMapType = termMapType;
         column = columnValue;
         rdfTermType = checkNotNull(termType);
@@ -69,9 +70,9 @@ public class BaseTermMap implements TermMap {
         return termMapType;
     }
 
-    public RDFNode generateRDFTerm(Map<String, String> entityRow){
+    public RDFNode generateRDFTerm(Map<String, String> entityRow) {
         RDFNode rdfTerm = null;
-        switch(termMapType){
+        switch (termMapType) {
             case TEMPLATE:
                 rdfTerm = generateTemplateTerm(entityRow);
                 break;
@@ -82,19 +83,19 @@ public class BaseTermMap implements TermMap {
                 rdfTerm = generateConstantTerm();
                 break;
         }
-        if(rdfTerm == null) throw new MapperException("Failed to generate RDF Term.");
+        if (rdfTerm == null) throw new MapperException("Failed to generate RDF Term.");
         return rdfTerm;
     }
 
     @Override
     public RDFNode generateConstantTerm() {
-        if(!termMapType.equals(CONSTANT)) throw new MapperException("Invalid operation; Constant Term Map only.");
+        if (!termMapType.equals(CONSTANT)) throw new MapperException("Invalid operation; Constant Term Map only.");
         return constant;
     }
 
     @Override
     public RDFNode generateTemplateTerm(Map<String, String> entityRow) {
-        if(!termMapType.equals(TEMPLATE)) throw new MapperException("Invalid operation; Template Term Map only.");
+        if (!termMapType.equals(TEMPLATE)) throw new MapperException("Invalid operation; Template Term Map only.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) throw new MapperException("Failed to generate template.");
         String generatedTerm = template.replace(matcher.group(0), checkNotNull(entityRow).get(matcher.group(1)));
@@ -108,9 +109,9 @@ public class BaseTermMap implements TermMap {
         return asRDFTerm(checkNotNull(entityRow).get(column), rdfTermType);
     }
 
-    private RDFNode asRDFTerm(String value, TermType type){
+    private RDFNode asRDFTerm(String value, TermType type) {
         RDFNode rdfTerm = null;
-        switch(type){
+        switch (type) {
             case IRI:
                 rdfTerm = ResourceFactory.createResource(value);
                 break;

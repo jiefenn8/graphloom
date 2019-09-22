@@ -53,8 +53,8 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public Resource generateEntityTerm(Map<String, String> entityRow) {
-        return subjectMap.generateEntityTerm(entityRow);
+    public Resource generateEntityTerm(Map<String, String> entityProps) {
+        return subjectMap.generateEntityTerm(entityProps);
     }
 
     @Override

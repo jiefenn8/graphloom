@@ -27,14 +27,15 @@ import java.util.Map;
  * any nodes to their graph node term.
  */
 public interface NodeMap {
-    /**
-     * Returns a generated object node term using the value found form a
-     * specified column_name in NodeMap using the provided entity records.
-     *
-     * @param row to find the column data.
-     * @return the term object generated from column value.
-     */
-    RDFNode generateNodeTerm(Map<String, String> row);
 
-    RDFNode generateNodeTerm();
+    /**
+     * Returns a generated node term as {@code RDFNode}
+     * for an entity property value using the provided entity
+     * properties collection.
+     *
+     * @param entityProps the entity properties collection to use.
+     * @return the term {@code RDFNode} generated.
+     */
+    RDFNode generateNodeTerm(Map<String, String> entityProps);
+
 }

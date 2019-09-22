@@ -22,14 +22,6 @@ import java.util.Map;
 
 public interface TermMap {
 
-    public enum TermMapType {
-        CONSTANT, TEMPLATE, COLUMN
-    }
-
-    public enum TermType {
-        IRI, BLANK, LITERAL
-    }
-
     TermMapType getTermMapType();
 
     RDFNode generateRDFTerm(Map<String, String> entityRow);
@@ -39,4 +31,12 @@ public interface TermMap {
     RDFNode generateTemplateTerm(Map<String, String> entityRow);
 
     RDFNode generateColumnTerm(Map<String, String> entityRow);
+
+    enum TermMapType {
+        CONSTANT, TEMPLATE, COLUMN
+    }
+
+    enum TermType {
+        IRI, BLANK, LITERAL
+    }
 }
