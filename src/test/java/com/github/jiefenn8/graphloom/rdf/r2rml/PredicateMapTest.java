@@ -16,29 +16,47 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PredicateMapTest {
 
+    @Mock Map<String, String> mockRow;
     private PredicateMap predicateMap;
 
     @Before
-    public void setUp() throws Exception {
-        Property predicate = ResourceFactory.createProperty("Predicate_1");
-        predicateMap = new PredicateMap(predicate);
+    public void setUp(){
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
     @Test
-    public void WhenRelationTermGiven_ThenReturnProperty() {
-        Property expected = ResourceFactory.createProperty("Predicate_1");
-        Property result = predicateMap.getRelationTerm();
-        assertThat(result, is(equalTo(expected)));
+    public void WhenConstantTermMapTypeGiven_ThenReturnTermAsProperty() {
+        Property constant = ResourceFactory.createProperty("Predicate_1");
+        predicateMap = new PredicateMap(TermMapType.CONSTANT, constant);
+        RDFNode result = predicateMap.getRelationTerm();
+        assertThat(result, is(instanceOf(Property.class)));
+    }
+
+    @Test
+    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
+        predicateMap = new PredicateMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        boolean result = predicateMap.getRelationTerm(mockRow).isResource();
+        assertThat(result, is(true));
     }
 }

@@ -17,6 +17,8 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,22 +36,33 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectMapTest {
 
-    @Mock Map<String, String> mockRecord;
+    @Mock Map<String, String> mockRow;
     private ObjectMap objectMap;
 
     @Before
     public void setUp() throws Exception {
-        objectMap = new ObjectMap("Col_1_Name");
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
     @Test
-    public void WhenEntityRecordGiven_ThenReturnRDFNode() {
-        String expectedValue = "Col_1_Val";
-        when(mockRecord.get(anyString()))
-                .thenReturn(expectedValue);
+    public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
+        Resource rdfNode = ResourceFactory.createResource("constant");
+        objectMap = new ObjectMap(TermMap.TermMapType.CONSTANT, rdfNode);
+        boolean result = objectMap.generateNodeTerm().isURIResource();
+        assertThat(result, is(true));
+    }
 
-        Literal term = (Literal) objectMap.generateNodeTerm(mockRecord);
-        String result = term.getString();
-        assertThat(result, is(equalTo(expectedValue)));
+    @Test
+    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
+        objectMap = new ObjectMap(TermMap.TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        boolean result = objectMap.generateNodeTerm(mockRow).isResource();
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsLiteral(){
+        objectMap = new ObjectMap(TermMap.TermMapType.COLUMN, "Col_1_Type", false);
+        boolean result = objectMap.generateNodeTerm(mockRow).isLiteral();
+        assertThat(result, is(true));
     }
 }

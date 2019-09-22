@@ -18,6 +18,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.PropertyMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
@@ -29,17 +30,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Implementation of R2RML SubjectMap with{@link PropertyMap} interface
- * using {@code Resource} as return type.
+ * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
+ * This term map will return either a rr:IRI or rr:BlankNode for its main term.
  */
-public class SubjectMap implements PropertyMap {
+public class SubjectMap extends BaseTermMap implements PropertyMap {
 
-    private final Pattern pattern = Pattern.compile("\\{(.*?)}");
-    private String template;
     private List<Resource> classes = new ArrayList<>();
 
-    public SubjectMap(String template) {
-        this.template = template;
+    //Constant SubjectMap
+    public SubjectMap(TermMapType type, RDFNode constant){
+        super(type, constant);
+    }
+
+    //Template SubjectMap
+    public SubjectMap(TermMapType type, String template) {
+        super(type, template, TermType.IRI);
+    }
+
+    //Column SubjectMap
+    public SubjectMap(TermMapType type, String column, boolean isRef){
+        super(type, column, TermType.IRI, isRef);
     }
 
     /**
@@ -53,9 +63,7 @@ public class SubjectMap implements PropertyMap {
 
     @Override
     public Resource generateEntityTerm(Map<String, String> entityRow) {
-        Matcher matcher = pattern.matcher(template);
-        if (!matcher.find()) throw new MapperException("Failed to generate template.");
-        return ResourceFactory.createResource(template.replace(matcher.group(0), entityRow.get(matcher.group(1))));
+        return generateRDFTerm(entityRow).asResource();
     }
 
     @Override

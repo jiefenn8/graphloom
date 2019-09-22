@@ -50,7 +50,7 @@ public class TriplesMapTest {
     }
 
     public void WhenPredicateMapGiven_ThenReturnNodeMap() {
-        PredicateMap predicateMap = new PredicateMap(mock(Property.class));
+        PredicateMap predicateMap = new PredicateMap(TermMap.TermMapType.CONSTANT, mock(Property.class));
         triplesMap = new TriplesMap(null, null);
         triplesMap.addRelationNodePair(predicateMap, mock(NodeMap.class));
         NodeMap result = triplesMap.getNodeMapWithRelation(predicateMap);

@@ -14,27 +14,29 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.api;
+package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Map;
 
-/**
- * Node Map
- * <p>
- * This interface defines the base method that manages the mapping of
- * any nodes to their graph node term.
- */
-public interface NodeMap {
-    /**
-     * Returns a generated object node term using the value found form a
-     * specified column_name in NodeMap using the provided entity records.
-     *
-     * @param row to find the column data.
-     * @return the term object generated from column value.
-     */
-    RDFNode generateNodeTerm(Map<String, String> row);
+public interface TermMap {
 
-    RDFNode generateNodeTerm();
+    public enum TermMapType {
+        CONSTANT, TEMPLATE, COLUMN
+    }
+
+    public enum TermType {
+        IRI, BLANK, LITERAL
+    }
+
+    TermMapType getTermMapType();
+
+    RDFNode generateRDFTerm(Map<String, String> entityRow);
+
+    RDFNode generateConstantTerm();
+
+    RDFNode generateTemplateTerm(Map<String, String> entityRow);
+
+    RDFNode generateColumnTerm(Map<String, String> entityRow);
 }

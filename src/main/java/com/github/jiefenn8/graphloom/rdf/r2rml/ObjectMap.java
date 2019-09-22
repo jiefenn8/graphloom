@@ -24,17 +24,32 @@ import java.util.Map;
 
 /**
  * Implementation of R2RML ObjectMap with {@link NodeMap} interface.
+ * This term map will return either a rr:IRI, rr:BlankNode or rr:Literal for its main term.
  */
-public class ObjectMap implements NodeMap {
+public class ObjectMap extends BaseTermMap implements NodeMap {
 
-    private String sourceName;
+    //Constant ObjectMap
+    public ObjectMap(TermMapType type, RDFNode constant) {
+        super(type, constant);
+    }
 
-    public ObjectMap(String source) {
-        sourceName = source;
+    //Template ObjectMap
+    public ObjectMap(TermMapType type, String template){
+        super(type, template, TermType.IRI);
+    }
+
+    //Column ObjectMap
+    public ObjectMap(TermMapType type, String column, boolean isRef){
+        super(type, column, TermType.LITERAL, isRef);
     }
 
     @Override
     public RDFNode generateNodeTerm(Map<String, String> row) {
-        return ResourceFactory.createStringLiteral(row.get(sourceName));
+        return generateRDFTerm(row);
+    }
+
+    @Override
+    public RDFNode generateNodeTerm() {
+        return generateRDFTerm(null);
     }
 }

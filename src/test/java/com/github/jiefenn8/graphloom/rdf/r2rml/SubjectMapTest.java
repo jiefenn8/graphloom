@@ -16,6 +16,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Before;
@@ -39,15 +40,28 @@ public class SubjectMapTest {
 
     @Before
     public void setUp() throws Exception {
-        subjectMap = new SubjectMap("Template/{Col_1_Type}");
-
         when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
     @Test
-    public void WhenEntityRecordGiven_ThenReturnResource() {
-        Resource expected = ResourceFactory.createResource("Template/Col_1_Val");
-        Resource result = subjectMap.generateEntityTerm(mockRow);
-        assertThat(result, is(equalTo(expected)));
+    public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
+        Resource rdfNode = ResourceFactory.createResource("constant");
+        subjectMap = new SubjectMap(TermMapType.CONSTANT, rdfNode);
+        boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
+        subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsResource(){
+        subjectMap = new SubjectMap(TermMapType.COLUMN, "Col_1_Type", false);
+        boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        assertThat(result, is(true));
     }
 }

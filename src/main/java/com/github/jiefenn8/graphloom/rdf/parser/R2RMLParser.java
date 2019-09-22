@@ -18,6 +18,7 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.*;
+import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.*;
@@ -97,46 +98,6 @@ public class R2RMLParser {
         return root.listResourcesWithProperty(landmark);
     }
 
-    private List<Resource> findPredicateObjectMaps(Resource tmNode) {
-        Property predicateObjectMap = ResourceFactory.createProperty(r2rmlPrefixUri, "predicateObjectMap");
-        return tmNode.listProperties(predicateObjectMap)
-                .toList().stream()
-                .map((i) -> i.getObject().asResource())
-                .collect(Collectors.toList());
-    }
-
-    private Pair<PredicateMap, ObjectMap> mapToPredicateObjectMap(Resource pomNode) {
-        //todo: 6.3 : using the rr:predicateMap property, whose value MUST be a predicate map, or..
-        Property predicate = ResourceFactory.createProperty(r2rmlPrefixUri, "predicate");
-        //todo: 6.3 : using the constant shortcut property rr:object.
-        Property objectMap = ResourceFactory.createProperty(r2rmlPrefixUri, "objectMap");
-
-        if (!pomNode.hasProperty(predicate) || !pomNode.hasProperty(objectMap)) {
-            throw new ParserException("Predicate or Object Map not found.");
-        }
-
-        String predicateUri = pomNode
-                .getPropertyResourceValue(predicate).getURI();
-
-        Property predicateProp = ResourceFactory.createProperty(predicateUri);
-
-        Resource objNode = pomNode
-                .getProperty(objectMap)
-                .getResource();
-
-        return new ImmutablePair<>(new PredicateMap(predicateProp), mapToObjectMap(objNode));
-    }
-
-    private ObjectMap mapToObjectMap(Resource omNode) {
-        Property column = ResourceFactory.createProperty(r2rmlPrefixUri, "column");
-        if (!omNode.hasProperty(column)) {
-            //todo: 8.0 : A referencing object map is represented by a resource that: ..
-            throw new ParserException("No column found.");
-        }
-
-        return new ObjectMap(omNode.getProperty(column).getLiteral().getString());
-    }
-
     private Resource findLogicalTable(Resource tmNode) {
         Property logicalTable = ResourceFactory.createProperty(r2rmlPrefixUri, "logicalTable");
         if (!tmNode.hasProperty(logicalTable)) {
@@ -147,14 +108,27 @@ public class R2RMLParser {
         return tmNode.getPropertyResourceValue(logicalTable);
     }
 
-    private Resource findSubjectMap(Resource tmNode) {
-        Property subjectMap = ResourceFactory.createProperty(r2rmlPrefixUri, "subjectMap");
-        if (!tmNode.hasProperty(subjectMap)) {
-            throw new ParserException("No Subject Map found");
-        }
+    //Return Statement containing SubjectMap property.
+    private Statement findSubjectMap(Resource triplesMapRes) {
+        return findTermMap(triplesMapRes, "subjectMap", "subject");
+    }
 
-        //return object : tmNode -> rr:subjectMap -> (object)
-        return tmNode.getPropertyResourceValue(subjectMap);
+    //Return Statement containing PredicateMap property.
+    private Statement findPredicateMap(Resource predicateObjectMapRes){
+        return findTermMap(predicateObjectMapRes, "predicateMap", "predicate");
+    }
+
+    //Return Statement containing ObjectMap property
+    private Statement findObjectMap(Resource predicateObjectMapRes){
+        return findTermMap(predicateObjectMapRes, "objectMap", "object");
+    }
+
+    private List<Resource> findPredicateObjectMaps(Resource tmNode) {
+        Property predicateObjectMap = ResourceFactory.createProperty(r2rmlPrefixUri, "predicateObjectMap");
+        return tmNode.listProperties(predicateObjectMap)
+                .toList().stream()
+                .map((i) -> i.getObject().asResource())
+                .collect(Collectors.toList());
     }
 
     private LogicalTable mapToLogicalTable(Resource ltNode) {
@@ -167,16 +141,115 @@ public class R2RMLParser {
         return new LogicalTable(ltNode.getProperty(tableName).getLiteral().getString());
     }
 
-    private SubjectMap mapToSubjectMap(Resource smNode) {
-        Property template = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
-        Property classType = ResourceFactory.createProperty(r2rmlPrefixUri, "class");
-        if (!smNode.hasProperty(template) && !smNode.hasProperty(classType)) {
-            //todo: 6.2 : A subject map MAY have one or more class IRIs.
-            throw new ParserException("Template or class type not found.");
+    private SubjectMap mapToSubjectMap(Statement subjectMapStmt) {
+        Resource stmtObj = subjectMapStmt.getObject().asResource();
+        if(isShortcutConstant(subjectMapStmt, "subject")) {
+            return new SubjectMap(TermMapType.CONSTANT, stmtObj);
         }
 
-        SubjectMap subjectMap = new SubjectMap(smNode.getProperty(template).getLiteral().getString());
-        subjectMap.addClass(smNode.getProperty(classType).getResource());
+        Model root = subjectMapStmt.getModel();
+        if(isConstant(subjectMapStmt)) {
+            Property constProp = root.getProperty(r2rmlPrefixUri, "constant");
+            return new SubjectMap(TermMapType.CONSTANT, stmtObj.getPropertyResourceValue(constProp));
+        }
+
+        SubjectMap subjectMap = null;
+        Property templateProp = root.getProperty(r2rmlPrefixUri, "template");
+        if(templateProp != null && stmtObj.hasProperty(templateProp)){
+            String template = stmtObj.getProperty(templateProp).getLiteral().getString();
+            subjectMap = new SubjectMap(TermMapType.TEMPLATE, template);
+        }
+
+        //todo: Check if subjectMap supports column term map.
+
+        if(subjectMap == null) throw new ParserException("SubjectMap not matched to any TermMap.");
+        //todo: 6.2 : A subject map MAY have one or more class IRIs.
+        Property classType = root.getProperty(r2rmlPrefixUri, "class");
+        if (classType == null || !stmtObj.hasProperty(classType)) throw new ParserException("Class type not found.");
+        subjectMap.addClass(subjectMapStmt.getProperty(classType).getResource());
+
         return subjectMap;
+    }
+
+    private Pair<PredicateMap, ObjectMap> mapToPredicateObjectMap(Resource pomNode) {
+        PredicateMap predicateMap = mapToPredicateMap(findPredicateMap(pomNode));
+        ObjectMap objectMap = mapToObjectMap(findObjectMap(pomNode));
+        return new ImmutablePair<>(predicateMap, objectMap);
+    }
+
+    private PredicateMap mapToPredicateMap(Statement pmStmt){
+        Resource stmtObj = pmStmt.getObject().asResource();
+        Property resAsProp = stmtObj.as(Property.class);
+        if(isShortcutConstant(pmStmt, "subject")) return new PredicateMap(TermMapType.CONSTANT, resAsProp);
+
+        Model root = pmStmt.getModel();
+        if(isConstant(pmStmt)){
+            Property constProp = root.getProperty(r2rmlPrefixUri, "constant");
+            Resource constRes = stmtObj.getPropertyResourceValue(constProp).asResource();
+            return new PredicateMap(TermMapType.CONSTANT, constRes.as(Property.class));
+        }
+
+        //todo: verify subject map restriction.
+        throw new ParserException("Predicate Map restricted to constant only.");
+    }
+
+    private ObjectMap mapToObjectMap(Statement omStmt) {
+        Resource stmtObj = omStmt.getObject().asResource();
+        if(isShortcutConstant(omStmt, "object")) return new ObjectMap(TermMapType.CONSTANT, stmtObj);
+
+        Model root = omStmt.getModel();
+        if(isConstant(omStmt)){
+            Property constProp = root.getProperty(r2rmlPrefixUri, "constant");
+            Resource constNode = stmtObj.getPropertyResourceValue(constProp);
+            return new ObjectMap(TermMapType.CONSTANT, constNode);
+        }
+
+        ObjectMap objectMap = null;
+        Property templateProp = root.getProperty(r2rmlPrefixUri, "template");
+        if(templateProp != null && stmtObj.hasProperty(templateProp)){
+            String template = stmtObj.getProperty(templateProp).getLiteral().getString();
+            objectMap = new ObjectMap(TermMapType.TEMPLATE, template);
+        }
+
+        Property columnProp = root.getProperty(r2rmlPrefixUri, "column");
+        if(columnProp != null && stmtObj.hasProperty(columnProp)){
+            String column = stmtObj.getProperty(columnProp).getLiteral().getString();
+            objectMap = new ObjectMap(TermMapType.COLUMN, column);
+        }
+
+        if(objectMap == null) throw new ParserException("ObjectMap not matched to any TermMap.");
+
+        return objectMap;
+    }
+
+    //Helper methods
+
+    private Statement findTermMap(Resource tmRes, String tmName, String tmConstName){
+        Model root = tmRes.getModel();
+        Property termMapProp = root.getProperty(r2rmlPrefixUri, tmName);
+        if(termMapProp == null || !tmRes.hasProperty(termMapProp)){
+            termMapProp = root.getProperty(r2rmlPrefixUri, tmConstName);
+        }
+
+        Statement termMapStmt = tmRes.getProperty(termMapProp);
+        if(termMapStmt == null) throw new ParserException(tmName + " or " + tmConstName + " not found.");
+
+        return termMapStmt;
+    }
+
+    public boolean isConstant(Statement stmt){
+        Model root = stmt.getModel();
+        Property constProperty = root.getProperty(r2rmlPrefixUri, "constant");
+        //If Model doesn't contain any; assume there is none is this node too.
+        if(constProperty == null) return false;
+        Resource stmtObj = stmt.getObject().asResource();
+        if(stmtObj.hasProperty(constProperty)) return true;
+        return false;
+    }
+
+    public boolean isShortcutConstant(Statement stmt, String shortcutName){
+        String stmtPredicate = stmt.getPredicate().getLocalName();
+        if(stmtPredicate.equals(shortcutName)) return true;
+        return false;
     }
 }

@@ -18,6 +18,8 @@ package com.github.jiefenn8.graphloom.api;
 
 import org.apache.jena.rdf.model.Property;
 
+import java.util.Map;
+
 /**
  * Object Map
  * <p>
@@ -31,4 +33,6 @@ public interface RelationMap {
      * @return the term {@code Property} created from relation.
      */
     Property getRelationTerm();
+
+    Property getRelationTerm(Map<String, String> row);
 }

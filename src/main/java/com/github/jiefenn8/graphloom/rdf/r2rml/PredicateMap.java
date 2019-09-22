@@ -18,20 +18,35 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResourceFactory;
+
+import java.util.Map;
 
 /**
  * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
+ * This term map will return either a rr:IRI for its main term.
  */
-public class PredicateMap implements RelationMap {
+public class PredicateMap extends BaseTermMap implements RelationMap {
 
-    private Property predicateName;
+    //Constant PredicateMap
+    public PredicateMap(TermMapType type, Property predicate) {
+        super(type, predicate);
+    }
 
-    public PredicateMap(Property predicate) {
-        predicateName = predicate;
+    //Template PredicateMap
+    public PredicateMap(TermMapType type, String template){
+        super(type, template, TermType.IRI);
     }
 
     @Override
     public Property getRelationTerm() {
-        return predicateName;
+        Property property = ResourceFactory.createProperty(generateRDFTerm(null).asResource().getURI());
+        return property;
+    }
+
+    @Override
+    public Property getRelationTerm(Map<String, String> row) {
+        Property property = ResourceFactory.createProperty(generateRDFTerm(row).asResource().getURI());
+        return property;
     }
 }
