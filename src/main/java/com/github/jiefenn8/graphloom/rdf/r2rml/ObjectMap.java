@@ -43,7 +43,7 @@ public class ObjectMap extends BaseTermMap implements NodeMap {
     }
 
     @Override
-    public RDFNode generateNodeTerm(Map<String, String> row) {
-        return generateRDFTerm(row);
+    public RDFNode generateNodeTerm(Map<String, String> entityProps) {
+        return generateRDFTerm(entityProps);
     }
 }

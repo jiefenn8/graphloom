@@ -30,8 +30,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 
 /**
  * Implementation of R2RML Map using {@link TermMap} interface using
- *
- * @code{Function<String,RDFNode>} to determine best type to return.
+ * @code{TermType} to determine best type to return.
  */
 public class BaseTermMap implements TermMap {
 
@@ -70,14 +69,14 @@ public class BaseTermMap implements TermMap {
         return termMapType;
     }
 
-    public RDFNode generateRDFTerm(Map<String, String> entityRow) {
+    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
         RDFNode rdfTerm = null;
         switch (termMapType) {
             case TEMPLATE:
-                rdfTerm = generateTemplateTerm(entityRow);
+                rdfTerm = generateTemplateTerm(entityProps);
                 break;
             case COLUMN:
-                rdfTerm = generateColumnTerm(entityRow);
+                rdfTerm = generateColumnTerm(entityProps);
                 break;
             case CONSTANT:
                 rdfTerm = generateConstantTerm();
@@ -104,8 +103,6 @@ public class BaseTermMap implements TermMap {
 
     @Override
     public RDFNode generateColumnTerm(Map<String, String> entityRow) {
-        //todo: Add referenced object map implementation.
-        //if(isReferencedCol) return ResourceFactory.createResource(entityRow.get(column));
         return asRDFTerm(checkNotNull(entityRow).get(column), rdfTermType);
     }
 
