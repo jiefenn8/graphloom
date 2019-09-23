@@ -17,7 +17,9 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.RelationMap;
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.Map;
@@ -40,7 +42,8 @@ public class PredicateMap extends BaseTermMap implements RelationMap {
 
     @Override
     public Property generateRelationTerm(Map<String, String> entityRecords) {
-        Property property = ResourceFactory.createProperty(generateRDFTerm(entityRecords).asResource().getURI());
-        return property;
+        Resource term = generateRDFTerm(entityRecords).asResource();
+        if(!term.isURIResource()) throw new MapperException("Is not an IRI resource.");
+        return ResourceFactory.createProperty(term.getURI());
     }
 }

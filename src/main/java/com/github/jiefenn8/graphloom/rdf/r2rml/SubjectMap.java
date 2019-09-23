@@ -17,6 +17,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.PropertyMap;
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
@@ -59,7 +60,9 @@ public class SubjectMap extends BaseTermMap implements PropertyMap {
 
     @Override
     public Resource generateEntityTerm(Map<String, String> entityProps) {
-        return generateRDFTerm(entityProps).asResource();
+        Resource term = generateRDFTerm(entityProps).asResource();
+        if(term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode");
+        return term;
     }
 
     @Override
