@@ -40,8 +40,9 @@ public class R2RMLParser {
     private FileManager fileManager;
     private String r2rmlPrefixUri;
 
+    //Recommended to use FileManager.get() to get instance.
     public R2RMLParser() {
-        fileManager = new FileManager();
+        fileManager = FileManager.get();
     }
 
     public R2RMLParser(FileManager manager) {
@@ -53,8 +54,7 @@ public class R2RMLParser {
     }
 
     public R2RMLMap parse(String filename, String base) {
-        Model graph = fileManager.loadModel(filename, base, "TTL");
-        return parse(graph);
+        return parse(fileManager.loadModel(filename, base, "TTL"));
     }
 
     public R2RMLMap parse(Model r2rmlGraph) {
@@ -64,11 +64,8 @@ public class R2RMLParser {
     private R2RMLMap mapToR2RMLMap(Model r2rmlGraph) {
 
         r2rmlPrefixUri = r2rmlGraph.getNsPrefixURI(r2rmlPrefix);
-        if (r2rmlPrefixUri == null) {
-            throw new ParserException("'rr' prefix uri not found.");
-        }
+        if (r2rmlPrefixUri == null) throw new ParserException("'rr' prefix uri not found.");
 
-        //TriplesMap MUST have a logicalTable property so search for any with that
         R2RMLMap r2rmlMap = new R2RMLMap(r2rmlGraph.getNsPrefixMap());
         findTriplesMap(r2rmlGraph).forEachRemaining(
                 (tm) -> r2rmlMap.addTriplesMap(mapToTriplesMap(tm)));
@@ -89,20 +86,17 @@ public class R2RMLParser {
         return triplesMap;
     }
 
+    //TriplesMap MUST have a logicalTable property so search for any with that
     private ResIterator findTriplesMap(Model root) {
-        Property landmark = root.getProperty("rr", "logicalTable");
-        if (landmark == null) {
-            throw new ParserException("No valid Triples Map with rr:logicalTable found.");
-        }
+        Property landmark = root.getProperty(r2rmlPrefixUri, "logicalTable");
+        if (landmark == null) throw new ParserException("No valid Triples Map with rr:logicalTable found.");
 
         return root.listResourcesWithProperty(landmark);
     }
 
     private Resource findLogicalTable(Resource tmNode) {
         Property logicalTable = ResourceFactory.createProperty(r2rmlPrefixUri, "logicalTable");
-        if (!tmNode.hasProperty(logicalTable)) {
-            throw new ParserException("No Logical Table found.");
-        }
+        if (!tmNode.hasProperty(logicalTable)) throw new ParserException("No Logical Table found.");
 
         //return object : tmNode -> rr:logicalTable -> (object)
         return tmNode.getPropertyResourceValue(logicalTable);

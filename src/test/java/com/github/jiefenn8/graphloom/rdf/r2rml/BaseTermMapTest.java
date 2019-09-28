@@ -20,23 +20,16 @@ import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.apache.jena.datatypes.RDFDatatype;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceF;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.vocabulary.RDFSyntax;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
-import javax.smartcardio.TerminalFactory;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.*;
