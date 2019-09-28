@@ -30,7 +30,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 
 /**
  * Implementation of R2RML Map using {@link TermMap} interface using
- * @code{TermType} to determine best type to return.
+ * {@code TermType} to determine best type to return.
  */
 public class BaseTermMap implements TermMap {
 
@@ -42,7 +42,6 @@ public class BaseTermMap implements TermMap {
     private String column;
     private boolean isReferencedCol;
 
-    //todo: replace the function to use RDF vocabulary instead. More safe.
     //Constant-value term map
     public BaseTermMap(TermMapType mapType, RDFNode constantValue) {
         termMapType = checkNotNull(mapType);

@@ -54,6 +54,7 @@ public interface TermMap {
      * must be an IRI unless specified by {@code TermType} as
      * {@code LITERAL}.
      *
+     * @param entityProps the entity properties collection to use.
      * @return the RDF term generated.
      */
     RDFNode generateTemplateTerm(Map<String, String> entityProps);
@@ -64,6 +65,7 @@ public interface TermMap {
      *
      * todo: Expand to type literal and other types if applicable.
      *
+     * @param entityProps the entity properties collection to use.
      * @return the RDF term generated.
      */
     RDFNode generateColumnTerm(Map<String, String> entityProps);
