@@ -67,7 +67,7 @@ public class R2RMLParser {
         if (r2rmlPrefixUri == null) throw new ParserException("'rr' prefix uri not found.");
 
         R2RMLMap r2rmlMap = new R2RMLMap(r2rmlGraph.getNsPrefixMap());
-        findTriplesMap(r2rmlGraph).forEachRemaining(
+        findTriplesMap(r2rmlGraph).forEach(
                 (tm) -> r2rmlMap.addTriplesMap(mapToTriplesMap(tm)));
 
         return r2rmlMap;
@@ -87,11 +87,12 @@ public class R2RMLParser {
     }
 
     //TriplesMap MUST have a logicalTable property so search for any with that
-    private ResIterator findTriplesMap(Model root) {
-        Property landmark = root.getProperty(r2rmlPrefixUri, "logicalTable");
-        if (landmark == null) throw new ParserException("No valid Triples Map with rr:logicalTable found.");
+    private List<Resource> findTriplesMap(Model root) {
+        Property landmark = ResourceFactory.createProperty(r2rmlPrefixUri, "logicalTable");
+        List<Resource> triplesMaps = root.listResourcesWithProperty(landmark).toList();
+        if (triplesMaps.isEmpty()) throw new ParserException("No valid Triples Map with rr:logicalTable found.");
 
-        return root.listResourcesWithProperty(landmark);
+        return triplesMaps;
     }
 
     private Resource findLogicalTable(Resource tmNode) {
@@ -141,26 +142,21 @@ public class R2RMLParser {
             return new SubjectMap(TermMapType.CONSTANT, stmtObj);
         }
 
-        Model root = subjectMapStmt.getModel();
         if (isConstant(subjectMapStmt)) {
-            Property constProp = root.getProperty(r2rmlPrefixUri, "constant");
+            Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
             return new SubjectMap(TermMapType.CONSTANT, stmtObj.getPropertyResourceValue(constProp));
         }
 
-        SubjectMap subjectMap = null;
-        Property templateProp = root.getProperty(r2rmlPrefixUri, "template");
-        if (templateProp != null && stmtObj.hasProperty(templateProp)) {
-            String template = stmtObj.getProperty(templateProp).getLiteral().getString();
-            subjectMap = new SubjectMap(TermMapType.TEMPLATE, template);
-        }
+        Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
+        if(!stmtObj.hasProperty(templateProp)) throw new ParserException(stmtObj + " is not a TermMap.");
+        String template = stmtObj.getProperty(templateProp).getLiteral().getString();
+        SubjectMap subjectMap = new SubjectMap(TermMapType.TEMPLATE, template);
 
         //todo: Check if subjectMap supports column term map.
-
-        if (subjectMap == null) throw new ParserException("SubjectMap not matched to any TermMap.");
         //todo: 6.2 : A subject map MAY have one or more class IRIs.
-        Property classType = root.getProperty(r2rmlPrefixUri, "class");
-        if (classType == null || !stmtObj.hasProperty(classType)) throw new ParserException("Class type not found.");
-        subjectMap.addClass(subjectMapStmt.getProperty(classType).getResource());
+        Property classProp = ResourceFactory.createProperty(r2rmlPrefixUri, "class");
+        if(!stmtObj.hasProperty(classProp)) throw new ParserException("Class type not found.");
+        subjectMap.addClass(subjectMapStmt.getProperty(classProp).getResource());
 
         return subjectMap;
     }
@@ -174,11 +170,12 @@ public class R2RMLParser {
     private PredicateMap mapToPredicateMap(Statement pmStmt) {
         Resource stmtObj = pmStmt.getObject().asResource();
         Property resAsProp = stmtObj.as(Property.class);
-        if (isShortcutConstant(pmStmt, "subject")) return new PredicateMap(TermMapType.CONSTANT, resAsProp);
+        if (isShortcutConstant(pmStmt, "predicate")) {
+            return new PredicateMap(TermMapType.CONSTANT, resAsProp);
+        }
 
-        Model root = pmStmt.getModel();
         if (isConstant(pmStmt)) {
-            Property constProp = root.getProperty(r2rmlPrefixUri, "constant");
+            Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
             Resource constRes = stmtObj.getPropertyResourceValue(constProp).asResource();
             return new PredicateMap(TermMapType.CONSTANT, constRes.as(Property.class));
         }
@@ -191,55 +188,59 @@ public class R2RMLParser {
         Resource stmtObj = omStmt.getObject().asResource();
         if (isShortcutConstant(omStmt, "object")) return new ObjectMap(TermMapType.CONSTANT, stmtObj);
 
-        Model root = omStmt.getModel();
         if (isConstant(omStmt)) {
-            Property constProp = root.getProperty(r2rmlPrefixUri, "constant");
+            Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
             Resource constNode = stmtObj.getPropertyResourceValue(constProp);
             return new ObjectMap(TermMapType.CONSTANT, constNode);
         }
 
-        ObjectMap objectMap = null;
-        Property templateProp = root.getProperty(r2rmlPrefixUri, "template");
-        if (templateProp != null && stmtObj.hasProperty(templateProp)) {
-            String template = stmtObj.getProperty(templateProp).getLiteral().getString();
-            objectMap = new ObjectMap(TermMapType.TEMPLATE, template);
+        Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
+        if(stmtObj.hasProperty(templateProp)){
+            String template  = stmtObj.getProperty(templateProp).getLiteral().getString();
+            return new ObjectMap(TermMapType.TEMPLATE, template);
         }
 
-        Property columnProp = root.getProperty(r2rmlPrefixUri, "column");
-        if (columnProp != null && stmtObj.hasProperty(columnProp)) {
-            String column = stmtObj.getProperty(columnProp).getLiteral().getString();
-            objectMap = new ObjectMap(TermMapType.COLUMN, column);
-        }
+        Property columnProp = ResourceFactory.createProperty(r2rmlPrefixUri, "column");
+        if(!stmtObj.hasProperty(columnProp)) throw new ParserException(stmtObj + " is not a TermMap.");
+        String column = stmtObj.getProperty(columnProp).getLiteral().getString();
 
-        if (objectMap == null) throw new ParserException("ObjectMap not matched to any TermMap.");
-
-        return objectMap;
+        return new ObjectMap(TermMapType.COLUMN, column);
     }
 
     //Helper methods
 
+    //Creates property to search against Resource. Returns true if there is a match.
+    private boolean resourceHasProperty(Resource res, String namespace, String localName){
+        Property property = ResourceFactory.createProperty(namespace, localName);
+        return res.hasProperty(property);
+    }
+
+    //Get property from a Resource statement.
+    private Property getResourceProperty(Resource res, String namespace, String localName){
+        Property property = ResourceFactory.createProperty(namespace, localName);
+        return res.getProperty(property).getPredicate();
+    }
+
+    //Find a TermMap from a Resource.
     private Statement findTermMap(Resource tmRes, String tmName, String tmConstName) {
-        Model root = tmRes.getModel();
-        Property termMapProp = root.getProperty(r2rmlPrefixUri, tmName);
-        if (termMapProp == null || !tmRes.hasProperty(termMapProp)) {
-            termMapProp = root.getProperty(r2rmlPrefixUri, tmConstName);
+        Property targetProperty = ResourceFactory.createProperty(r2rmlPrefixUri, tmName);
+        if(!tmRes.hasProperty(targetProperty)) {
+            targetProperty = ResourceFactory.createProperty(r2rmlPrefixUri, tmConstName);
         }
 
-        Statement termMapStmt = tmRes.getProperty(termMapProp);
+        Statement termMapStmt = tmRes.getProperty(targetProperty);
         if (termMapStmt == null) throw new ParserException(tmName + " or " + tmConstName + " not found.");
 
         return termMapStmt;
     }
 
+    //Check if Statement Object contains a constant Property.
     public boolean isConstant(Statement stmt) {
-        Model root = stmt.getModel();
-        Property constProperty = root.getProperty(r2rmlPrefixUri, "constant");
-        //If Model doesn't contain any; assume there is none is this node too.
-        if (constProperty == null) return false;
         Resource stmtObj = stmt.getObject().asResource();
-        return stmtObj.hasProperty(constProperty);
+        return resourceHasProperty(stmtObj, r2rmlPrefixUri, "constant");
     }
 
+    //Check if Statement Predicate is a constant shortcut.
     public boolean isShortcutConstant(Statement stmt, String shortcutName) {
         String stmtPredicate = stmt.getPredicate().getLocalName();
         return stmtPredicate.equals(shortcutName);

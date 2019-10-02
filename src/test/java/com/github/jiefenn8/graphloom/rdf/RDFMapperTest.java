@@ -30,11 +30,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -52,15 +52,13 @@ public class RDFMapperTest {
         rdfMapper = new RDFMapper();
 
         //Default mock behaviour setup
-        when(mockConfigMaps.getNamespaceMap())
-                .thenReturn(mock(Map.class));
-
-        when(mockConfigMaps.listEntityMaps())
-                .thenReturn(Collections.unmodifiableList(new ArrayList<>()));
+        Map<String, String> fakeMap = new HashMap<String, String>();
+        when(mockConfigMaps.getNamespaceMap()).thenReturn(fakeMap);
+        when(mockConfigMaps.listEntityMaps()).thenReturn(Collections.unmodifiableList(new ArrayList<>()));
     }
 
     @Test
-    public void WhenSourceAndConfigGiven_ThenReturnGraph() {
+    public void WhenSourceAndConfigGiven_ThenReturnNonNullGraph() {
         Model result = rdfMapper.mapToGraph(mockInputSource, mockConfigMaps);
         assertThat(result, notNullValue());
     }

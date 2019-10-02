@@ -20,19 +20,13 @@ import com.github.jiefenn8.graphloom.rdf.RDFMapper;
 import com.github.jiefenn8.graphloom.rdf.parser.R2RMLParser;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URI;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+//Simple big bang integration test. todo: Refactor test to include more integration test.
 public class RDFMapperTest {
 
     private final String validFile = "/valid_r2rml.ttl";
@@ -55,10 +49,9 @@ public class RDFMapperTest {
     public void WhenInputAndR2RMLGiven_ShouldReturnPopulatedGraph()
     {
         Model graph = rdfMapper.mapToGraph(fakeInputDatabase, mapperConfig);
-
         //Graph should have 2 triples from the given input and configs.
         long result = graph.size();
 
-        assertThat(result, is(equalTo(2)));
+        assertThat(result, is(equalTo(Long.valueOf(2))));
     }
 }

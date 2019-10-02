@@ -22,7 +22,6 @@ import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,11 +42,6 @@ public class BaseTermMapTest {
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock Map<String, String> mockRow;
     private BaseTermMap baseTermMap;
-
-    @Before
-    public void setUp() throws Exception {
-        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
-    }
 
     @Test
     @Parameters({"CONSTANT", "TEMPLATE", "COLUMN"})
@@ -82,6 +76,7 @@ public class BaseTermMapTest {
     public void WhenTermTypeIRIGiven_ThenReturnTemplateTermAsResource(){
         String template = "Template/{Col_1_Type}";
         baseTermMap = new BaseTermMap(TermMapType.TEMPLATE, template, TermType.IRI);
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
         boolean result = baseTermMap.generateTemplateTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
@@ -90,6 +85,7 @@ public class BaseTermMapTest {
     public void WhenTermTypeLiteralGiven_ThenReturnTemplateTermAsLiteral(){
         String template = "Template/{Col_1_Type}";
         baseTermMap = new BaseTermMap(TermMapType.TEMPLATE, template, TermType.LITERAL);
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
         boolean result = baseTermMap.generateTemplateTerm(mockRow).isLiteral();
         assertThat(result, is(true));
     }
@@ -100,6 +96,7 @@ public class BaseTermMapTest {
     public void WhenTermTypeIRIGiven_ThenReturnColumnTermAsResource(){
         String column = "Col_1_Type";
         baseTermMap = new BaseTermMap(TermMapType.COLUMN, column, TermType.IRI, false);
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
         boolean result = baseTermMap.generateColumnTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
@@ -108,6 +105,7 @@ public class BaseTermMapTest {
     public void WhenTermTypeLiteralGiven_ThenReturnColumnTermAsLiteral(){
         String column = "Col_1_Type";
         baseTermMap = new BaseTermMap(TermMapType.COLUMN, column, TermType.LITERAL, false);
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
         boolean result = baseTermMap.generateColumnTerm(mockRow).isLiteral();
         assertThat(result, is(true));
     }
@@ -119,6 +117,7 @@ public class BaseTermMapTest {
     public void WhenEntityRecordGiven_ThenReturnNonNullTemplateTerm(TermType type) {
         String template = "Template/{Col_1_Type}";
         baseTermMap = new BaseTermMap(TermMapType.TEMPLATE, template, type);
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
         RDFNode result = baseTermMap.generateTemplateTerm(mockRow);
         assertThat(result, notNullValue());
     }
@@ -137,6 +136,7 @@ public class BaseTermMapTest {
     public void WhenEntityRecordGiven_ThenReturnNonNullColumnTerm(TermType type) {
         String column = "Col_1_Type";
         baseTermMap = new BaseTermMap(TermMapType.COLUMN, column, type, false);
+        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
         RDFNode result = baseTermMap.generateColumnTerm(mockRow);
         assertThat(result, notNullValue());
     }
