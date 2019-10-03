@@ -16,12 +16,15 @@
 
 package com.github.jiefenn8.graphloom.integrationtest;
 
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.github.jiefenn8.graphloom.rdf.RDFMapper;
 import com.github.jiefenn8.graphloom.rdf.parser.R2RMLParser;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,8 +32,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 //Simple big bang integration test. todo: Refactor test to include more integration test.
 public class RDFMapperTest {
 
-    private final String validFile = "/valid_r2rml.ttl";
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
 
+    private final String validFile = "/valid_r2rml.ttl";
     private RDFMapper rdfMapper;
     private FakeInputDatabase fakeInputDatabase;
     private R2RMLMap mapperConfig;
@@ -46,12 +50,28 @@ public class RDFMapperTest {
     }
 
     @Test
-    public void WhenInputAndR2RMLGiven_ShouldReturnPopulatedGraph()
+    public void WhenSourceAndConfigGiven_ShouldReturnPopulatedGraph()
     {
         Model graph = rdfMapper.mapToGraph(fakeInputDatabase, mapperConfig);
         //Graph should have 2 triples from the given input and configs.
         long result = graph.size();
 
         assertThat(result, is(equalTo(Long.valueOf(2))));
+    }
+
+    @Test
+    public void WhenNoInputSourceGiven_ThenThrowException() {
+        String expected = "Cannot retrieve source data from null input source";
+        exceptionRule.expect(MapperException.class);
+        exceptionRule.expectMessage(expected);
+        rdfMapper.mapToGraph(null, mapperConfig);
+    }
+
+    @Test
+    public void WhenNoConfigMapsGiven_ThenThrowException() {
+        String expected = "Cannot map source from null config maps.";
+        exceptionRule.expect(MapperException.class);
+        exceptionRule.expectMessage(expected);
+        rdfMapper.mapToGraph(fakeInputDatabase, null);
     }
 }
