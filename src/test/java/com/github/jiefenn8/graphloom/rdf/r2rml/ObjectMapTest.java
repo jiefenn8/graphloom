@@ -50,14 +50,14 @@ public class ObjectMapTest {
     }
 
     @Test
-    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
+    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
         objectMap = new ObjectMap(TermMap.TermMapType.TEMPLATE, "Template/{Col_1_Type}");
         boolean result = objectMap.generateNodeTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 
     @Test
-    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsLiteral(){
+    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsLiteral() {
         objectMap = new ObjectMap(TermMap.TermMapType.COLUMN, "Col_1_Type", false);
         boolean result = objectMap.generateNodeTerm(mockRow).isLiteral();
         assertThat(result, is(true));

@@ -23,6 +23,8 @@ import org.apache.jena.rdf.model.Resource;
 
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of R2RML TriplesMap with {@link EntityMap} interface.
  */
@@ -33,8 +35,8 @@ public class TriplesMap implements EntityMap {
     private Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
 
     public TriplesMap(LogicalTable source, SubjectMap subject) {
-        logicalTable = source;
-        subjectMap = subject;
+        logicalTable = checkNotNull(source);
+        subjectMap = checkNotNull(subject);
     }
 
     @Override

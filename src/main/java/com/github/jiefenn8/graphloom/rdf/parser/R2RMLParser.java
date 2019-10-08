@@ -62,7 +62,6 @@ public class R2RMLParser {
     }
 
     private R2RMLMap mapToR2RMLMap(Model r2rmlGraph) {
-
         r2rmlPrefixUri = r2rmlGraph.getNsPrefixURI(r2rmlPrefix);
         if (r2rmlPrefixUri == null) throw new ParserException("'rr' prefix uri not found.");
 
@@ -148,14 +147,14 @@ public class R2RMLParser {
         }
 
         Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
-        if(!stmtObj.hasProperty(templateProp)) throw new ParserException(stmtObj + " is not a TermMap.");
+        if (!stmtObj.hasProperty(templateProp)) throw new ParserException(stmtObj + " is not a TermMap.");
         String template = stmtObj.getProperty(templateProp).getLiteral().getString();
         SubjectMap subjectMap = new SubjectMap(TermMapType.TEMPLATE, template);
 
         //todo: Check if subjectMap supports column term map.
         //todo: 6.2 : A subject map MAY have one or more class IRIs.
         Property classProp = ResourceFactory.createProperty(r2rmlPrefixUri, "class");
-        if(!stmtObj.hasProperty(classProp)) throw new ParserException("Class type not found.");
+        if (!stmtObj.hasProperty(classProp)) throw new ParserException("Class type not found.");
         subjectMap.addClass(subjectMapStmt.getProperty(classProp).getResource());
 
         return subjectMap;
@@ -195,13 +194,13 @@ public class R2RMLParser {
         }
 
         Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
-        if(stmtObj.hasProperty(templateProp)){
-            String template  = stmtObj.getProperty(templateProp).getLiteral().getString();
+        if (stmtObj.hasProperty(templateProp)) {
+            String template = stmtObj.getProperty(templateProp).getLiteral().getString();
             return new ObjectMap(TermMapType.TEMPLATE, template);
         }
 
         Property columnProp = ResourceFactory.createProperty(r2rmlPrefixUri, "column");
-        if(!stmtObj.hasProperty(columnProp)) throw new ParserException(stmtObj + " is not a TermMap.");
+        if (!stmtObj.hasProperty(columnProp)) throw new ParserException(stmtObj + " is not a TermMap.");
         String column = stmtObj.getProperty(columnProp).getLiteral().getString();
 
         return new ObjectMap(TermMapType.COLUMN, column);
@@ -210,13 +209,13 @@ public class R2RMLParser {
     //Helper methods
 
     //Creates property to search against Resource. Returns true if there is a match.
-    private boolean resourceHasProperty(Resource res, String namespace, String localName){
+    private boolean resourceHasProperty(Resource res, String namespace, String localName) {
         Property property = ResourceFactory.createProperty(namespace, localName);
         return res.hasProperty(property);
     }
 
-    //Get property from a Resource statement.
-    private Property getResourceProperty(Resource res, String namespace, String localName){
+    //Get property from a Resource statement. Check before call else NullPointerException if property doesn't exist.
+    private Property getResourceProperty(Resource res, String namespace, String localName) {
         Property property = ResourceFactory.createProperty(namespace, localName);
         return res.getProperty(property).getPredicate();
     }
@@ -224,7 +223,7 @@ public class R2RMLParser {
     //Find a TermMap from a Resource.
     private Statement findTermMap(Resource tmRes, String tmName, String tmConstName) {
         Property targetProperty = ResourceFactory.createProperty(r2rmlPrefixUri, tmName);
-        if(!tmRes.hasProperty(targetProperty)) {
+        if (!tmRes.hasProperty(targetProperty)) {
             targetProperty = ResourceFactory.createProperty(r2rmlPrefixUri, tmConstName);
         }
 
@@ -235,13 +234,13 @@ public class R2RMLParser {
     }
 
     //Check if Statement Object contains a constant Property.
-    public boolean isConstant(Statement stmt) {
+    private boolean isConstant(Statement stmt) {
         Resource stmtObj = stmt.getObject().asResource();
         return resourceHasProperty(stmtObj, r2rmlPrefixUri, "constant");
     }
 
     //Check if Statement Predicate is a constant shortcut.
-    public boolean isShortcutConstant(Statement stmt, String shortcutName) {
+    private boolean isShortcutConstant(Statement stmt, String shortcutName) {
         String stmtPredicate = stmt.getPredicate().getLocalName();
         return stmtPredicate.equals(shortcutName);
     }

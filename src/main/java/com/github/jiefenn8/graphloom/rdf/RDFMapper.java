@@ -44,21 +44,17 @@ public class RDFMapper implements GraphMapper {
      * @return the graph of the result from mapping.
      */
     public Model mapToGraph(InputSource source, ConfigMaps configs) {
-        if (source == null) {
-            throw new MapperException("Cannot retrieve source data from null input source.");
-        }
-        if (configs == null) {
-            throw new MapperException("Cannot map source from null config maps.");
-        }
+        if (source == null) throw new MapperException("Cannot retrieve source data from null input source.");
+        if (configs == null) throw new MapperException("Cannot map source from null config maps.");
 
         Model outputGraph = ModelFactory.createDefaultModel();
         outputGraph.setNsPrefixes(configs.getNamespaceMap());
+
         return outputGraph.add(mapSource(source, configs.listEntityMaps()));
     }
 
     private Model mapSource(InputSource source, List<EntityMap> triplesMaps) {
         Model outputGraph = ModelFactory.createDefaultModel();
-
         triplesMaps.forEach((e) -> outputGraph.add(mapEntity(e, source.getEntityRecords(e.getSource()))));
 
         return outputGraph;
@@ -71,12 +67,14 @@ public class RDFMapper implements GraphMapper {
             triplesMap.listEntityClasses().forEach(
                     (c) -> entityGraph.add(subject, RDF.type, c));
 
+            //todo: Refactor to separate PredicateObjectMap class.
             triplesMap.listRelationMaps().forEach(
                     (k) -> entityGraph.add(
                             subject,
                             k.generateRelationTerm(r),
                             triplesMap.getNodeMapWithRelation(k).generateNodeTerm(r)));
         });
+
         return entityGraph;
     }
 }

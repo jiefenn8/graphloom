@@ -26,22 +26,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 //Simple big bang integration test. todo: Refactor test to include more integration test.
 public class RDFMapperTest {
 
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
-
     private final String validFile = "/valid_r2rml.ttl";
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
     private RDFMapper rdfMapper;
     private FakeInputDatabase fakeInputDatabase;
     private R2RMLMap mapperConfig;
 
     @Before
-    public void SetUp() throws Exception
-    {
+    public void SetUp() throws Exception {
         String path = getClass().getResource(validFile).getPath();
         R2RMLParser parser = new R2RMLParser();
         mapperConfig = parser.parse(path);
@@ -50,8 +49,7 @@ public class RDFMapperTest {
     }
 
     @Test
-    public void WhenSourceAndConfigGiven_ShouldReturnPopulatedGraph()
-    {
+    public void WhenSourceAndConfigGiven_ShouldReturnPopulatedGraph() {
         Model graph = rdfMapper.mapToGraph(fakeInputDatabase, mapperConfig);
         //Graph should have 2 triples from the given input and configs.
         long result = graph.size();

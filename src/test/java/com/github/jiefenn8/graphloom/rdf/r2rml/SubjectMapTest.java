@@ -51,16 +51,32 @@ public class SubjectMapTest {
     }
 
     @Test
-    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
+    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
         subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
         boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 
     @Test
-    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsResource(){
+    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsResource() {
         subjectMap = new SubjectMap(TermMapType.COLUMN, "Col_1_Type", false);
         boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void WhenClassGiven_ThenReturnNonEmptyList() {
+        subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        Resource expected = ResourceFactory.createResource("resource");
+        subjectMap.addClass(expected);
+        boolean result = subjectMap.listEntityClasses().isEmpty();
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void WhenNoClassGiven_ThenReturnEmptyList() {
+        subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        boolean result = subjectMap.listEntityClasses().isEmpty();
         assertThat(result, is(true));
     }
 }

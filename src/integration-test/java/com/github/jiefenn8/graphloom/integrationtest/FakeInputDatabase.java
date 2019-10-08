@@ -14,7 +14,9 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.integrationtest;import com.github.jiefenn8.graphloom.api.InputSource;
+package com.github.jiefenn8.graphloom.integrationtest;
+
+import com.github.jiefenn8.graphloom.api.InputSource;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 

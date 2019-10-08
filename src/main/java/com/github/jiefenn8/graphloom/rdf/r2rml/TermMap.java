@@ -62,7 +62,7 @@ public interface TermMap {
     /**
      * Returns a generated constant RDF Term. The term value
      * must be a literal.
-     *
+     * <p>
      * todo: Expand to type literal and other types if applicable.
      *
      * @param entityProps the entity properties collection to use.

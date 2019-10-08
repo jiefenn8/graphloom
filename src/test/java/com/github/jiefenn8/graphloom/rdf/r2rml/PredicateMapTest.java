@@ -40,7 +40,7 @@ public class PredicateMapTest {
     private PredicateMap predicateMap;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
@@ -53,7 +53,7 @@ public class PredicateMapTest {
     }
 
     @Test
-    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource(){
+    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
         predicateMap = new PredicateMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
         boolean result = predicateMap.generateRelationTerm(mockRow).isResource();
         assertThat(result, is(true));

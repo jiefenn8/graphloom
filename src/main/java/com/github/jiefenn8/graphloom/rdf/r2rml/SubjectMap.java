@@ -61,7 +61,7 @@ public class SubjectMap extends BaseTermMap implements PropertyMap {
     @Override
     public Resource generateEntityTerm(Map<String, String> entityProps) {
         Resource term = generateRDFTerm(entityProps).asResource();
-        if(term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode");
+        if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode");
         return term;
     }
 

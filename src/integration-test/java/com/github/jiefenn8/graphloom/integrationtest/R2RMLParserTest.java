@@ -34,7 +34,7 @@ public class R2RMLParserTest {
     private R2RMLParser r2rmlParser;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         r2rmlParser = new R2RMLParser();
     }
 

@@ -49,16 +49,16 @@ public class BaseTermMap implements TermMap {
     }
 
     //Template-value term map
-    public BaseTermMap(TermMapType termMapType, String templateValue, TermType termType) {
-        this.termMapType = checkNotNull(termMapType);
+    public BaseTermMap(TermMapType mapType, String templateValue, TermType termType) {
+        termMapType = checkNotNull(mapType);
         template = checkNotNull(templateValue);
         rdfTermType = checkNotNull(termType);
     }
 
     //Column-valued term map
-    public BaseTermMap(TermMapType termMapType, String columnValue, TermType termType, boolean isRef) {
-        this.termMapType = termMapType;
-        column = columnValue;
+    public BaseTermMap(TermMapType mapType, String columnValue, TermType termType, boolean isRef) {
+        termMapType = checkNotNull(mapType);
+        column = checkNotNull(columnValue);
         rdfTermType = checkNotNull(termType);
         isReferencedCol = isRef;
     }
@@ -69,20 +69,16 @@ public class BaseTermMap implements TermMap {
     }
 
     public RDFNode generateRDFTerm(Map<String, String> entityProps) {
-        RDFNode rdfTerm = null;
         switch (termMapType) {
             case TEMPLATE:
-                rdfTerm = generateTemplateTerm(entityProps);
-                break;
+                return generateTemplateTerm(entityProps);
             case COLUMN:
-                rdfTerm = generateColumnTerm(entityProps);
-                break;
+                return generateColumnTerm(entityProps);
             case CONSTANT:
-                rdfTerm = generateConstantTerm();
-                break;
+                return generateConstantTerm();
+            default:
+                throw new MapperException("TermMap is not identified as Template, Column or Constant.");
         }
-        if (rdfTerm == null) throw new MapperException("Failed to generate RDF Term.");
-        return rdfTerm;
     }
 
     @Override
@@ -95,7 +91,7 @@ public class BaseTermMap implements TermMap {
     public RDFNode generateTemplateTerm(Map<String, String> entityRow) {
         if (!termMapType.equals(TEMPLATE)) throw new MapperException("Invalid operation; Template Term Map only.");
         Matcher matcher = pattern.matcher(template);
-        if (!matcher.find()) throw new MapperException("Failed to generate template.");
+        if (!matcher.find()) throw new MapperException("Invalid template string given.");
         String generatedTerm = template.replace(matcher.group(0), checkNotNull(entityRow).get(matcher.group(1)));
         return asRDFTerm(generatedTerm, rdfTermType);
     }
@@ -106,18 +102,15 @@ public class BaseTermMap implements TermMap {
     }
 
     private RDFNode asRDFTerm(String value, TermType type) {
-        RDFNode rdfTerm = null;
         switch (type) {
             case IRI:
-                rdfTerm = ResourceFactory.createResource(value);
-                break;
+                return ResourceFactory.createResource(value);
             case BLANK:
-                rdfTerm = ResourceFactory.createResource();
-                break;
+                return ResourceFactory.createResource();
             case LITERAL:
-                rdfTerm = ResourceFactory.createStringLiteral(value);
-                break;
+                return ResourceFactory.createStringLiteral(value);
+            default:
+                throw new MapperException("TermType is invalid.");
         }
-        return rdfTerm;
     }
 }
