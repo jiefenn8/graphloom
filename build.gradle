@@ -54,6 +54,15 @@ task integrationTest(type: Test){
     classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
+task integTestReport(type :JacocoReport){
+    sourceSets sourceSets.main
+    executionData integrationTest
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
 configurations {
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntimeOnly.extendsFrom runtimeOnly
@@ -94,6 +103,7 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+integrationTest.finalizedBy integTestReport
 
 publishing {
     publications {
