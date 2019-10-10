@@ -6,8 +6,6 @@ A Java implementation of a RDB to Semantic Graph mapping API.
 
 ## Description
 
-Part of CONVERT component for web and graph parent side project [ws-projects](https://github.com/jiefenn8/ws-projects).
-
 A relational database to graph mapping API. Mapping relational database data from a provided interface and mapping rules to generate a graph output dataset. 
 
 ## Getting Started
@@ -36,30 +34,25 @@ Supply the Processor with a implementation of InputDatabase interface and a R2RM
 ```
 //Quick example
 
-InputDatabase inputDb = new YourInputDatabaseImpl();
-//Your Code handling InputDatabase impl with database.
-
-//Load R2RML document 
-MappingDocument myR2rmlDoc = new MappingDocument("my-rmrl.ttl");
+InputSource inputSource = new YourInputSourceImpl();
+//Your Code handling InputSource implementation with database.
 
 //Parse the R2RML file
 R2RMLParser r2rmlParser = new R2RMLParser();
-ConfigMap r2rmlMap = r2rmlParser.parse(myR2RmlDoc);
+ConfigMaps r2rmlMap = r2rmlParser.parse("my-rmrl.ttl");
 
 //Map data
-Mapper mapper = new Mapper();
-Model output = mapper.mapToGraph(inputDb, r2rmlMap);
+RDFMapper rdfMapper = new RDFMapper();
+Model output = mapper.mapToGraph(inputSource, r2rmlMap);
 
-//Rest of your code handling output. e.g. To file or graph database
+//Rest of your code handling output. e.g. To file or graph database.
 ```
 
-### Plans
+### More information
 
-* ~~Add [R2RML](https://www.w3.org/TR/r2rml/) implementation~~
-* Add graph RDF file output support
-* Add graph to graph-db/triplestore support
-* Add [RML](rml.io) implementation (JSON, CSV and XML data source)
-* Remove dependency from Jena to Common RDF
+For more information on GraphLoom such as API usage or planned roadmap, visit the [Wiki](https://github.com/jiefenn8/graphloom/wiki).
+
+Collection of other technology related projects can be found in this [repository](https://github.com/jiefenn8/ws-projects).
 
 ## Third Party Software
 
