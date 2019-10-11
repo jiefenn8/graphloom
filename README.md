@@ -1,36 +1,45 @@
 # GraphLoom
 
-A Java implementation of a RDB to Semantic Graph mapping API. 
+A Java implementation of a RDB to Semantic Graph mapping library. 
 
 [![Build Status](https://travis-ci.org/jiefenn8/graphloom.svg?branch=master)](https://travis-ci.org/jiefenn8/graphloom)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
 
+[ ![Download](https://api.bintray.com/packages/jiefenn8/graphloom/graphloom/images/download.svg) ](https://bintray.com/jiefenn8/graphloom/graphloom/_latestVersion)
+
 ## Description
 
-A relational database to graph mapping API. Mapping relational database data from a provided interface and mapping rules to generate a graph output dataset. 
+A relational database to semantic graph mapping library. Mapping relational database data from a provided interface and mapping rules to generate a semantic graph dataset. 
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See the prerequisties and deployment notes below on how to use the project on a development environment.
+To get started on using GraphLoom on your project, ensure you have met all prequisities and follow any instructions below to get the library in your build up and running for development or testing purposes.
 
 ### Prerequisites
 
- * Make sure to have [Java 8 SDK](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed.
+GraphLoom v0.2 target compatibility is Java 8. Your Java SDK must have compatibility for Java 8 for this library to work properly. To obtain Java SDK, go to either [OpenJDK](https://openjdk.java.net/) or [OracleJDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) depending on your own project license requirement.
+ 
+### Adding GraphLoom to your build
 
-### Installation
-
-Get the latest version from [releases](https://github.com/jiefenn8/graphloom/releases)
-
-OR
-
-Clone the repository with cmd (or terminal) with Git installed.
+For Maven build: 
 ```
-cd <install directory of choice>
-git clone https://github.com/jiefenn8/graphloom.git
+<dependency>
+  <groupId>com.github.jiefenn8.graphloom</groupId>
+  <artifactId>graphloom-core</artifactId>
+  <version>0.2.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+For Gradle build:
+```
+dependencies {
+  compile 'com.github.jiefenn8.graphloom:graphloom-core:0.2.0'
+}
 ```
 
 ### Usage example
 
-Supply the Processor with a implementation of InputDatabase interface and a R2RML mapping document with InputStream.
+Supply the Processor with an implementation of InputSource interface and the R2RML mapping document.
 ```
 //Quick example
 
@@ -48,7 +57,7 @@ Model output = mapper.mapToGraph(inputSource, r2rmlMap);
 //Rest of your code handling output. e.g. To file or graph database.
 ```
 
-### More information
+## More information
 
 For more information on GraphLoom such as API usage or planned roadmap, visit the [Wiki](https://github.com/jiefenn8/graphloom/wiki).
 
@@ -56,7 +65,7 @@ Collection of other technology related projects can be found in this [repository
 
 ## Third Party Software
 
-See [NOTICE](./NOTICE.md) and [THIRD-PARTY-LICENSE](./LICENSE-3RD-PARTY.md) for more information on third party software used.
+See [notice](./NOTICE.md) and [third party license](./LICENSE-3RD-PARTY.md) for more information on third party software used.
 
 ## License
 
