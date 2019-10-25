@@ -93,24 +93,11 @@ public class BaseTermMap implements TermMap {
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) throw new MapperException("Invalid template string given.");
         String generatedTerm = template.replace(matcher.group(0), checkNotNull(entityRow).get(matcher.group(1)));
-        return asRDFTerm(generatedTerm, rdfTermType);
+        return RDFTermHelper.asRDFTerm(generatedTerm, rdfTermType);
     }
 
     @Override
     public RDFNode generateColumnTerm(Map<String, String> entityRow) {
-        return asRDFTerm(checkNotNull(entityRow).get(column), rdfTermType);
-    }
-
-    private RDFNode asRDFTerm(String value, TermType type) {
-        switch (type) {
-            case IRI:
-                return ResourceFactory.createResource(value);
-            case BLANK:
-                return ResourceFactory.createResource();
-            case LITERAL:
-                return ResourceFactory.createStringLiteral(value);
-            default:
-                throw new MapperException("TermType is invalid.");
-        }
+        return RDFTermHelper.asRDFTerm(checkNotNull(entityRow).get(column), rdfTermType);
     }
 }
