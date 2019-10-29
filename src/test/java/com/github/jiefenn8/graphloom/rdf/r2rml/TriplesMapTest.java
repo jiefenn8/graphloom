@@ -59,7 +59,7 @@ public class TriplesMapTest {
 
     @Test
     public void WhenPredicateMapGiven_ThenReturnNodeMap() {
-        PredicateMap predicateMap = new PredicateMap(TermMap.TermMapType.CONSTANT, mock(Property.class));
+        PredicateMap predicateMap = R2RMLFactory.createConstPredicateMap(mock(Property.class));
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
         triplesMap.addRelationNodePair(predicateMap, mock(NodeMap.class));
         NodeMap result = triplesMap.getNodeMapWithRelation(predicateMap);

@@ -18,7 +18,6 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.*;
-import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.*;
@@ -65,7 +64,7 @@ public class R2RMLParser {
         r2rmlPrefixUri = r2rmlGraph.getNsPrefixURI(r2rmlPrefix);
         if (r2rmlPrefixUri == null) throw new ParserException("'rr' prefix uri not found.");
 
-        R2RMLMap r2rmlMap = new R2RMLMap(r2rmlGraph.getNsPrefixMap());
+        R2RMLMap r2rmlMap = R2RMLFactory.createR2RMLMap(r2rmlGraph.getNsPrefixMap());
         findTriplesMap(r2rmlGraph).forEach(
                 (tm) -> r2rmlMap.addTriplesMap(mapToTriplesMap(tm)));
 
@@ -75,7 +74,7 @@ public class R2RMLParser {
     private TriplesMap mapToTriplesMap(Resource tmRes) {
         LogicalTable logicalTable = mapToLogicalTable(findLogicalTable(tmRes));
         SubjectMap subjectMap = mapToSubjectMap(findSubjectMap(tmRes));
-        TriplesMap triplesMap = new TriplesMap(logicalTable, subjectMap);
+        TriplesMap triplesMap = R2RMLFactory.createTriplesMap(logicalTable, subjectMap);
         findPredicateObjectMaps(tmRes).forEach(
                 (pom) -> {
                     Pair<PredicateMap, ObjectMap> pomPair = mapToPredicateObjectMap(pom);
@@ -148,7 +147,7 @@ public class R2RMLParser {
         Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
         if (!stmtObj.hasProperty(templateProp)) throw new ParserException(stmtObj + " is not a TermMap.");
         String template = stmtObj.getProperty(templateProp).getLiteral().getString();
-        SubjectMap subjectMap = R2RMLFactory.createTemplateSubjectMap(template);
+        SubjectMap subjectMap = R2RMLFactory.createTmplSubjectMap(template);
 
         //todo: Check if subjectMap supports column term map.
         //todo: 6.2 : A subject map MAY have one or more class IRIs.
@@ -184,7 +183,7 @@ public class R2RMLParser {
 
     private ObjectMap mapToObjectMap(Statement omStmt) {
         Resource stmtObj = omStmt.getObject().asResource();
-        if (isShortcutConstant(omStmt, "object")) return new ObjectMap(TermMapType.CONSTANT, stmtObj);
+        if (isShortcutConstant(omStmt, "object")) return R2RMLFactory.createConstObjectMap(stmtObj);
 
         if (isConstant(omStmt)) {
             Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
@@ -195,14 +194,14 @@ public class R2RMLParser {
         Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
         if (stmtObj.hasProperty(templateProp)) {
             String template = stmtObj.getProperty(templateProp).getLiteral().getString();
-            return R2RMLFactory.createTemplateObjectMap(template);
+            return R2RMLFactory.createTmplObjectMap(template);
         }
 
         Property columnProp = ResourceFactory.createProperty(r2rmlPrefixUri, "column");
         if (!stmtObj.hasProperty(columnProp)) throw new ParserException(stmtObj + " is not a TermMap.");
         String column = stmtObj.getProperty(columnProp).getLiteral().getString();
 
-        return R2RMLFactory.createColumnObjectMap(column);
+        return R2RMLFactory.createColObjectMap(column);
     }
 
     //Helper methods

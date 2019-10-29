@@ -44,21 +44,21 @@ public class ObjectMapTest {
     @Test
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
         Resource rdfNode = ResourceFactory.createResource("constant");
-        objectMap = new ObjectMap(TermMap.TermMapType.CONSTANT, rdfNode);
+        objectMap = R2RMLFactory.createConstObjectMap(rdfNode);
         boolean result = objectMap.generateNodeTerm(mockRow).isURIResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
-        objectMap = new ObjectMap(TermMap.TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        objectMap = R2RMLFactory.createTmplObjectMap("Template/{Col_1_Type}");
         boolean result = objectMap.generateNodeTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenColumnTermMapTypeGiven_ThenReturnTermAsLiteral() {
-        objectMap = new ObjectMap(TermMap.TermMapType.COLUMN, "Col_1_Type", false);
+        objectMap = R2RMLFactory.createColObjectMap( "Col_1_Type");
         boolean result = objectMap.generateNodeTerm(mockRow).isLiteral();
         assertThat(result, is(true));
     }

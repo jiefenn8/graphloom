@@ -34,7 +34,7 @@ public class TriplesMap implements EntityMap {
     private SubjectMap subjectMap;
     private Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
 
-    public TriplesMap(LogicalTable source, SubjectMap subject) {
+    protected TriplesMap(LogicalTable source, SubjectMap subject) {
         logicalTable = checkNotNull(source);
         subjectMap = checkNotNull(subject);
     }

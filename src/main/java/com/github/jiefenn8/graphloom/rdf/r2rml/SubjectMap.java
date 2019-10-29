@@ -26,27 +26,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
  * This term map will return either a rr:IRI or rr:BlankNode for its main term.
  */
-public class SubjectMap extends BaseTermMap implements PropertyMap {
+public class SubjectMap implements TermMap, PropertyMap {
 
+    private TermMap termMap;
     private List<Resource> classes = new ArrayList<>();
 
-    //Constant SubjectMap
-    public SubjectMap(TermMapType type, RDFNode constant) {
-        super(type, constant);
-    }
-
-    //Template SubjectMap
-    public SubjectMap(TermMapType type, String template) {
-        super(type, template, TermType.IRI);
-    }
-
-    //Column SubjectMap
-    public SubjectMap(TermMapType type, String column, boolean isRef) {
-        super(type, column, TermType.IRI, isRef);
+    protected SubjectMap(TermMap termMap){
+        this.termMap = checkNotNull(termMap);
     }
 
     /**
@@ -60,13 +52,18 @@ public class SubjectMap extends BaseTermMap implements PropertyMap {
 
     @Override
     public Resource generateEntityTerm(Map<String, String> entityProps) {
-        Resource term = generateRDFTerm(entityProps).asResource();
+        RDFNode term = generateRDFTerm(entityProps);
         if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode");
-        return term;
+        return term.asResource();
     }
 
     @Override
     public List<Resource> listEntityClasses() {
         return Collections.unmodifiableList(classes);
+    }
+
+    @Override
+    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+        return termMap.generateRDFTerm(entityProps);
     }
 }

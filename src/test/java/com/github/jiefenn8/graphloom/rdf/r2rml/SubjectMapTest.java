@@ -16,7 +16,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
+import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Before;
@@ -45,28 +45,28 @@ public class SubjectMapTest {
     @Test
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
         Resource rdfNode = ResourceFactory.createResource("constant");
-        subjectMap = new SubjectMap(TermMapType.CONSTANT, rdfNode);
+        subjectMap = R2RMLFactory.createConstSubjectMap(rdfNode);
         boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
-        subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
         boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenColumnTermMapTypeGiven_ThenReturnTermAsResource() {
-        subjectMap = new SubjectMap(TermMapType.COLUMN, "Col_1_Type", false);
+        subjectMap = R2RMLFactory.createColSubjectMap("Col_1_Type", TermType.IRI);
         boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenClassGiven_ThenReturnNonEmptyList() {
-        subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        subjectMap = R2RMLFactory.createTmplSubjectMap( "Template/{Col_1_Type}");
         Resource expected = ResourceFactory.createResource("resource");
         subjectMap.addClass(expected);
         boolean result = subjectMap.listEntityClasses().isEmpty();
@@ -75,7 +75,7 @@ public class SubjectMapTest {
 
     @Test
     public void WhenNoClassGiven_ThenReturnEmptyList() {
-        subjectMap = new SubjectMap(TermMapType.TEMPLATE, "Template/{Col_1_Type}");
+        subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
         boolean result = subjectMap.listEntityClasses().isEmpty();
         assertThat(result, is(true));
     }

@@ -16,36 +16,31 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.RelationMap;
-import org.apache.jena.rdf.model.Property;
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
- * This term map will return either a rr:IRI for its main term.
- */
-public class PredicateMap implements TermMap, RelationMap {
+public class TmplTermMap implements TermMap {
 
-    private TermMap termMap;
+    private Pattern pattern = Pattern.compile("\\{(.*?)}");
+    private String templateStr;
+    private TermType termType;
 
-    protected PredicateMap(TermMap termMap){
-        this.termMap = checkNotNull(termMap);
-    }
-
-    @Override
-    public Property generateRelationTerm(Map<String, String> entityProps) {
-        Resource term = generateRDFTerm(entityProps).asResource();
-        return ResourceFactory.createProperty(term.getURI());
+    protected TmplTermMap(String templateStr, TermType termType){
+        this.templateStr = checkNotNull(templateStr);
+        this.termType = checkNotNull(termType);
     }
 
     @Override
     public RDFNode generateRDFTerm(Map<String, String> entityProps) {
-        return termMap.generateRDFTerm(entityProps);
+        Matcher matcher = pattern.matcher(templateStr);
+        if (!matcher.find()) throw new MapperException("Invalid template string given.");
+        String generatedTerm = templateStr.replace(matcher.group(0), entityProps.get(matcher.group(1)));
+        return RDFTermHelper.asRDFTerm(generatedTerm, termType);
     }
 }

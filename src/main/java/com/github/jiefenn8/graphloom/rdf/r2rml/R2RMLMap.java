@@ -21,6 +21,8 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 
 import java.util.*;
 
+import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of R2RML with {@code ConfigMaps} interface.
  * This class stores and manages all the {@code TriplesMap} associated
@@ -31,10 +33,8 @@ public class R2RMLMap implements ConfigMaps {
     private Map<String, String> namespaceMap = new HashMap<String, String>();
     private List<EntityMap> triplesMaps = new ArrayList<>();
 
-    public R2RMLMap(Map<String, String> ns) {
-        if (ns != null) {
-            namespaceMap.putAll(ns);
-        }
+    protected R2RMLMap(Map<String, String> ns) {
+        namespaceMap.putAll(checkNotNull(ns));
     }
 
     @Override

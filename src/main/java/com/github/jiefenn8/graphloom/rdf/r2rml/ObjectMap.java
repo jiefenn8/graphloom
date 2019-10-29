@@ -21,29 +21,27 @@ import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Map;
 
+import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of R2RML ObjectMap with {@link NodeMap} interface.
  * This term map will return either a rr:IRI, rr:BlankNode or rr:Literal for its main term.
  */
-public class ObjectMap extends BaseTermMap implements NodeMap {
+public class ObjectMap implements TermMap, NodeMap {
 
-    //Constant ObjectMap
-    public ObjectMap(TermMapType type, RDFNode constant) {
-        super(type, constant);
-    }
+    private TermMap termMap;
 
-    //Template ObjectMap
-    public ObjectMap(TermMapType type, String template) {
-        super(type, template, TermType.IRI);
-    }
-
-    //Column ObjectMap
-    public ObjectMap(TermMapType type, String column, boolean isRef) {
-        super(type, column, TermType.LITERAL, isRef);
+    protected ObjectMap(TermMap termMap){
+        this.termMap = checkNotNull(termMap);
     }
 
     @Override
     public RDFNode generateNodeTerm(Map<String, String> entityProps) {
         return generateRDFTerm(entityProps);
+    }
+
+    @Override
+    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+        return termMap.generateRDFTerm(entityProps);
     }
 }

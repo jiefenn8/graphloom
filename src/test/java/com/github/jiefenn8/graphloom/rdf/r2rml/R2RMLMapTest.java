@@ -18,8 +18,10 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.google.common.collect.ImmutableMap;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
@@ -33,10 +35,11 @@ import static org.mockito.Mockito.mock;
 public class R2RMLMapTest {
 
     private R2RMLMap r2rmlMap;
+    @Mock Map<String, String> mockNamespaceMap;
 
     @Test
     public void WhenNoNamespaceMapGiven_ThenReturnMap() {
-        r2rmlMap = new R2RMLMap(null);
+        r2rmlMap = new R2RMLMap(mockNamespaceMap);
         Map<String, String> result = r2rmlMap.getNamespaceMap();
         assertThat(result, notNullValue());
     }
@@ -51,7 +54,7 @@ public class R2RMLMapTest {
 
     @Test
     public void WhenEntityMapGiven_ThenReturnNonEmptyList() {
-        r2rmlMap = new R2RMLMap(null);
+        r2rmlMap = new R2RMLMap(mockNamespaceMap);
         r2rmlMap.addTriplesMap(mock(EntityMap.class));
         boolean result = r2rmlMap.listEntityMaps().isEmpty();
         assertThat(result, is(false));

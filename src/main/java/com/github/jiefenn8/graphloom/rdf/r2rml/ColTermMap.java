@@ -16,23 +16,24 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.SourceMap;
+import org.apache.jena.rdf.model.RDFNode;
+
+import java.util.Map;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
-/**
- * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
- */
-public class LogicalTable implements SourceMap {
+public class ColTermMap implements TermMap {
 
-    private String sourceName;
+    private String columnName;
+    private TermType termType;
 
-    protected LogicalTable(String source) {
-        sourceName = checkNotNull(source);
+    protected ColTermMap(String columnName, TermType termType){
+        this.columnName = checkNotNull(columnName);
+        this.termType = checkNotNull(termType);
     }
 
     @Override
-    public String getSource() {
-        return sourceName;
+    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+        return RDFTermHelper.asRDFTerm(entityProps.get(columnName), termType);
     }
 }
