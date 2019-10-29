@@ -133,7 +133,7 @@ public class R2RMLParser {
         return R2RMLFactory.createLogicalTable(tableSource);
     }
 
-    SubjectMap mapToSubjectMap(Statement subjectMapStmt) {
+    private SubjectMap mapToSubjectMap(Statement subjectMapStmt) {
         Resource stmtObj = subjectMapStmt.getObject().asResource();
         if (isShortcutConstant(subjectMapStmt, "subject")) {
             return R2RMLFactory.createConstSubjectMap(stmtObj);
