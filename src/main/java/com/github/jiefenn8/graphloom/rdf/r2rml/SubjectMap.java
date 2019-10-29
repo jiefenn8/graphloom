@@ -16,6 +16,8 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.EntityMap;
+import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.PropertyMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
@@ -32,8 +34,9 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
  * This term map will return either a rr:IRI or rr:BlankNode for its main term.
  */
-public class SubjectMap implements TermMap, PropertyMap {
+public class SubjectMap implements TermMap, PropertyMap, EntityChild {
 
+    private EntityMap parent;
     private TermMap termMap;
     private List<Resource> classes = new ArrayList<>();
 
@@ -57,6 +60,11 @@ public class SubjectMap implements TermMap, PropertyMap {
         return term.asResource();
     }
 
+    protected SubjectMap withParentMap(EntityMap entityMap){
+        this.parent = entityMap;
+        return this;
+    }
+
     @Override
     public List<Resource> listEntityClasses() {
         return Collections.unmodifiableList(classes);
@@ -65,5 +73,10 @@ public class SubjectMap implements TermMap, PropertyMap {
     @Override
     public RDFNode generateRDFTerm(Map<String, String> entityProps) {
         return termMap.generateRDFTerm(entityProps);
+    }
+
+    @Override
+    public EntityMap getParentMap() {
+        return parent;
     }
 }

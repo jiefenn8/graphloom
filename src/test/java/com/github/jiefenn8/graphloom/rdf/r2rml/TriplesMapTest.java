@@ -17,9 +17,11 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 
+import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import org.apache.jena.rdf.model.Property;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -41,28 +43,41 @@ public class TriplesMapTest {
     @Mock private LogicalTable mockLogicalTable;
     @Mock private SubjectMap mockSubjectMap;
 
+    @Before
+    public void setUp(){
+        when(mockSubjectMap.withParentMap(any(EntityMap.class))).thenReturn(mockSubjectMap);
+    }
+
     @Test
     public void WhenPredicateAndObjectMapGiven_TheReturnNonEmptyList() {
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.addRelationNodePair(mock(RelationMap.class), mock(NodeMap.class));
+        triplesMap.addRelationNodePair(mock(PredicateMap.class), mock(ObjectMap.class));
+
         boolean result = triplesMap.listRelationMaps().isEmpty();
+
         assertThat(result, is(false));
     }
 
     @Test
     public void WhenPredicateAndObjectMapGiven_ThenReturnTrue() {
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.addRelationNodePair(mock(PredicateMap.class), mock(NodeMap.class));
+        triplesMap.addRelationNodePair(mock(PredicateMap.class), mock(ObjectMap.class));
+
         boolean result = triplesMap.hasRelationNodeMaps();
+
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenPredicateMapGiven_ThenReturnNodeMap() {
         PredicateMap predicateMap = R2RMLFactory.createConstPredicateMap(mock(Property.class));
+        ObjectMap mockObjectMap = mock(ObjectMap.class);
+        when(mockObjectMap.withParentMap(any(EntityMap.class))).thenReturn(mockObjectMap);
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.addRelationNodePair(predicateMap, mock(NodeMap.class));
+        triplesMap.addRelationNodePair(predicateMap, mockObjectMap);
+
         NodeMap result = triplesMap.getNodeMapWithRelation(predicateMap);
+
         assertThat(result, notNullValue());
     }
 
@@ -84,6 +99,7 @@ public class TriplesMapTest {
     public void WhenGenerateEntity_ThenVerifyCall() {
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
         triplesMap.generateEntityTerm(anyMap());
+
         verify(mockSubjectMap, times(1)).generateEntityTerm(anyMap());
     }
 
@@ -91,6 +107,7 @@ public class TriplesMapTest {
     public void WhenGetSource_ThenVerifyCall() {
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
         triplesMap.getSource();
+
         verify(mockLogicalTable, times(1)).getSource();
     }
 
@@ -98,6 +115,7 @@ public class TriplesMapTest {
     public void WhenListEntityClasses_ThenVerifyCall() {
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
         triplesMap.listEntityClasses();
+
         verify(mockSubjectMap, times(1)).listEntityClasses();
     }
 

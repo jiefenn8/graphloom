@@ -168,9 +168,9 @@ public class R2RMLParserTest {
         //Setup expectations
         Property template = ResourceFactory.createProperty(r2rmlNamespace, "template");
         Resource mockTermMapNode = mock(Resource.class);
+        when(mockTermMapStmt.getProperty(any(Property.class))).thenReturn(mockStatement);
         when(mockTermMapStmt.getObject()).thenReturn(mockTermMapNode);
         when(mockTermMapStmt.getPredicate()).thenReturn(mockProperty);
-        when(mockTermMapStmt.getProperty(any(Property.class))).thenReturn(mockStatement);
         when(mockTermMapNode.asResource()).thenReturn(mockTermMapNode);
         when(mockTermMapNode.hasProperty(any(Property.class))).thenReturn(true);
         when(mockTermMapNode.hasProperty(constant)).thenReturn(false);

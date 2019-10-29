@@ -36,7 +36,7 @@ public class TriplesMap implements EntityMap {
 
     protected TriplesMap(LogicalTable source, SubjectMap subject) {
         logicalTable = checkNotNull(source);
-        subjectMap = checkNotNull(subject);
+        subjectMap = checkNotNull(subject).withParentMap(this);
     }
 
     @Override
@@ -72,10 +72,10 @@ public class TriplesMap implements EntityMap {
     /**
      * Adds a {@code PredicateMap} and {@code ObjectMap} pair to {@code TriplesMap}.
      *
-     * @param relationMap to add as key to the map.
-     * @param nodeMap     as value for {@code relationMap} key.
+     * @param predicateMap to add as key to the map.
+     * @param objectMap   as value for {@code relationMap} key.
      */
-    public void addRelationNodePair(RelationMap relationMap, NodeMap nodeMap) {
-        predicateObjectMaps.put(relationMap, nodeMap);
+    public void addRelationNodePair(PredicateMap predicateMap, ObjectMap objectMap) {
+        predicateObjectMaps.put(predicateMap.withParentMap(this), objectMap.withParentMap(this));
     }
 }

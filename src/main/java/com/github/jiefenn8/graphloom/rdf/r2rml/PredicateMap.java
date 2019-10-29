@@ -16,6 +16,8 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.EntityMap;
+import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -30,8 +32,9 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
  * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
  * This term map will return either a rr:IRI for its main term.
  */
-public class PredicateMap implements TermMap, RelationMap {
+public class PredicateMap implements TermMap, RelationMap, EntityChild {
 
+    private EntityMap parent;
     private TermMap termMap;
 
     protected PredicateMap(TermMap termMap){
@@ -47,5 +50,15 @@ public class PredicateMap implements TermMap, RelationMap {
     @Override
     public RDFNode generateRDFTerm(Map<String, String> entityProps) {
         return termMap.generateRDFTerm(entityProps);
+    }
+
+    protected PredicateMap withParentMap(EntityMap entityMap){
+        this.parent = entityMap;
+        return this;
+    }
+
+    @Override
+    public EntityMap getParentMap() {
+        return parent;
     }
 }
