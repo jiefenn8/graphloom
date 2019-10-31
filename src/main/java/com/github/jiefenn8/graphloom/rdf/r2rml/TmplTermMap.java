@@ -16,10 +16,10 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,16 +31,16 @@ public class TmplTermMap implements TermMap {
     private String templateStr;
     private TermType termType;
 
-    protected TmplTermMap(String templateStr, TermType termType){
+    protected TmplTermMap(String templateStr, TermType termType) {
         this.templateStr = checkNotNull(templateStr);
         this.termType = checkNotNull(termType);
     }
 
     @Override
-    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+    public RDFNode generateRDFTerm(Record entityProps) {
         Matcher matcher = pattern.matcher(templateStr);
         if (!matcher.find()) throw new MapperException("Invalid template string given.");
-        String generatedTerm = templateStr.replace(matcher.group(0), entityProps.get(matcher.group(1)));
+        String generatedTerm = templateStr.replace(matcher.group(0), entityProps.getPropertyValue(matcher.group(1)));
         return RDFTermHelper.asRDFTerm(generatedTerm, termType);
     }
 }

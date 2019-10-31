@@ -16,9 +16,8 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.RDFNode;
-
-import java.util.Map;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
@@ -27,13 +26,13 @@ public class ColTermMap implements TermMap {
     private String columnName;
     private TermType termType;
 
-    protected ColTermMap(String columnName, TermType termType){
+    protected ColTermMap(String columnName, TermType termType) {
         this.columnName = checkNotNull(columnName);
         this.termType = checkNotNull(termType);
     }
 
     @Override
-    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
-        return RDFTermHelper.asRDFTerm(entityProps.get(columnName), termType);
+    public RDFNode generateRDFTerm(Record entityProps) {
+        return RDFTermHelper.asRDFTerm(entityProps.getPropertyValue(columnName), termType);
     }
 }

@@ -18,7 +18,6 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.google.common.collect.ImmutableMap;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,8 +33,8 @@ import static org.mockito.Mockito.mock;
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLMapTest {
 
+    @Mock private Map<String, String> mockNamespaceMap;
     private R2RMLMap r2rmlMap;
-    @Mock Map<String, String> mockNamespaceMap;
 
     @Test
     public void WhenNoNamespaceMapGiven_ThenReturnMap() {

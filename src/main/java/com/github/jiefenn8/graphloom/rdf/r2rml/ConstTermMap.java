@@ -16,9 +16,8 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.RDFNode;
-
-import java.util.Map;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,12 +25,12 @@ public class ConstTermMap implements TermMap {
 
     private RDFNode constTerm;
 
-    protected ConstTermMap(RDFNode constTerm){
+    protected ConstTermMap(RDFNode constTerm) {
         this.constTerm = checkNotNull(constTerm);
     }
 
     @Override
-    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+    public RDFNode generateRDFTerm(Record entityProps) {
         return constTerm;
     }
 }

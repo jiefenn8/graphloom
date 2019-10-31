@@ -16,9 +16,6 @@
 
 package com.github.jiefenn8.graphloom.api;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Input Source
  * <p>
@@ -26,12 +23,28 @@ import java.util.Map;
  * a data source.
  */
 public interface InputSource {
+
     /**
-     * Returns a list of records for an entity containing records
-     * that represent the data and its column-type.
+     * Returns a collection of {@code Record} for an entity containing data
+     * representing it properties and their values. If the query result
+     * is a large data-set, the InputSource may split the result and return
+     * several batches of the result. The retrieval of specific batch can be
+     * controlled by specifying the seq number.
+     * E.g. 2000 items, fetch size of 500 = 4 batches; batch 2 will be the 2nd
+     * collection of data.
      *
-     * @param entity to get records from data-source.
-     * @return the list of records in maps.
+     * @param config  to setup the query for this entity.
+     * @param batchId the batch to return
+     * @return the collection of Records as EntityRecord. Else return empty
+     * {@code EntityRecord} if there is no more Records to return.
      */
-    List<Map<String, String>> getEntityRecords(String entity);
+    EntityRecord getEntityRecord(SourceConfig config, int batchId);
+
+    /**
+     * Returns the number of batches to expect for a {@code SourceConfig}.
+     *
+     * @param config containing the Entity query info.
+     * @return the number of batches possible.
+     */
+    int calculateNumOfBatches(SourceConfig config);
 }

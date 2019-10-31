@@ -16,6 +16,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.common.HashRecord;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -25,8 +26,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Map;
-
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,26 +34,26 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PredicateMapTest {
 
-    @Mock Map<String, String> mockRow;
+    @Mock private HashRecord mockRecord;
     private PredicateMap predicateMap;
 
     @Before
     public void setUp() {
-        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
+        when(mockRecord.getPropertyValue("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
     @Test
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsProperty() {
         Property constant = ResourceFactory.createProperty("Predicate_1");
         predicateMap = R2RMLFactory.createConstPredicateMap(constant);
-        RDFNode result = predicateMap.generateRelationTerm(mockRow);
+        RDFNode result = predicateMap.generateRelationTerm(mockRecord);
         assertThat(result, is(instanceOf(Property.class)));
     }
 
     @Test
     public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
         predicateMap = R2RMLFactory.createTmplPredicateMap("Template/{Col_1_Type}");
-        boolean result = predicateMap.generateRelationTerm(mockRow).isResource();
+        boolean result = predicateMap.generateRelationTerm(mockRecord).isResource();
         assertThat(result, is(true));
     }
 }

@@ -16,12 +16,11 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.EntityChild;
+import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
+import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.RDFNode;
-
-import java.util.Map;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
@@ -34,16 +33,11 @@ public class ObjectMap implements TermMap, NodeMap, EntityChild {
     private EntityMap parent;
     private TermMap termMap;
 
-    protected ObjectMap(TermMap termMap){
+    protected ObjectMap(TermMap termMap) {
         this.termMap = checkNotNull(termMap);
     }
 
-    @Override
-    public RDFNode generateNodeTerm(Map<String, String> entityProps) {
-        return generateRDFTerm(entityProps);
-    }
-
-    protected ObjectMap withParentMap(EntityMap entityMap){
+    protected ObjectMap withParentMap(EntityMap entityMap) {
         this.parent = entityMap;
         return this;
     }
@@ -54,7 +48,12 @@ public class ObjectMap implements TermMap, NodeMap, EntityChild {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+    public RDFNode generateRDFTerm(Record entityProps) {
         return termMap.generateRDFTerm(entityProps);
+    }
+
+    @Override
+    public RDFNode generateNodeTerm(Record entityProps) {
+        return generateRDFTerm(entityProps);
     }
 }

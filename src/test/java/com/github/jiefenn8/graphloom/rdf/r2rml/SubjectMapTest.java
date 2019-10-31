@@ -16,6 +16,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.common.HashRecord;
 import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -25,8 +26,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Map;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -34,39 +33,39 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SubjectMapTest {
 
-    @Mock Map<String, String> mockRow;
+    @Mock private HashRecord mockRecord;
     private SubjectMap subjectMap;
 
     @Before
     public void setUp() throws Exception {
-        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
+        when(mockRecord.getPropertyValue("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
     @Test
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
         Resource rdfNode = ResourceFactory.createResource("constant");
         subjectMap = R2RMLFactory.createConstSubjectMap(rdfNode);
-        boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        boolean result = subjectMap.generateEntityTerm(mockRecord).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
         subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
-        boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        boolean result = subjectMap.generateEntityTerm(mockRecord).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenColumnTermMapTypeGiven_ThenReturnTermAsResource() {
         subjectMap = R2RMLFactory.createColSubjectMap("Col_1_Type", TermType.IRI);
-        boolean result = subjectMap.generateEntityTerm(mockRow).isResource();
+        boolean result = subjectMap.generateEntityTerm(mockRecord).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenClassGiven_ThenReturnNonEmptyList() {
-        subjectMap = R2RMLFactory.createTmplSubjectMap( "Template/{Col_1_Type}");
+        subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
         Resource expected = ResourceFactory.createResource("resource");
         subjectMap.addClass(expected);
         boolean result = subjectMap.listEntityClasses().isEmpty();

@@ -16,9 +16,10 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.EntityChild;
+import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.PropertyMap;
+import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -26,7 +27,6 @@ import org.apache.jena.rdf.model.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
@@ -40,7 +40,7 @@ public class SubjectMap implements TermMap, PropertyMap, EntityChild {
     private TermMap termMap;
     private List<Resource> classes = new ArrayList<>();
 
-    protected SubjectMap(TermMap termMap){
+    protected SubjectMap(TermMap termMap) {
         this.termMap = checkNotNull(termMap);
     }
 
@@ -54,13 +54,13 @@ public class SubjectMap implements TermMap, PropertyMap, EntityChild {
     }
 
     @Override
-    public Resource generateEntityTerm(Map<String, String> entityProps) {
+    public Resource generateEntityTerm(Record entityProps) {
         RDFNode term = generateRDFTerm(entityProps);
         if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode");
         return term.asResource();
     }
 
-    protected SubjectMap withParentMap(EntityMap entityMap){
+    protected SubjectMap withParentMap(EntityMap entityMap) {
         this.parent = entityMap;
         return this;
     }
@@ -71,7 +71,7 @@ public class SubjectMap implements TermMap, PropertyMap, EntityChild {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Map<String, String> entityProps) {
+    public RDFNode generateRDFTerm(Record entityProps) {
         return termMap.generateRDFTerm(entityProps);
     }
 

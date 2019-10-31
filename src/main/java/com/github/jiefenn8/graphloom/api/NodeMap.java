@@ -18,8 +18,6 @@ package com.github.jiefenn8.graphloom.api;
 
 import org.apache.jena.rdf.model.RDFNode;
 
-import java.util.Map;
-
 /**
  * Node Map
  * <p>
@@ -36,6 +34,6 @@ public interface NodeMap {
      * @param entityProps the entity properties collection to use.
      * @return the term {@code RDFNode} generated.
      */
-    RDFNode generateNodeTerm(Map<String, String> entityProps);
+    RDFNode generateNodeTerm(Record entityProps);
 
 }

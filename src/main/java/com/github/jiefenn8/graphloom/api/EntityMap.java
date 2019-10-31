@@ -24,7 +24,18 @@ import java.util.Set;
  * This interface defines the base methods that manages the mapping
  * of data to their graph terms sharing the same entity.
  */
-public interface EntityMap extends SourceMap, PropertyMap {
+public interface EntityMap extends PropertyMap {
+
+    /**
+     * Load the configs on {@code SourceMap} to {@code InputSource}.
+     * If successful, returns {@code SourceMap} ready for retrieval
+     * of  Records for mapping.
+     *
+     * @param source where is data is stored to be query from.
+     * @return the SourceMap ready to be queried and iterated on.
+     */
+    SourceMap applySource(InputSource source);
+
     /**
      * Returns all {@code RelationMap} that this {@code EntityMap} has.
      *
@@ -41,11 +52,11 @@ public interface EntityMap extends SourceMap, PropertyMap {
     NodeMap getNodeMapWithRelation(RelationMap relationMap);
 
     /**
-     * Checks if {@code EntityMap} has any {@code RelationMap} and {@code NodeMap} pair.
+     * Checks if {@code EntityMap} has any {@code RelationMap}
+     * and {@code NodeMap} pair.
      *
      * @return true if there are any pair, otherwise false.
      */
     boolean hasRelationNodeMaps();
-
 
 }

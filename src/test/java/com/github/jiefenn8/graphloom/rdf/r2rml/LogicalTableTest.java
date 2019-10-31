@@ -16,25 +16,39 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import org.junit.Before;
+import com.github.jiefenn8.graphloom.api.EntityRecord;
+import com.github.jiefenn8.graphloom.api.InputSource;
+import com.github.jiefenn8.graphloom.api.SourceConfig;
+import com.github.jiefenn8.graphloom.common.LinkedHashEntityRecord;
+import com.github.jiefenn8.graphloom.rdf.r2rml.LogicalTable.DbPayloadType;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+@RunWith(JUnitParamsRunner.class)
 public class LogicalTableTest {
 
-    private final String source = "Source_1";
+    private final String payload = "PAYLOAD";
     private LogicalTable logicalTable;
 
-    @Before
-    public void setUp() throws Exception {
-        logicalTable = new LogicalTable(source);
-    }
-
     @Test
-    public void WhenSourceGiven_ThenReturnNonNullString() {
-        String result = logicalTable.getSource();
+    @Parameters({"QUERY", "TABLENAME"})
+    public void WhenEntityRecordRetrieved_ThenReturnEntityRecord(DbPayloadType payloadType) {
+        logicalTable = new LogicalTable(payload, payloadType);
+        InputSource mockInputSource = mock(InputSource.class);
+        logicalTable.loadInputSource(mockInputSource);
+        when(mockInputSource.getEntityRecord(any(SourceConfig.class), anyInt()))
+                .thenReturn(mock(LinkedHashEntityRecord.class));
+
+        EntityRecord result = logicalTable.getEntityRecord(0);
         assertThat(result, notNullValue());
     }
 }

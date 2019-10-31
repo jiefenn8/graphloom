@@ -1,8 +1,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.RDFNode;
-
-import java.util.Map;
 
 public interface TermMap {
 
@@ -14,7 +13,7 @@ public interface TermMap {
      * @param entityProps the entity properties collection to use.
      * @return the RDF term generated.
      */
-    RDFNode generateRDFTerm(Map<String, String> entityProps);
+    RDFNode generateRDFTerm(Record entityProps);
 
     /**
      * The TermType to return generated term as.

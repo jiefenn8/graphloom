@@ -130,7 +130,7 @@ public class R2RMLParser {
         if (!ltNode.hasProperty(tableName)) throw new ParserException("No table name found.");
         String tableSource = ltNode.getProperty(tableName).getLiteral().getString();
 
-        return R2RMLFactory.createLogicalTable(tableSource);
+        return R2RMLFactory.createLogicalTableBaseTableOrView(tableSource);
     }
 
     private SubjectMap mapToSubjectMap(Statement subjectMapStmt) {

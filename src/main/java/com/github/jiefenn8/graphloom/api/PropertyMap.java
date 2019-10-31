@@ -19,7 +19,6 @@ package com.github.jiefenn8.graphloom.api;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Property Map
@@ -36,7 +35,7 @@ public interface PropertyMap {
      * @param entityProps the entity properties collection to use.
      * @return the term {@code Resource} generated.
      */
-    Resource generateEntityTerm(Map<String, String> entityProps);
+    Resource generateEntityTerm(Record entityProps);
 
     /**
      * Returns an enumerator of all class associated with the entity.

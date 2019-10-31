@@ -19,7 +19,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
-import com.github.jiefenn8.graphloom.api.RelationMap;
+import com.github.jiefenn8.graphloom.common.HashRecord;
 import org.apache.jena.rdf.model.Property;
 import org.junit.Before;
 import org.junit.Rule;
@@ -32,7 +32,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -44,7 +43,7 @@ public class TriplesMapTest {
     @Mock private SubjectMap mockSubjectMap;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         when(mockSubjectMap.withParentMap(any(EntityMap.class))).thenReturn(mockSubjectMap);
     }
 
@@ -98,17 +97,9 @@ public class TriplesMapTest {
     @Test
     public void WhenGenerateEntity_ThenVerifyCall() {
         triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.generateEntityTerm(anyMap());
+        triplesMap.generateEntityTerm(mock(HashRecord.class));
 
-        verify(mockSubjectMap, times(1)).generateEntityTerm(anyMap());
-    }
-
-    @Test
-    public void WhenGetSource_ThenVerifyCall() {
-        triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.getSource();
-
-        verify(mockLogicalTable, times(1)).getSource();
+        verify(mockSubjectMap, times(1)).generateEntityTerm(any());
     }
 
     @Test

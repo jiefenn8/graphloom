@@ -16,6 +16,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.common.HashRecord;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Before;
@@ -24,8 +25,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Map;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
@@ -33,33 +32,33 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectMapTest {
 
-    @Mock Map<String, String> mockRow;
+    @Mock private HashRecord mockRecord;
     private ObjectMap objectMap;
 
     @Before
     public void setUp() throws Exception {
-        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
+        when(mockRecord.getPropertyValue("Col_1_Type")).thenReturn("Col_1_Val");
     }
 
     @Test
     public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
         Resource rdfNode = ResourceFactory.createResource("constant");
         objectMap = R2RMLFactory.createConstObjectMap(rdfNode);
-        boolean result = objectMap.generateNodeTerm(mockRow).isURIResource();
+        boolean result = objectMap.generateNodeTerm(mockRecord).isURIResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
         objectMap = R2RMLFactory.createTmplObjectMap("Template/{Col_1_Type}");
-        boolean result = objectMap.generateNodeTerm(mockRow).isResource();
+        boolean result = objectMap.generateNodeTerm(mockRecord).isResource();
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenColumnTermMapTypeGiven_ThenReturnTermAsLiteral() {
-        objectMap = R2RMLFactory.createColObjectMap( "Col_1_Type");
-        boolean result = objectMap.generateNodeTerm(mockRow).isLiteral();
+        objectMap = R2RMLFactory.createColObjectMap("Col_1_Type");
+        boolean result = objectMap.generateNodeTerm(mockRecord).isLiteral();
         assertThat(result, is(true));
     }
 }
