@@ -39,7 +39,7 @@ public interface EntityRecord extends Iterable<Record> {
      * @param r record to be searched in collection
      * @return true if this collection contains the given Record
      * @throws NullPointerException if the given Record is null and this
-     *          collection does not allow null elements
+     *                              collection does not allow null elements
      */
     boolean containsRecord(Record r);
 
@@ -66,7 +66,7 @@ public interface EntityRecord extends Iterable<Record> {
      *
      * @param r record to be added to the collection
      * @return true if the given Record element did not exist in the
-     *          collection or its properties matches with existing elements
+     * collection or its properties matches with existing elements
      */
     boolean addRecord(Record r);
 

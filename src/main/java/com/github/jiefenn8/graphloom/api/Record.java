@@ -35,9 +35,9 @@ public interface Record {
      * property does not exist.
      *
      * @param property name of the property to add to Record.
-     * @param value value to associate to the property.
+     * @param value    value to associate to the property.
      * @return the previous value associated with the property
-     *          otherwise null
+     *         otherwise null
      */
     String addProperty(String property, String value);
 
@@ -78,7 +78,7 @@ public interface Record {
      *
      * @param property property to be removed from Record
      * @return the previous value associated with the property
-     *          otherwise null
+     *         otherwise null
      */
     String removeProperty(String property);
 

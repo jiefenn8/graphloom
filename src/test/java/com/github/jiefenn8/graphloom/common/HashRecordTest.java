@@ -31,63 +31,92 @@ public class HashRecordTest {
         record = new HashRecord("PROPERTY", "VALUE");
     }
 
-    @Test
-    public void WhenRecordValueExist_TheReturnTrue() {
-        boolean result = record.hasValue("VALUE");
-        assertThat(result, is(true));
-    }
+    //addProperty
 
     @Test
-    public void WhenRecordValueNotExist_ThenReturnFalse() {
-        boolean result = record.hasValue("OTHER");
-        assertThat(result, is(false));
-    }
-
-    @Test
-    public void WhenRecordPropertyExist_ThenReturnTrue() {
-        boolean result = record.hasProperty("PROPERTY");
-        assertThat(result, is(true));
-    }
-
-    @Test
-    public void WhenRecordKeyNoExist_ThenReturnFalse() {
-        boolean result = record.hasProperty("OTHER");
-        assertThat(result, is(false));
-    }
-
-    @Test
-    public void WhenAddNewProperty_ThenShouldReturnNull() {
+    public void GivenNewProperty_WhenAddNewProperty_ThenReturnNull() {
         String value = "VALUE2";
         String result = record.addProperty("PROPERTY2", value);
-        assertThat(result, nullValue());
+        assertThat(result, is(nullValue()));
     }
 
     @Test
-    public void WhenAddNewPropertyValue_ThenShouldReturnPreviousValue() {
+    public void GivenExistingProperty_WhenAddNewProperty_ThenReturnPreviousValue() {
         String expected = "VALUE";
         String value = "VALUE2";
         String result = record.addProperty("PROPERTY", value);
         assertThat(result, is(equalTo(expected)));
     }
 
+    //hasProperty
+
     @Test
-    public void WhenRemovePropertyValue_TheShouldReturnValue() {
+    public void GivenExistingProperty_WhenSearchProperty_ThenReturnTrue() {
+        boolean result = record.hasProperty("PROPERTY");
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void GivenNewProperty_WhenSearchProperty_ThenReturnFalse() {
+        boolean result = record.hasProperty("OTHER");
+        assertThat(result, is(false));
+    }
+
+    //hasValue
+
+    @Test
+    public void GivenExistingValue_WhenSearchValue_TheReturnTrue() {
+        boolean result = record.hasValue("VALUE");
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void GivenNewValue_WhenSearchValue_ThenReturnFalse() {
+        boolean result = record.hasValue("OTHER");
+        assertThat(result, is(false));
+    }
+
+    //getProperty
+
+    @Test
+    public void GivenExistingProperty_WhenRetrieveProperty_ThenReturnValue() {
+        String expectedValue = "VALUE";
+        String result = record.getPropertyValue("PROPERTY");
+        assertThat(result, is(equalTo(expectedValue)));
+    }
+
+    @Test
+    public void GivenNewProperty_WhenRetrieveProperty_ThenReturnNull() {
+        String result = record.getPropertyValue("PROPERTY2");
+        assertThat(result, is(nullValue()));
+    }
+
+    //removeProperty
+
+    @Test
+    public void GivenExistingProperty_WhenRemoveProperty_ThenReturnPreviousValue() {
         String propertyValue = "VALUE";
         String result = record.removeProperty("PROPERTY");
-        assertThat(result, equalTo(propertyValue));
+        assertThat(result, is(equalTo(propertyValue)));
+    }
+
+    @Test
+    public void GivenNewProperty_WhenRemoveProperty_ThenReturnNull() {
+        String result = record.removeProperty("PROPERTY2");
+        assertThat(result, is(nullValue()));
     }
 
     //equals()
 
     @Test
-    public void WhenRecordCompareAreEqual_ThenReturnTrue() {
+    public void GivenSameRecord_WhenCompareRecord_ThenReturnTrue() {
         HashRecord record2 = new HashRecord("PROPERTY", "VALUE");
         boolean result = record.equals(record2);
         assertThat(result, is(true));
     }
 
     @Test
-    public void WhenDiffRecordCompareAreNotEqual_ThenReturnFalse() {
+    public void GivenDiffRecord_WhenCompareRecord_ThenReturnFalse() {
         HashRecord record2 = new HashRecord("PROPERTY", "VALUE2");
         boolean result = record.equals(record2);
         assertThat(result, is(false));
@@ -97,17 +126,17 @@ public class HashRecordTest {
 
     //Check hashcode generation on different property name.
     @Test
-    public void WhenDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() {
+    public void WhenTwoDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() {
         HashRecord record2 = new HashRecord("PROPERTY2", "VALUE");
         int result = record2.hashCode();
-        assertThat(result, not(equalTo(record.hashCode())));
+        assertThat(result, is(not(equalTo(record.hashCode()))));
     }
 
-    //Negation case of WhenDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() for verification.
+    //Negation case of WhenTwoDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() for verification.
     @Test
-    public void WhenSameRecordGenerateHashCode_ThenBothHashCodeMatch() {
+    public void WhenTwoSameRecordGenerateHashCode_ThenBothHashCodeMatch() {
         HashRecord record2 = new HashRecord("PROPERTY", "VALUE");
         int result = record2.hashCode();
-        assertThat(result, equalTo(record.hashCode()));
+        assertThat(result, is(equalTo(record.hashCode())));
     }
 }
