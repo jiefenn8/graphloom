@@ -59,6 +59,16 @@ public interface Record {
      */
     boolean hasValue(String value);
 
+    /**
+     * Returns the value of the given property in this Record if
+     * does exist. If the property does not exist in the Record, null
+     * will be returned. A null value returned does not fully indicate
+     * there is no property but can also mean that the property exist
+     * but the value is mapped to null.
+     *
+     * @param property property to retrieve its value in this Record
+     * @return the value mapped to given property otherwise null
+     */
     String getPropertyValue(String property);
 
     /**
