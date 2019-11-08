@@ -17,38 +17,47 @@
 package com.github.jiefenn8.graphloom.common;
 
 import com.github.jiefenn8.graphloom.api.Record;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class LinkedHashEntityRecordTest {
 
     private LinkedHashEntityRecord entityRecord;
 
+    //Default setup with have one record inserted into the SUT instance.
     @Before
     public void setUp() {
+        //SUT instance creation
         entityRecord = new LinkedHashEntityRecord();
+
+        //Default mock behaviour setup
         HashRecord mockRecord = mock(HashRecord.class);
         entityRecord.addRecord(mockRecord);
+        when(mockRecord.properties()).thenReturn(ImmutableSet.of("PROPERTY"));
     }
 
+    //size
+
     @Test
-    public void WhenSizeExist_ThenReturnNonNegInt() {
+    public void WhenRetrieveSize_ThenReturnNonNegativeNumber() {
         int result = entityRecord.size();
         assertThat(result, is(greaterThanOrEqualTo(0)));
     }
 
+    //containsRecord
+
     @Test
-    public void WhenContainsRecordMatch_ThenReturnTrue() {
+    public void GivenExistingRecord_WhenSearchRecord_ThenReturnTrue() {
         HashRecord record = mock(HashRecord.class);
         entityRecord.addRecord(record);
         boolean result = entityRecord.containsRecord(record);
@@ -56,20 +65,24 @@ public class LinkedHashEntityRecordTest {
     }
 
     @Test
-    public void WhenContainsRecordFail_ThenReturnFalse() {
+    public void GivenNewRecord_WhenSearchRecord_ThenReturnFalse() {
         HashRecord mockRecord = mock(HashRecord.class);
         boolean result = entityRecord.containsRecord(mockRecord);
         assertThat(result, is(false));
     }
 
+    //iterator
+
     @Test
-    public void WhenIteratorExist_ThenReturnIterator() {
+    public void WhenRetrieveIterator_ThenReturnIterator() {
         Iterator result = entityRecord.iterator();
         assertThat(result, notNullValue());
     }
 
+    //removeRecord
+
     @Test
-    public void WhenRemoveRecordMatch_ThenReturnTrue() {
+    public void GivenExistingRecord_WhenRemoveRecord_ThenReturnTrue() {
         HashRecord mockRecord = mock(HashRecord.class);
         entityRecord.addRecord(mockRecord);
         boolean result = entityRecord.removeRecord(mockRecord);
@@ -77,27 +90,39 @@ public class LinkedHashEntityRecordTest {
     }
 
     @Test
-    public void WhenRemoveRecordNoMatch_ThenReturnFalse() {
+    public void GivenNewRecord_WhenRemoveRecord_ThenReturnFalse() {
         HashRecord mockRecord = mock(HashRecord.class);
         boolean result = entityRecord.removeRecord(mockRecord);
         assertThat(result, is(false));
     }
 
+    //addRecord
+
     @Test
-    public void WhenAddRecordSucceed_ThenReturnTrue() {
+    public void GivenNewRecordWithSameProperties_WhenAddRecord_ThenReturnTrue() {
         boolean result = entityRecord.addRecord(mock(HashRecord.class));
         assertThat(result, is(true));
     }
 
     @Test
-    public void WhenNoRecordExist_ThenReturnTrue() {
-        entityRecord.clear();
+    public void GivenNewRecordWithDiffProperties_WhenAddRecord_ThenReturnFalse() {
+        Record mockRecord = mock(HashRecord.class);
+        when(mockRecord.properties()).thenReturn(ImmutableSet.of("PROPERTY2"));
+        boolean result = entityRecord.addRecord(mockRecord);
+        assertThat(result, is(false));
+    }
+
+    //isEmpty
+
+    @Test
+    public void GivenEntityRecordIsEmpty_WhenCheckIsEmpty_ThenReturnTrue() {
+        entityRecord = new LinkedHashEntityRecord();
         boolean result = entityRecord.isEmpty();
         assertThat(result, is(true));
     }
 
     @Test
-    public void WhenRecordExist_ThenReturnFalse() {
+    public void GivenRecordHasRecord_WhenCheckIsEmpty_ThenReturnFalse() {
         entityRecord.addRecord(mock(HashRecord.class));
         boolean result = entityRecord.isEmpty();
         assertThat(result, is(false));

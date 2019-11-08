@@ -19,7 +19,10 @@ package com.github.jiefenn8.graphloom.common;
 import com.github.jiefenn8.graphloom.api.EntityRecord;
 import com.github.jiefenn8.graphloom.api.Record;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Collection of {@code Record} as EntityRecord.
@@ -43,8 +46,8 @@ public class LinkedHashEntityRecord implements EntityRecord {
     }
 
     @Override
-    public boolean containsRecord(Record record) {
-        return records.contains(record);
+    public boolean containsRecord(Record r) {
+        return records.contains(r);
     }
 
     @Override
@@ -58,13 +61,19 @@ public class LinkedHashEntityRecord implements EntityRecord {
     }
 
     @Override
-    public boolean removeRecord(Record record) {
-        return records.remove(record);
+    public boolean removeRecord(Record r) {
+        return records.remove(r);
     }
 
     @Override
-    public boolean addRecord(Record record) {
-        return records.add(record);
+    public boolean addRecord(Record r) {
+        Iterator<Record> iterator = records.iterator();
+        if (iterator.hasNext()) {
+            Record record = iterator.next();
+            if (!record.properties().equals(r.properties())) return false;
+        }
+
+        return records.add(r);
     }
 
     @Override
