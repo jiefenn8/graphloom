@@ -19,43 +19,41 @@ package com.github.jiefenn8.graphloom.api;
 import java.util.Set;
 
 /**
- * Entity Map
- * <p>
  * This interface defines the base methods that manages the mapping
  * of data to their graph terms sharing the same entity.
  */
 public interface EntityMap extends PropertyMap {
 
     /**
-     * Load the configs on {@code SourceMap} to {@code InputSource}.
-     * If successful, returns {@code SourceMap} ready for retrieval
-     * of  Records for mapping.
+     * Returns the source map after applying input source with the entity
+     * map in preparation for the retrieval calls of entity record.
      *
-     * @param source where is data is stored to be query from.
-     * @return the SourceMap ready to be queried and iterated on.
+     * @param s input source to apply to mapping configs
+     * @return the source map ready to be queried and iterated on
      */
-    SourceMap applySource(InputSource source);
+    SourceMap applySource(InputSource s);
 
     /**
-     * Returns all {@code RelationMap} that this {@code EntityMap} has.
+     * Returns all relation maps that this entity map has.
      *
-     * @return all {@code RelationMap} in associated.
+     * @return the set containing all relation maps in this entity map
      */
     Set<RelationMap> listRelationMaps();
 
     /**
-     * Returns the {@code NodeMap} associated with the {@code RelationMap}.
+     * Returns the node map associated with the given relation map.
      *
-     * @param relationMap key to search for paired ObjectMap.
-     * @return the {@code NodeMap} found with {@code relationMap} key.
+     * @param m relation mapping to be searched in entity map for its
+     *         paired node map
+     * @return the node map found with the given relation map
      */
-    NodeMap getNodeMapWithRelation(RelationMap relationMap);
+    NodeMap getNodeMapWithRelation(RelationMap m);
 
     /**
-     * Checks if {@code EntityMap} has any {@code RelationMap}
-     * and {@code NodeMap} pair.
+     * Returns true if this entity mapping has any relation map and
+     * node map pairs'.
      *
-     * @return true if there are any pair, otherwise false.
+     * @return true if there are any pair, otherwise false
      */
     boolean hasRelationNodeMaps();
 

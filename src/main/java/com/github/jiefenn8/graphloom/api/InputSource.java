@@ -17,15 +17,13 @@
 package com.github.jiefenn8.graphloom.api;
 
 /**
- * Input Source
- * <p>
- * This interface defines the base methods to retrieve data from
- * a data source.
+ * This interface defines the base methods to retrieve data of entities as
+ * a entity record from a data source.
  */
 public interface InputSource {
 
     /**
-     * Returns a collection of {@code Record} for an entity containing data
+     * Returns a collection of record for an entity containing data
      * representing it properties and their values. If the query result
      * is a large data-set, the InputSource may split the result and return
      * several batches of the result. The retrieval of specific batch can be
@@ -33,18 +31,18 @@ public interface InputSource {
      * E.g. 2000 items, fetch size of 500 = 4 batches; batch 2 will be the 2nd
      * collection of data.
      *
-     * @param config  to setup the query for this entity.
+     * @param c to setup the query for this entity.
      * @param batchId the batch to return
-     * @return the collection of Records as EntityRecord. Else return empty
-     * {@code EntityRecord} if there is no more Records to return.
+     * @return the collection of records as EntityRecord. Else return empty
+     *         entity map if there is no more records to return.
      */
-    EntityRecord getEntityRecord(SourceConfig config, int batchId);
+    EntityRecord getEntityRecord(SourceConfig c, int batchId);
 
     /**
-     * Returns the number of batches to expect for a {@code SourceConfig}.
+     * Returns the number of batches to expect for a source config.
      *
-     * @param config containing the Entity query info.
-     * @return the number of batches possible.
+     * @param c containing the entity query info
+     * @return the number of batches possible
      */
-    int calculateNumOfBatches(SourceConfig config);
+    int calculateNumOfBatches(SourceConfig c);
 }

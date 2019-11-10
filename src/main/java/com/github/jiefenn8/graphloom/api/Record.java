@@ -20,9 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * An Record.
- * <p>
- * This interface defines a set of method to manage a collection of
+ * This interface defines the base method to manage a collection of
  * properties with their values as Strings.
  */
 public interface Record {

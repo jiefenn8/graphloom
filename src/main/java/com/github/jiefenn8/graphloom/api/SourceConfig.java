@@ -19,9 +19,9 @@ package com.github.jiefenn8.graphloom.api;
 public interface SourceConfig {
 
     /**
-     * Returns the payload type id of this class.
+     * Returns the payload type of this class.
      *
-     * @return the payload type.
+     * @return the payload type
      */
     PayloadType getPayloadType();
 
@@ -29,7 +29,7 @@ public interface SourceConfig {
      * Returns the payload string that defines query on what Entity
      * result is needed to continue the mapping.
      *
-     * @return the String containing info needed to execute a query.
+     * @return the payload containing info needed to execute the query
      */
     String getPayload();
 
@@ -37,22 +37,21 @@ public interface SourceConfig {
      * Returns a definition that defines how to iterate through each
      * record of Entity result.
      *
-     * @return the String containing the iteration definition.
+     * @return the value containing the iteration definition
      */
     String getIteratorDef();
 
     /**
-     * Returns the value of a property that is set in this instance.
+     * Returns the value of a property in this source config.
      *
-     * @param propertyName the name of the property to get value.
-     * @return the String containing the value of the property else
-     * return null;
+     * @param propertyName the given property name to retrieve its value
+     * @return the value of the given property otherwise null
      */
     String getProperty(String propertyName);
 
     /**
-     * The interface to manage the type of payload.
-     * Can be used to implement with enum.
+     * This interface defines the base methods to manage the type of payload
+     * the source config can be.
      */
     interface PayloadType {
     }

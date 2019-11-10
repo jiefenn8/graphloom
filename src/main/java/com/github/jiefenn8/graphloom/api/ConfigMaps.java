@@ -20,26 +20,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Graph Maps
- * <p>
  * This interface defines the base methods to express the rules
  * from many configurations that will map data-source to a graph model.
  */
 public interface ConfigMaps {
 
     /**
-     * Returns namespace map of all prefix and {@code URI} that was used in the
+     * Returns map of all namespace prefix and URI that was used in the
      * mapping document.
      *
-     * @return the map containing all prefixes and their {@code URI}.
+     * @return the map containing all namespace prefixes and their URIs
      */
-
     Map<String, String> getNamespaceMap();
 
     /**
-     * Returns all {@code EntityMap} that exists in the mapping configuration.
+     * Returns all entity map that exists in the configuration mappings.
      *
-     * @return all {@code EntityMap} associated.
+     * @return the list containing all entity map associated
+     *         with the mapping
      */
     List<EntityMap> listEntityMaps();
 }

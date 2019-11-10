@@ -19,39 +19,35 @@ package com.github.jiefenn8.graphloom.api;
 import java.util.function.Consumer;
 
 /**
- * SourceMap
- * <p>
  * This interface defines the base methods that provides the information
  * needed to locate and retrieve the desired data from the data-source.
  */
 public interface SourceMap {
 
     /**
-     * Sets and prepare the main source where the Entity and its properties should
-     * be retrieved from as EntityRecord.
+     * Returns this source map after applying it on the given input source.
      *
-     * @param source of the Entity and its properties.
-     * @return this SourceMap after validating the source.
+     * @param s input source containing the data to map over to graph
+     * @return the source map ready to be queried and iterated on
      */
-    SourceMap loadInputSource(InputSource source);
+    SourceMap loadInputSource(InputSource s);
 
     /**
-     * Takes in a {@code Consumer} that will consume each Record from the
-     * retrieved {@code EntityRecord} from {@code InputSource}.
-     * <p>
-     * This method is used when user want to iterate through all the available
-     * Entity records from {@code InputSource} with several batches.
+     * This call will consume each record given from the input source after
+     * querying and apply the consumer action on each of them. This method
+     * is used when it is desired to iterate through all the available entity
+     * records from input source with several batches.
      *
-     * @param action the action to perform.
+     * @param action the action to perform on each record
      */
     void forEachEntityRecord(Consumer<Record> action);
 
 
     /**
-     * Returns an EntityRecord collection based on the batch id; containing
-     * Records of Entity properties.
+     * Returns an entity record result based on the batch id; containing
+     * records of an entity from applied source map.
      *
-     * @return the collection of Records as EntityRecord.
+     * @return the collection of records for an entity
      */
     EntityRecord getEntityRecord(int batchId);
 }

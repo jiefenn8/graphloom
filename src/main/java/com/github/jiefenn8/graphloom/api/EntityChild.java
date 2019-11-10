@@ -16,12 +16,17 @@
 
 package com.github.jiefenn8.graphloom.api;
 
+/**
+ * This interface defines the base methods to manage any property
+ * of that is associated to an entity map; such that any instance of
+ * this implementation is owned by zero or one entity map.
+ */
 public interface EntityChild {
 
     /**
-     * Returns the EntityMap that this TermMap is associated with.
+     * Returns the entity map that this mapping is associated with.
      *
-     * @return the EntityMap that owns this.
+     * @return the entity map that owns this map
      */
     EntityMap getParentMap();
 }
