@@ -30,7 +30,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-//Simple big bang integration test. todo: Refactor test to include more integration test.
+//Simple all ups integration test.
 public class RDFMapperTest {
 
     private final String validFile = "/valid_r2rml.ttl";

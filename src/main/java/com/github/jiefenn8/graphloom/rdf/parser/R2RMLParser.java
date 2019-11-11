@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * R2RML Parser
- * <p>
  * This class defines the base methods that manages the mapping
  * configuration of predicate and any objects related to parent entity
  * by the specified predicate.
@@ -140,7 +138,7 @@ public class R2RMLParser {
 
             Property sqlVersion = ResourceFactory.createProperty(r2rmlPrefixUri, "sqlVersion");
             if(!ltNode.hasProperty(sqlVersion)) throw new ParserException("SqlVersion property not found with SqlQuery.");
-            String version = ltNode.getProperty(sqlVersion).getLiteral().getString();
+            String version = ltNode.getProperty(sqlVersion).getResource().getLocalName();
 
             return R2RMLFactory.createLogicalTableR2RMLView(query, version);
         }

@@ -41,9 +41,8 @@ public class LinkedHashEntityRecordTest {
         entityRecord = new LinkedHashEntityRecord();
 
         //Default mock behaviour setup
-        HashRecord mockRecord = mock(HashRecord.class);
-        entityRecord.addRecord(mockRecord);
-        when(mockRecord.properties()).thenReturn(ImmutableSet.of("PROPERTY"));
+        Record record = new HashRecord("PROPERTY", "VALUE");
+        entityRecord.addRecord(record);
     }
 
     //size
@@ -58,16 +57,15 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenExistingRecord_WhenSearchRecord_ThenReturnTrue() {
-        HashRecord record = mock(HashRecord.class);
-        entityRecord.addRecord(record);
+        Record record = new HashRecord("PROPERTY", "VALUE");
         boolean result = entityRecord.containsRecord(record);
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenNewRecord_WhenSearchRecord_ThenReturnFalse() {
-        HashRecord mockRecord = mock(HashRecord.class);
-        boolean result = entityRecord.containsRecord(mockRecord);
+        Record record = new HashRecord("PROPERTY2", "VALUE");
+        boolean result = entityRecord.containsRecord(record);
         assertThat(result, is(false));
     }
 
@@ -83,16 +81,15 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenExistingRecord_WhenRemoveRecord_ThenReturnTrue() {
-        HashRecord mockRecord = mock(HashRecord.class);
-        entityRecord.addRecord(mockRecord);
-        boolean result = entityRecord.removeRecord(mockRecord);
+        Record record = new HashRecord("PROPERTY", "VALUE");
+        boolean result = entityRecord.removeRecord(record);
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenNewRecord_WhenRemoveRecord_ThenReturnFalse() {
-        HashRecord mockRecord = mock(HashRecord.class);
-        boolean result = entityRecord.removeRecord(mockRecord);
+        Record record = new HashRecord("PROPERTY", "VALUE2");
+        boolean result = entityRecord.removeRecord(record);
         assertThat(result, is(false));
     }
 
@@ -100,15 +97,22 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenNewRecordWithSameProperties_WhenAddRecord_ThenReturnTrue() {
-        boolean result = entityRecord.addRecord(mock(HashRecord.class));
+        Record record = new HashRecord("PROPERTY", "VALUE2");
+        boolean result = entityRecord.addRecord(record);
         assertThat(result, is(true));
     }
 
     @Test
+    public void GivenNewRecordWithSamePropertiesAndValues_ThenReturnFalse(){
+        Record record = new HashRecord("PROPERTY", "VALUE");
+        boolean result = entityRecord.addRecord(record);
+        assertThat(result, is(false));
+    }
+
+    @Test
     public void GivenNewRecordWithDiffProperties_WhenAddRecord_ThenReturnFalse() {
-        Record mockRecord = mock(HashRecord.class);
-        when(mockRecord.properties()).thenReturn(ImmutableSet.of("PROPERTY2"));
-        boolean result = entityRecord.addRecord(mockRecord);
+        Record record = new HashRecord("PROPERTY2", "VALUE");
+        boolean result = entityRecord.addRecord(record);
         assertThat(result, is(false));
     }
 
@@ -116,14 +120,13 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenEntityRecordIsEmpty_WhenCheckIsEmpty_ThenReturnTrue() {
-        entityRecord = new LinkedHashEntityRecord();
+        entityRecord = new LinkedHashEntityRecord(); //Override default
         boolean result = entityRecord.isEmpty();
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenRecordHasRecord_WhenCheckIsEmpty_ThenReturnFalse() {
-        entityRecord.addRecord(mock(HashRecord.class));
         boolean result = entityRecord.isEmpty();
         assertThat(result, is(false));
     }

@@ -40,7 +40,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-//todo: Refactor using fake r2rml map with mock. Also can trim unneeded mock calls.
+//todo: trim mock calls
 @RunWith(JUnitParamsRunner.class)
 public class R2RMLParserTest {
 
@@ -83,6 +83,7 @@ public class R2RMLParserTest {
         when(mockStatement.getPredicate()).thenReturn(mockProperty);
         when(mockLiteral.getString()).thenReturn("LITERAL");
         when(mockProperty.getLocalName()).thenReturn("PROPERTY");
+        when(mockStatement.getResource()).thenReturn(mockResource);
     }
 
     @Test

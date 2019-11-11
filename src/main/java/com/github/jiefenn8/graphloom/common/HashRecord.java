@@ -17,7 +17,6 @@
 package com.github.jiefenn8.graphloom.common;
 
 import com.github.jiefenn8.graphloom.api.Record;
-import com.google.common.collect.ImmutableMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +33,8 @@ public class HashRecord implements Record {
 
     //Default constructor
     public HashRecord(String column, String value) {
-        recordValue = new HashMap<>(ImmutableMap.of(column, value));
+        recordValue = new HashMap<>();
+        recordValue.put(column, value);
     }
 
     public HashRecord(Map<String, String> m) {
