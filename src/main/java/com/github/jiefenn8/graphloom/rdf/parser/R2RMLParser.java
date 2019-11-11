@@ -125,12 +125,27 @@ public class R2RMLParser {
     }
 
     private LogicalTable mapToLogicalTable(Resource ltNode) {
+        //BaseTableOrView
         Property tableName = ResourceFactory.createProperty(r2rmlPrefixUri, "tableName");
-        //todo: 5.0 : sql view, r2rml view, logical table row, column name, sql identifier.
-        if (!ltNode.hasProperty(tableName)) throw new ParserException("No table name found.");
-        String tableSource = ltNode.getProperty(tableName).getLiteral().getString();
+        if (ltNode.hasProperty(tableName)) {
+            String table = ltNode.getProperty(tableName).getLiteral().getString();
 
-        return R2RMLFactory.createLogicalTableBaseTableOrView(tableSource);
+            return R2RMLFactory.createLogicalTableBaseTableOrView(table);
+        }
+
+        //R2RMLView
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlPrefixUri, "sqlQuery");
+        if(ltNode.hasProperty(sqlQuery)){
+            String query = ltNode.getProperty(sqlQuery).getLiteral().getString();
+
+            Property sqlVersion = ResourceFactory.createProperty(r2rmlPrefixUri, "sqlVersion");
+            if(!ltNode.hasProperty(sqlVersion)) throw new ParserException("SqlVersion property not found with SqlQuery.");
+            String version = ltNode.getProperty(sqlVersion).getLiteral().getString();
+
+            return R2RMLFactory.createLogicalTableR2RMLView(query, version);
+        }
+
+        throw new ParserException("No BaseTableOrView or R2RMLView property found.");
     }
 
     private SubjectMap mapToSubjectMap(Statement subjectMapStmt) {

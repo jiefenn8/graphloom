@@ -25,6 +25,7 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.shared.NotFoundException;
 import org.apache.jena.util.FileManager;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -125,13 +126,35 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void WhenLogicalTableNameNotGiven_ThenThrowException() {
+    public void GivenNoBaseTableOrView_WhenParse_ThenSearchForSQLQueryProperty(){
         Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
         when(mockResource.hasProperty(tableName)).thenReturn(false);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage("No table name found.");
+        r2rmlParser.parse(filename);
+        verify(mockResource, times(1)).hasProperty(sqlQuery);
+    }
 
-        //Act, Assert
+    @Test
+    public void GivenNoR2RMLView_WhenParse_ThenThrowException(){
+        Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
+        when(mockResource.hasProperty(tableName)).thenReturn(false);
+        when(mockResource.hasProperty(sqlQuery)).thenReturn(false);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage("No BaseTableOrView or R2RMLView property found.");
+        r2rmlParser.parse(filename);
+    }
+
+    @Test
+    public void GivenNoSqlVersion_WhenParse_ThenThrowException(){
+        Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
+        Property sqlVersion = ResourceFactory.createProperty(r2rmlNamespace, "sqlVersion");
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
+        when(mockResource.hasProperty(tableName)).thenReturn(false);
+        when(mockResource.hasProperty(sqlQuery)).thenReturn(true);
+        when(mockResource.hasProperty(sqlVersion)).thenReturn(false);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage("SqlVersion property not found with SqlQuery.");
         r2rmlParser.parse(filename);
     }
 
