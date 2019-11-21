@@ -31,17 +31,17 @@ public interface InputSource {
      * E.g. 2000 items, fetch size of 500 = 4 batches; batch 2 will be the 2nd
      * collection of data.
      *
-     * @param c to setup the query for this entity.
+     * @param c source config containing the query for this entity
      * @param batchId the batch to return
      * @return the collection of records as EntityRecord. Else return empty
-     *         entity map if there is no more records to return.
+     *         entity map if there is no more records to return
      */
     EntityRecord getEntityRecord(SourceConfig c, int batchId);
 
     /**
      * Returns the number of batches to expect for a source config.
      *
-     * @param c containing the entity query info
+     * @param c source config containing the query for this entity
      * @return the number of batches possible
      */
     int calculateNumOfBatches(SourceConfig c);

@@ -1,6 +1,5 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.rdf.r2rml.LogicalTable.DbPayloadType;
 import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
@@ -16,13 +15,16 @@ public class R2RMLFactory {
 
     //LogicalTable
     public static LogicalTable createLogicalTableBaseTableOrView(String source) {
-        return new LogicalTable(source, DbPayloadType.TABLENAME);
+        R2RMLView r2rmlView = new R2RMLView(source);
+
+        return new LogicalTable(r2rmlView);
     }
 
     public static LogicalTable createLogicalTableR2RMLView(String source, String version) {
-        LogicalTable logicalTable = new LogicalTable(source, DbPayloadType.QUERY);
-        logicalTable.setProperty("sqlVersion", version);
-        return logicalTable;
+        BaseTableOrView baseTableOrView = new BaseTableOrView(source);
+        baseTableOrView.setProperty("sqlVersion", version);
+
+        return new LogicalTable(baseTableOrView);
     }
 
     //PredicateMap

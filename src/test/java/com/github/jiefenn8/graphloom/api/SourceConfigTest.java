@@ -14,23 +14,21 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.rdf.r2rml;
+package com.github.jiefenn8.graphloom.api;
 
-import com.github.jiefenn8.graphloom.api.Record;
-import org.apache.jena.rdf.model.RDFNode;
+import junitparams.JUnitParamsRunner;
+import org.junit.Before;
+import org.junit.runner.RunWith;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+@RunWith(JUnitParamsRunner.class)
+public class SourceConfigTest {
 
-public class ConstTermMap implements TermMap {
+    private final String payloadStr = "PAYLOAD";
+    private SourceConfig sourceConfig;
 
-    private RDFNode constTerm;
+    @Before
+    public void setUp(){
 
-    protected ConstTermMap(RDFNode n) {
-        constTerm = checkNotNull(n, "Constant term must not be null.");
     }
 
-    @Override
-    public RDFNode generateRDFTerm(Record r) {
-        return constTerm;
-    }
 }

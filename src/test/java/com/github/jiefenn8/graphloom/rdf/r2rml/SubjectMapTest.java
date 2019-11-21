@@ -16,65 +16,83 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.common.HashRecord;
-import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
+import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SubjectMapTest {
 
-    @Mock private HashRecord mockRecord;
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
+
     private SubjectMap subjectMap;
+    @Mock private Record mockRecord;
+    @Mock private TermMap mockTermMap;
 
-    @Before
-    public void setUp() throws Exception {
-        when(mockRecord.getPropertyValue("Col_1_Type")).thenReturn("Col_1_Val");
+    @Test
+    public void GivenNoTermMap_WhenCreateInstance_ThenThrowException(){
+        exceptionRule.expect(NullPointerException.class);
+        exceptionRule.expectMessage("Must provide a TermMap.");
+        subjectMap = new SubjectMap(null);
+    }
+
+    //generateEntityTerm
+
+    @Test
+    public void GivenNoRecord_WhenGenerateEntityTerm_ThenPassException(){
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
+        exceptionRule.expect(NullPointerException.class);
+        exceptionRule.expectMessage("Record is null.");
+        subjectMap = new SubjectMap(mockTermMap);
+        subjectMap.generateEntityTerm(null);
     }
 
     @Test
-    public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
-        Resource rdfNode = ResourceFactory.createResource("constant");
-        subjectMap = R2RMLFactory.createConstSubjectMap(rdfNode);
-        boolean result = subjectMap.generateEntityTerm(mockRecord).isResource();
-        assertThat(result, is(true));
+    public void GivenRecord_WhenGenerateEntityTerm_ThenReturnResource(){
+        Resource mockResource = mock(Resource.class);
+        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockResource);
+        when(mockResource.asResource()).thenReturn(mockResource);
+        subjectMap = new SubjectMap(mockTermMap);
+        Resource result = subjectMap.generateEntityTerm(mockRecord);
+        assertThat(result, is(notNullValue()));
     }
 
-    @Test
-    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
-        subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
-        boolean result = subjectMap.generateEntityTerm(mockRecord).isResource();
-        assertThat(result, is(true));
+    //addClass
+
+    @Test(expected = NullPointerException.class)
+    public void GivenNullResource_WhenAddClass_ThenThrowException(){
+        subjectMap.addEntityClass(null);
     }
 
-    @Test
-    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsResource() {
-        subjectMap = R2RMLFactory.createColSubjectMap("Col_1_Type", TermType.IRI);
-        boolean result = subjectMap.generateEntityTerm(mockRecord).isResource();
-        assertThat(result, is(true));
-    }
+    //addEntityClass
+    //listEntityClasses
 
     @Test
     public void WhenClassGiven_ThenReturnNonEmptyList() {
-        subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
         Resource expected = ResourceFactory.createResource("resource");
-        subjectMap.addClass(expected);
+        subjectMap = new SubjectMap(mockTermMap);
+        subjectMap.addEntityClass(expected);
         boolean result = subjectMap.listEntityClasses().isEmpty();
         assertThat(result, is(false));
     }
 
     @Test
     public void WhenNoClassGiven_ThenReturnEmptyList() {
-        subjectMap = R2RMLFactory.createTmplSubjectMap("Template/{Col_1_Type}");
+        subjectMap = new SubjectMap(mockTermMap);
         boolean result = subjectMap.listEntityClasses().isEmpty();
         assertThat(result, is(true));
     }

@@ -21,38 +21,33 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 
 /**
  * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
  * This term map will return either a rr:IRI for its main term.
  */
-public class PredicateMap implements TermMap, RelationMap, EntityChild {
+public class PredicateMap implements RelationMap, EntityChild {
 
     private EntityMap parent;
     private TermMap termMap;
 
-    protected PredicateMap(TermMap termMap) {
-        this.termMap = checkNotNull(termMap);
+    protected PredicateMap(TermMap m) {
+        this.termMap = checkNotNull(m, "Term map must not be null.");
     }
 
     @Override
-    public Property generateRelationTerm(Record entityProps) {
-        Resource term = generateRDFTerm(entityProps).asResource();
+    public Property generateRelationTerm(Record r) {
+        Resource term = termMap.generateRDFTerm(r).asResource();
         return ResourceFactory.createProperty(term.getURI());
     }
 
-    @Override
-    public RDFNode generateRDFTerm(Record entityProps) {
-        return termMap.generateRDFTerm(entityProps);
-    }
-
-    protected PredicateMap withParentMap(EntityMap entityMap) {
-        this.parent = entityMap;
+    protected PredicateMap withParentMap(EntityMap m) {
+        parent = m;
         return this;
     }
 

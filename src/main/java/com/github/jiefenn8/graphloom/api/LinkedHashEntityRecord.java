@@ -14,10 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.common;
-
-import com.github.jiefenn8.graphloom.api.EntityRecord;
-import com.github.jiefenn8.graphloom.api.Record;
+package com.github.jiefenn8.graphloom.api;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;

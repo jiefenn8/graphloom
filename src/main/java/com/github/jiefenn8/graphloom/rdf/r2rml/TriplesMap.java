@@ -32,9 +32,9 @@ public class TriplesMap implements EntityMap {
     private SubjectMap subjectMap;
     private Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
 
-    protected TriplesMap(LogicalTable source, SubjectMap subject) {
-        logicalTable = checkNotNull(source);
-        subjectMap = checkNotNull(subject).withParentMap(this);
+    protected TriplesMap(LogicalTable lt, SubjectMap sm) {
+        logicalTable = checkNotNull(lt, "Logical table must not be null.");
+        subjectMap = checkNotNull(sm, "Subject map must not be null.").withParentMap(this);
     }
 
     @Override

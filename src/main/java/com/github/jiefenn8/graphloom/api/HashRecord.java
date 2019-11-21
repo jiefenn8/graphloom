@@ -14,9 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.common;
-
-import com.github.jiefenn8.graphloom.api.Record;
+package com.github.jiefenn8.graphloom.api;
 
 import java.util.HashMap;
 import java.util.Map;

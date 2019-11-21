@@ -19,7 +19,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
-import com.github.jiefenn8.graphloom.common.HashRecord;
+import com.github.jiefenn8.graphloom.api.HashRecord;
 import org.apache.jena.rdf.model.Property;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,6 +38,7 @@ import static org.mockito.Mockito.*;
 public class TriplesMapTest {
 
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
+
     private TriplesMap triplesMap;
     @Mock private LogicalTable mockLogicalTable;
     @Mock private SubjectMap mockSubjectMap;

@@ -42,7 +42,6 @@ public interface SourceMap {
      */
     void forEachEntityRecord(Consumer<Record> action);
 
-
     /**
      * Returns an entity record result based on the batch id; containing
      * records of an entity from applied source map.

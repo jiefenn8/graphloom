@@ -18,8 +18,8 @@ package com.github.jiefenn8.graphloom.integrationtest;
 
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.api.SourceConfig;
-import com.github.jiefenn8.graphloom.common.HashRecord;
-import com.github.jiefenn8.graphloom.common.LinkedHashEntityRecord;
+import com.github.jiefenn8.graphloom.api.HashRecord;
+import com.github.jiefenn8.graphloom.api.LinkedHashEntityRecord;
 import com.google.common.collect.ImmutableMap;
 
 public class FakeInputDatabase implements InputSource {

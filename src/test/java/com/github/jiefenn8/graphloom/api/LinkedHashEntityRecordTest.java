@@ -14,10 +14,11 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.common;
+package com.github.jiefenn8.graphloom.api;
 
+import com.github.jiefenn8.graphloom.api.HashRecord;
+import com.github.jiefenn8.graphloom.api.LinkedHashEntityRecord;
 import com.github.jiefenn8.graphloom.api.Record;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,8 +28,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class LinkedHashEntityRecordTest {
 
