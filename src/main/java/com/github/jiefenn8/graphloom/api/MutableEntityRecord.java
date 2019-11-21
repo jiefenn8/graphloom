@@ -14,10 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.common;
-
-import com.github.jiefenn8.graphloom.api.EntityRecord;
-import com.github.jiefenn8.graphloom.api.Record;
+package com.github.jiefenn8.graphloom.api;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -31,12 +28,12 @@ import java.util.Set;
  * will generate each {@code Record} with the same properties as all other within
  * this instance.
  */
-public class LinkedHashEntityRecord implements EntityRecord {
+public class MutableEntityRecord implements EntityRecord {
 
     private Set<Record> records;
 
     //Default constructor
-    public LinkedHashEntityRecord() {
+    public MutableEntityRecord() {
         records = new LinkedHashSet<>();
     }
 
@@ -85,7 +82,7 @@ public class LinkedHashEntityRecord implements EntityRecord {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        LinkedHashEntityRecord records1 = (LinkedHashEntityRecord) o;
+        MutableEntityRecord records1 = (MutableEntityRecord) o;
         return Objects.equals(records, records1.records);
     }
 

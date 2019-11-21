@@ -28,51 +28,46 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
  * This term map will return either a rr:IRI or rr:BlankNode for its main term.
  */
-public class SubjectMap implements TermMap, PropertyMap, EntityChild {
+public class SubjectMap implements PropertyMap, EntityChild {
 
     private EntityMap parent;
     private TermMap termMap;
     private List<Resource> classes = new ArrayList<>();
 
-    protected SubjectMap(TermMap termMap) {
-        this.termMap = checkNotNull(termMap);
+    protected SubjectMap(TermMap m) {
+        termMap = checkNotNull(m, "Must provide a TermMap.");
     }
 
     /**
-     * Adds a class type to subject map.
+     * Adds class type to the entity associated with this subject map.
      *
-     * @param clazz to add to list.
+     * @param r class to associate with entity
      */
-    public void addClass(Resource clazz) {
-        classes.add(clazz);
+    public void addEntityClass(Resource r) {
+        classes.add(r);
     }
 
     @Override
-    public Resource generateEntityTerm(Record entityProps) {
-        RDFNode term = generateRDFTerm(entityProps);
-        if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode");
+    public Resource generateEntityTerm(Record r) {
+        RDFNode term = termMap.generateRDFTerm(r);
+        if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode.");
         return term.asResource();
     }
 
-    protected SubjectMap withParentMap(EntityMap entityMap) {
-        this.parent = entityMap;
+    protected SubjectMap withParentMap(EntityMap em) {
+        parent = em;
         return this;
     }
 
     @Override
     public List<Resource> listEntityClasses() {
         return Collections.unmodifiableList(classes);
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Record entityProps) {
-        return termMap.generateRDFTerm(entityProps);
     }
 
     @Override

@@ -25,7 +25,6 @@ import org.apache.jena.rdf.model.*;
 import org.apache.jena.shared.NotFoundException;
 import org.apache.jena.util.FileManager;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

@@ -55,4 +55,11 @@ public interface SourceConfig {
      */
     interface PayloadType {
     }
+
+    /**
+     * Default types of payload.
+     */
+    enum DefaultType implements PayloadType {
+        UNDEFINED;
+    }
 }

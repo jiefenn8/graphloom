@@ -32,15 +32,17 @@ public class TmplTermMap implements TermMap {
     private TermType termType;
 
     protected TmplTermMap(String templateStr, TermType termType) {
-        this.templateStr = checkNotNull(templateStr);
-        this.termType = checkNotNull(termType);
+        this.templateStr = checkNotNull(templateStr, "Template string must not be null.");
+        this.termType = checkNotNull(termType, "Term type must not be null.");
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record entityProps) {
+    public RDFNode generateRDFTerm(Record r) {
+        checkNotNull(r, "Record is null.");
         Matcher matcher = pattern.matcher(templateStr);
         if (!matcher.find()) throw new MapperException("Invalid template string given.");
-        String generatedTerm = templateStr.replace(matcher.group(0), entityProps.getPropertyValue(matcher.group(1)));
+        String generatedTerm = templateStr.replace(matcher.group(0), r.getPropertyValue(matcher.group(1)));
+
         return RDFTermHelper.asRDFTerm(generatedTerm, termType);
     }
 }

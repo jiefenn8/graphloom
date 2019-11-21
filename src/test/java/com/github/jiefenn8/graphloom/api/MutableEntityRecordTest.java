@@ -14,10 +14,8 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.common;
+package com.github.jiefenn8.graphloom.api;
 
-import com.github.jiefenn8.graphloom.api.Record;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,21 +25,19 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class LinkedHashEntityRecordTest {
+public class MutableEntityRecordTest {
 
-    private LinkedHashEntityRecord entityRecord;
+    private MutableEntityRecord entityRecord;
 
     //Default setup with have one record inserted into the SUT instance.
     @Before
     public void setUp() {
         //SUT instance creation
-        entityRecord = new LinkedHashEntityRecord();
+        entityRecord = new MutableEntityRecord();
 
         //Default mock behaviour setup
-        Record record = new HashRecord("PROPERTY", "VALUE");
+        Record record = new MutableRecord("PROPERTY", "VALUE");
         entityRecord.addRecord(record);
     }
 
@@ -57,14 +53,14 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenExistingRecord_WhenSearchRecord_ThenReturnTrue() {
-        Record record = new HashRecord("PROPERTY", "VALUE");
+        Record record = new MutableRecord("PROPERTY", "VALUE");
         boolean result = entityRecord.containsRecord(record);
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenNewRecord_WhenSearchRecord_ThenReturnFalse() {
-        Record record = new HashRecord("PROPERTY2", "VALUE");
+        Record record = new MutableRecord("PROPERTY2", "VALUE");
         boolean result = entityRecord.containsRecord(record);
         assertThat(result, is(false));
     }
@@ -81,14 +77,14 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenExistingRecord_WhenRemoveRecord_ThenReturnTrue() {
-        Record record = new HashRecord("PROPERTY", "VALUE");
+        Record record = new MutableRecord("PROPERTY", "VALUE");
         boolean result = entityRecord.removeRecord(record);
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenNewRecord_WhenRemoveRecord_ThenReturnFalse() {
-        Record record = new HashRecord("PROPERTY", "VALUE2");
+        Record record = new MutableRecord("PROPERTY", "VALUE2");
         boolean result = entityRecord.removeRecord(record);
         assertThat(result, is(false));
     }
@@ -97,21 +93,21 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenNewRecordWithSameProperties_WhenAddRecord_ThenReturnTrue() {
-        Record record = new HashRecord("PROPERTY", "VALUE2");
+        Record record = new MutableRecord("PROPERTY", "VALUE2");
         boolean result = entityRecord.addRecord(record);
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenNewRecordWithSamePropertiesAndValues_ThenReturnFalse(){
-        Record record = new HashRecord("PROPERTY", "VALUE");
+        Record record = new MutableRecord("PROPERTY", "VALUE");
         boolean result = entityRecord.addRecord(record);
         assertThat(result, is(false));
     }
 
     @Test
     public void GivenNewRecordWithDiffProperties_WhenAddRecord_ThenReturnFalse() {
-        Record record = new HashRecord("PROPERTY2", "VALUE");
+        Record record = new MutableRecord("PROPERTY2", "VALUE");
         boolean result = entityRecord.addRecord(record);
         assertThat(result, is(false));
     }
@@ -120,7 +116,7 @@ public class LinkedHashEntityRecordTest {
 
     @Test
     public void GivenEntityRecordIsEmpty_WhenCheckIsEmpty_ThenReturnTrue() {
-        entityRecord = new LinkedHashEntityRecord(); //Override default
+        entityRecord = new MutableEntityRecord(); //Override default
         boolean result = entityRecord.isEmpty();
         assertThat(result, is(true));
     }

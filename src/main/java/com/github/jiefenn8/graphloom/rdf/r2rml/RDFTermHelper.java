@@ -10,8 +10,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class RDFTermHelper {
 
     public static RDFNode asRDFTerm(String value, TermType type) {
-        checkNotNull(value, "Not value found");
-        switch (type) {
+        checkNotNull(value);
+        switch (checkNotNull(type)) {
             case IRI:
                 return ResourceFactory.createResource(value);
             case BLANK:
@@ -19,7 +19,7 @@ public class RDFTermHelper {
             case LITERAL:
                 return ResourceFactory.createStringLiteral(value);
             default:
-                throw new MapperException("TermType is invalid.");
+                throw new MapperException("Term type is UNDEFINED.");
         }
     }
 }

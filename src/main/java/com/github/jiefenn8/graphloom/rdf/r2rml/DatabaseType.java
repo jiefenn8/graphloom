@@ -16,25 +16,8 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
-import org.apache.jena.rdf.model.RDFNode;
+import static com.github.jiefenn8.graphloom.api.SourceConfig.PayloadType;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-public class ColTermMap implements TermMap {
-
-    private String columnName;
-    private TermType termType;
-
-    protected ColTermMap(String columnName, TermType t) {
-        this.columnName = checkNotNull(columnName, "Column name must not be null.");
-        termType = checkNotNull(t, "Term type must not be null.");
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Record r) {
-        String columnValue = r.getPropertyValue(columnName);
-
-        return RDFTermHelper.asRDFTerm(columnValue, termType);
-    }
+public enum DatabaseType implements PayloadType {
+    QUERY, TABLE_NAME;
 }

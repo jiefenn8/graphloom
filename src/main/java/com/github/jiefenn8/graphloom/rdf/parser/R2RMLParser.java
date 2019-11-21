@@ -166,7 +166,7 @@ public class R2RMLParser {
         //todo: 6.2 : A subject map MAY have one or more class IRIs.
         Property classProp = ResourceFactory.createProperty(r2rmlPrefixUri, "class");
         if (!stmtObj.hasProperty(classProp)) throw new ParserException("Class type not found.");
-        subjectMap.addClass(subjectMapStmt.getProperty(classProp).getResource());
+        subjectMap.addEntityClass(subjectMapStmt.getProperty(classProp).getResource());
 
         return subjectMap;
     }

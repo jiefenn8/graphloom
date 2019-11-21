@@ -17,77 +17,45 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
+import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.Validate;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
-public class LogicalTable implements SourceMap, SourceConfig {
+public class LogicalTable implements SourceMap {
 
-    private final String payload;
-    private final PayloadType payloadType;
-    private final String iteratorDef;
-    private final Map<String, String> exProperty = new HashMap<>();
+    private SourceConfig sourceConfig;
     private InputSource inputSource;
 
-    protected LogicalTable(String payload, PayloadType payloadType) {
-        this.payload = checkNotNull(payload);
-        this.payloadType = checkNotNull(payloadType);
-        iteratorDef = "";
+    protected LogicalTable(SourceConfig sourceConfig) {
+        this.sourceConfig = checkNotNull(sourceConfig, "Payload must not be null.");
     }
 
     @Override
     public EntityRecord getEntityRecord(int batchId) {
-        return inputSource.getEntityRecord(this, batchId);
+        return inputSource.getEntityRecord(sourceConfig, batchId);
     }
 
     @Override
-    public PayloadType getPayloadType() {
-        return payloadType;
-    }
-
-    @Override
-    public String getPayload() {
-        return payload;
-    }
-
-    @Override
-    public String getIteratorDef() {
-        return iteratorDef;
-    }
-
-    @Override
-    public String getProperty(String propertyName) {
-        return exProperty.get(propertyName);
-    }
-
-    protected void setProperty(String propertyName, String propertyValue) {
-        exProperty.put(propertyName, propertyValue);
-    }
-
-    @Override
-    public SourceMap loadInputSource(InputSource source) {
-        inputSource = checkNotNull(source);
+    public SourceMap loadInputSource(InputSource s) {
+        inputSource = s;
         return this;
     }
 
     @Override
     public void forEachEntityRecord(Consumer<Record> action) {
-        int totalBatch = inputSource.calculateNumOfBatches(this);
+        Preconditions.checkNotNull(action);
+        int totalBatch = inputSource.calculateNumOfBatches(sourceConfig);
         for (int batchId = 0; batchId < totalBatch; batchId++) {
             EntityRecord entityRecord = getEntityRecord(batchId);
             for (Record record : entityRecord) {
-                checkNotNull(action).accept(record);
+                action.accept(record);
             }
         }
-    }
-
-    protected enum DbPayloadType implements PayloadType {
-        QUERY, TABLENAME
     }
 }

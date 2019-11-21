@@ -16,25 +16,13 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
-import org.apache.jena.rdf.model.RDFNode;
+import com.github.jiefenn8.graphloom.api.SourceConfig;
+import com.github.jiefenn8.graphloom.api.InputSourceConfig;
+import org.apache.commons.lang3.StringUtils;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+public class R2RMLView extends InputSourceConfig implements SourceConfig {
 
-public class ColTermMap implements TermMap {
-
-    private String columnName;
-    private TermType termType;
-
-    protected ColTermMap(String columnName, TermType t) {
-        this.columnName = checkNotNull(columnName, "Column name must not be null.");
-        termType = checkNotNull(t, "Term type must not be null.");
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Record r) {
-        String columnValue = r.getPropertyValue(columnName);
-
-        return RDFTermHelper.asRDFTerm(columnValue, termType);
+    protected R2RMLView(String payload){
+        super(payload, DatabaseType.QUERY, StringUtils.EMPTY);
     }
 }

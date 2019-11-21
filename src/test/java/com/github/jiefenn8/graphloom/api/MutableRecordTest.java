@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.github.jiefenn8.graphloom.common;
+package com.github.jiefenn8.graphloom.api;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +22,13 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class HashRecordTest {
+public class MutableRecordTest {
 
-    private HashRecord record;
+    private MutableRecord record;
 
     @Before
     public void setUp() {
-        record = new HashRecord("PROPERTY", "VALUE");
+        record = new MutableRecord("PROPERTY", "VALUE");
     }
 
     //addProperty
@@ -110,14 +110,14 @@ public class HashRecordTest {
 
     @Test
     public void GivenSameRecord_WhenCompareRecord_ThenReturnTrue() {
-        HashRecord record2 = new HashRecord("PROPERTY", "VALUE");
+        MutableRecord record2 = new MutableRecord("PROPERTY", "VALUE");
         boolean result = record.equals(record2);
         assertThat(result, is(true));
     }
 
     @Test
     public void GivenDiffRecord_WhenCompareRecord_ThenReturnFalse() {
-        HashRecord record2 = new HashRecord("PROPERTY", "VALUE2");
+        MutableRecord record2 = new MutableRecord("PROPERTY", "VALUE2");
         boolean result = record.equals(record2);
         assertThat(result, is(false));
     }
@@ -127,7 +127,7 @@ public class HashRecordTest {
     //Check hashcode generation on different property name.
     @Test
     public void WhenTwoDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() {
-        HashRecord record2 = new HashRecord("PROPERTY2", "VALUE");
+        MutableRecord record2 = new MutableRecord("PROPERTY2", "VALUE");
         int result = record2.hashCode();
         assertThat(result, is(not(equalTo(record.hashCode()))));
     }
@@ -135,7 +135,7 @@ public class HashRecordTest {
     //Negation case of WhenTwoDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() for verification.
     @Test
     public void WhenTwoSameRecordGenerateHashCode_ThenBothHashCodeMatch() {
-        HashRecord record2 = new HashRecord("PROPERTY", "VALUE");
+        MutableRecord record2 = new MutableRecord("PROPERTY", "VALUE");
         int result = record2.hashCode();
         assertThat(result, is(equalTo(record.hashCode())));
     }
