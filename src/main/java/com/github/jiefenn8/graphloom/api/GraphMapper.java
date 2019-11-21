@@ -19,20 +19,20 @@ package com.github.jiefenn8.graphloom.api;
 import org.apache.jena.rdf.model.Model;
 
 /**
- * GraphMapper
- * <p>
  * This interface defines the base methods that manages the mapping
- * of an {@code InputSource} using maps from {@code ConfigMaps}.
+ * of a input source using provided mapping configurations.
  */
 public interface GraphMapper {
 
     /**
-     * Main mapping function converting input source data to graph
-     * using {@code ConfigMaps}.
+     * Returns the resulting mapping of input source applied to the config
+     * mappings given. Returns an empty model if the given
+     * input source or configuration mappings was not sufficient enough
+     * to generate any semantic terms.
      *
-     * @param source  containing the data to map over to graph.
-     * @param configs to manage the retrieval  and mapping of data from {@code source}.
-     * @return the {@code Model} containing the mapped source as a graph model.
+     * @param s input source containing the data to map over to graph
+     * @param c config maps to manage the mapping of data
+     * @return the model containing the mapped source as a graph model
      */
-    Model mapToGraph(InputSource source, ConfigMaps configs);
+    Model mapToGraph(InputSource s, ConfigMaps c);
 }

@@ -16,9 +16,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.github.jiefenn8.graphloom.api.NodeMap;
-import com.github.jiefenn8.graphloom.api.RelationMap;
+import com.github.jiefenn8.graphloom.api.*;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.*;
@@ -34,9 +32,14 @@ public class TriplesMap implements EntityMap {
     private SubjectMap subjectMap;
     private Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
 
-    public TriplesMap(LogicalTable source, SubjectMap subject) {
-        logicalTable = checkNotNull(source);
-        subjectMap = checkNotNull(subject);
+    protected TriplesMap(LogicalTable lt, SubjectMap sm) {
+        logicalTable = checkNotNull(lt, "Logical table must not be null.");
+        subjectMap = checkNotNull(sm, "Subject map must not be null.").withParentMap(this);
+    }
+
+    @Override
+    public SourceMap applySource(InputSource source) {
+        return logicalTable.loadInputSource(source);
     }
 
     @Override
@@ -55,7 +58,7 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public Resource generateEntityTerm(Map<String, String> entityProps) {
+    public Resource generateEntityTerm(Record entityProps) {
         return subjectMap.generateEntityTerm(entityProps);
     }
 
@@ -64,18 +67,13 @@ public class TriplesMap implements EntityMap {
         return subjectMap.listEntityClasses();
     }
 
-    @Override
-    public String getSource() {
-        return logicalTable.getSource();
-    }
-
     /**
      * Adds a {@code PredicateMap} and {@code ObjectMap} pair to {@code TriplesMap}.
      *
-     * @param relationMap to add as key to the map.
-     * @param nodeMap     as value for {@code relationMap} key.
+     * @param predicateMap to add as key to the map.
+     * @param objectMap    as value for {@code relationMap} key.
      */
-    public void addRelationNodePair(RelationMap relationMap, NodeMap nodeMap) {
-        predicateObjectMaps.put(relationMap, nodeMap);
+    public void addRelationNodePair(PredicateMap predicateMap, ObjectMap objectMap) {
+        predicateObjectMaps.put(predicateMap.withParentMap(this), objectMap.withParentMap(this));
     }
 }

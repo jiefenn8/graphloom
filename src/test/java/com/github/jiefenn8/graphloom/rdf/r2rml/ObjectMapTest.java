@@ -16,50 +16,68 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.github.jiefenn8.graphloom.api.MutableRecord;
+import com.github.jiefenn8.graphloom.api.Record;
+import org.apache.jena.rdf.model.Literal;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Map;
-
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectMapTest {
 
-    @Mock Map<String, String> mockRow;
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
+
     private ObjectMap objectMap;
+    @Mock private MutableRecord mockRecord;
+    @Mock private TermMap mockTermMap;
 
-    @Before
-    public void setUp() throws Exception {
-        when(mockRow.get("Col_1_Type")).thenReturn("Col_1_Val");
+    @Test
+    public void GivenNoTermMap_WhenCreateInstance_ThenThrowException(){
+        exceptionRule.expect(NullPointerException.class);
+        exceptionRule.expectMessage("Term map must not be null.");
+        objectMap = new ObjectMap(null);
+    }
+
+    //generateNodeTerm()
+
+    @Test
+    public void GivenNoRecord_WhenGenerateNodeTerm_ThenThrowException(){
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
+        exceptionRule.expect(NullPointerException.class);
+        exceptionRule.expectMessage("Record is null.");
+        objectMap = new ObjectMap(mockTermMap);
+        objectMap.generateNodeTerm(null);
     }
 
     @Test
-    public void WhenConstantTermMapTypeGiven_ThenReturnTermAsResource() {
-        Resource rdfNode = ResourceFactory.createResource("constant");
-        objectMap = new ObjectMap(TermMap.TermMapType.CONSTANT, rdfNode);
-        boolean result = objectMap.generateNodeTerm(mockRow).isURIResource();
-        assertThat(result, is(true));
+    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnResource(){
+        Resource mockResource = mock(Resource.class);
+        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockResource);
+        objectMap = new ObjectMap(mockTermMap);
+        RDFNode result = objectMap.generateNodeTerm(mockRecord);
+        assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void WhenTemplateTermMapTypeGiven_ThenReturnTermAsResource() {
-        objectMap = new ObjectMap(TermMap.TermMapType.TEMPLATE, "Template/{Col_1_Type}");
-        boolean result = objectMap.generateNodeTerm(mockRow).isResource();
-        assertThat(result, is(true));
-    }
-
-    @Test
-    public void WhenColumnTermMapTypeGiven_ThenReturnTermAsLiteral() {
-        objectMap = new ObjectMap(TermMap.TermMapType.COLUMN, "Col_1_Type", false);
-        boolean result = objectMap.generateNodeTerm(mockRow).isLiteral();
-        assertThat(result, is(true));
+    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnLiteral(){
+        Literal mockLiteral = mock(Literal.class);
+        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockLiteral);
+        objectMap = new ObjectMap(mockTermMap);
+        RDFNode result = objectMap.generateNodeTerm(mockRecord);
+        assertThat(result, is(notNullValue()));
     }
 }

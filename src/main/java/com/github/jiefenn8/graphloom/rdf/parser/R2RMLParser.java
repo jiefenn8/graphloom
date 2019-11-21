@@ -18,7 +18,6 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.*;
-import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermMapType;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.*;
@@ -28,8 +27,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * R2RML Parser
- * <p>
  * This class defines the base methods that manages the mapping
  * configuration of predicate and any objects related to parent entity
  * by the specified predicate.
@@ -65,7 +62,7 @@ public class R2RMLParser {
         r2rmlPrefixUri = r2rmlGraph.getNsPrefixURI(r2rmlPrefix);
         if (r2rmlPrefixUri == null) throw new ParserException("'rr' prefix uri not found.");
 
-        R2RMLMap r2rmlMap = new R2RMLMap(r2rmlGraph.getNsPrefixMap());
+        R2RMLMap r2rmlMap = R2RMLFactory.createR2RMLMap(r2rmlGraph.getNsPrefixMap());
         findTriplesMap(r2rmlGraph).forEach(
                 (tm) -> r2rmlMap.addTriplesMap(mapToTriplesMap(tm)));
 
@@ -75,7 +72,7 @@ public class R2RMLParser {
     private TriplesMap mapToTriplesMap(Resource tmRes) {
         LogicalTable logicalTable = mapToLogicalTable(findLogicalTable(tmRes));
         SubjectMap subjectMap = mapToSubjectMap(findSubjectMap(tmRes));
-        TriplesMap triplesMap = new TriplesMap(logicalTable, subjectMap);
+        TriplesMap triplesMap = R2RMLFactory.createTriplesMap(logicalTable, subjectMap);
         findPredicateObjectMaps(tmRes).forEach(
                 (pom) -> {
                     Pair<PredicateMap, ObjectMap> pomPair = mapToPredicateObjectMap(pom);
@@ -126,36 +123,50 @@ public class R2RMLParser {
     }
 
     private LogicalTable mapToLogicalTable(Resource ltNode) {
+        //BaseTableOrView
         Property tableName = ResourceFactory.createProperty(r2rmlPrefixUri, "tableName");
-        if (!ltNode.hasProperty(tableName)) {
-            //todo: 5.0 : sql view, r2rml view, logical table row, column name, sql identifier.
-            throw new ParserException("No table name found.");
+        if (ltNode.hasProperty(tableName)) {
+            String table = ltNode.getProperty(tableName).getLiteral().getString();
+
+            return R2RMLFactory.createLogicalTableBaseTableOrView(table);
         }
 
-        return new LogicalTable(ltNode.getProperty(tableName).getLiteral().getString());
+        //R2RMLView
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlPrefixUri, "sqlQuery");
+        if(ltNode.hasProperty(sqlQuery)){
+            String query = ltNode.getProperty(sqlQuery).getLiteral().getString();
+
+            Property sqlVersion = ResourceFactory.createProperty(r2rmlPrefixUri, "sqlVersion");
+            if(!ltNode.hasProperty(sqlVersion)) throw new ParserException("SqlVersion property not found with SqlQuery.");
+            String version = ltNode.getProperty(sqlVersion).getResource().getLocalName();
+
+            return R2RMLFactory.createLogicalTableR2RMLView(query, version);
+        }
+
+        throw new ParserException("No BaseTableOrView or R2RMLView property found.");
     }
 
     private SubjectMap mapToSubjectMap(Statement subjectMapStmt) {
         Resource stmtObj = subjectMapStmt.getObject().asResource();
         if (isShortcutConstant(subjectMapStmt, "subject")) {
-            return new SubjectMap(TermMapType.CONSTANT, stmtObj);
+            return R2RMLFactory.createConstSubjectMap(stmtObj);
         }
 
         if (isConstant(subjectMapStmt)) {
             Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
-            return new SubjectMap(TermMapType.CONSTANT, stmtObj.getPropertyResourceValue(constProp));
+            return R2RMLFactory.createConstSubjectMap(stmtObj.getPropertyResourceValue(constProp));
         }
 
         Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
         if (!stmtObj.hasProperty(templateProp)) throw new ParserException(stmtObj + " is not a TermMap.");
         String template = stmtObj.getProperty(templateProp).getLiteral().getString();
-        SubjectMap subjectMap = new SubjectMap(TermMapType.TEMPLATE, template);
+        SubjectMap subjectMap = R2RMLFactory.createTmplSubjectMap(template);
 
         //todo: Check if subjectMap supports column term map.
         //todo: 6.2 : A subject map MAY have one or more class IRIs.
         Property classProp = ResourceFactory.createProperty(r2rmlPrefixUri, "class");
         if (!stmtObj.hasProperty(classProp)) throw new ParserException("Class type not found.");
-        subjectMap.addClass(subjectMapStmt.getProperty(classProp).getResource());
+        subjectMap.addEntityClass(subjectMapStmt.getProperty(classProp).getResource());
 
         return subjectMap;
     }
@@ -170,13 +181,13 @@ public class R2RMLParser {
         Resource stmtObj = pmStmt.getObject().asResource();
         Property resAsProp = stmtObj.as(Property.class);
         if (isShortcutConstant(pmStmt, "predicate")) {
-            return new PredicateMap(TermMapType.CONSTANT, resAsProp);
+            return R2RMLFactory.createConstPredicateMap(resAsProp);
         }
 
         if (isConstant(pmStmt)) {
             Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
             Resource constRes = stmtObj.getPropertyResourceValue(constProp).asResource();
-            return new PredicateMap(TermMapType.CONSTANT, constRes.as(Property.class));
+            return R2RMLFactory.createConstPredicateMap(constRes.as(Property.class));
         }
 
         //todo: verify subject map restriction.
@@ -185,25 +196,25 @@ public class R2RMLParser {
 
     private ObjectMap mapToObjectMap(Statement omStmt) {
         Resource stmtObj = omStmt.getObject().asResource();
-        if (isShortcutConstant(omStmt, "object")) return new ObjectMap(TermMapType.CONSTANT, stmtObj);
+        if (isShortcutConstant(omStmt, "object")) return R2RMLFactory.createConstObjectMap(stmtObj);
 
         if (isConstant(omStmt)) {
             Property constProp = getResourceProperty(stmtObj, r2rmlPrefixUri, "constant");
             Resource constNode = stmtObj.getPropertyResourceValue(constProp);
-            return new ObjectMap(TermMapType.CONSTANT, constNode);
+            return R2RMLFactory.createConstObjectMap(constNode);
         }
 
         Property templateProp = ResourceFactory.createProperty(r2rmlPrefixUri, "template");
         if (stmtObj.hasProperty(templateProp)) {
             String template = stmtObj.getProperty(templateProp).getLiteral().getString();
-            return new ObjectMap(TermMapType.TEMPLATE, template);
+            return R2RMLFactory.createTmplObjectMap(template);
         }
 
         Property columnProp = ResourceFactory.createProperty(r2rmlPrefixUri, "column");
         if (!stmtObj.hasProperty(columnProp)) throw new ParserException(stmtObj + " is not a TermMap.");
         String column = stmtObj.getProperty(columnProp).getLiteral().getString();
 
-        return new ObjectMap(TermMapType.COLUMN, column);
+        return R2RMLFactory.createColObjectMap(column);
     }
 
     //Helper methods

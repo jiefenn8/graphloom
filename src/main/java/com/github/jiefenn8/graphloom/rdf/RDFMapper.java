@@ -27,7 +27,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of {@link GraphMapper} interface using Jena; and R2RML
@@ -55,14 +54,14 @@ public class RDFMapper implements GraphMapper {
 
     private Model mapSource(InputSource source, List<EntityMap> triplesMaps) {
         Model outputGraph = ModelFactory.createDefaultModel();
-        triplesMaps.forEach((e) -> outputGraph.add(mapEntity(e, source.getEntityRecords(e.getSource()))));
+        triplesMaps.forEach((e) -> outputGraph.add(mapEntity(e, source)));
 
         return outputGraph;
     }
 
-    private Model mapEntity(EntityMap triplesMap, List<Map<String, String>> rows) {
+    private Model mapEntity(EntityMap triplesMap, InputSource source) {
         Model entityGraph = ModelFactory.createDefaultModel();
-        rows.forEach((r) -> {
+        triplesMap.applySource(source).forEachEntityRecord((r) -> {
             Resource subject = triplesMap.generateEntityTerm(r);
             triplesMap.listEntityClasses().forEach(
                     (c) -> entityGraph.add(subject, RDF.type, c));

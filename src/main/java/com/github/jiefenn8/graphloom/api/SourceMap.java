@@ -16,17 +16,37 @@
 
 package com.github.jiefenn8.graphloom.api;
 
+import java.util.function.Consumer;
+
 /**
- * SourceMap
- * <p>
  * This interface defines the base methods that provides the information
  * needed to locate and retrieve the desired data from the data-source.
  */
 public interface SourceMap {
+
     /**
-     * Returns the source id where all of the entity records is stored at.
+     * Returns this source map after applying it on the given input source.
      *
-     * @return the source id of the entity.
+     * @param s input source containing the data to map over to graph
+     * @return the source map ready to be queried and iterated on
      */
-    String getSource();
+    SourceMap loadInputSource(InputSource s);
+
+    /**
+     * This call will consume each record given from the input source after
+     * querying and apply the consumer action on each of them. This method
+     * is used when it is desired to iterate through all the available entity
+     * records from input source with several batches.
+     *
+     * @param action the action to perform on each record
+     */
+    void forEachEntityRecord(Consumer<Record> action);
+
+    /**
+     * Returns an entity record result based on the batch id; containing
+     * records of an entity from applied source map.
+     *
+     * @return the collection of records for an entity
+     */
+    EntityRecord getEntityRecord(int batchId);
 }

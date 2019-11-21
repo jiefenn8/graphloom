@@ -16,21 +16,46 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.SourceMap;
+import com.github.jiefenn8.graphloom.api.*;
+import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.Validate;
+
+import java.util.function.Consumer;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
 public class LogicalTable implements SourceMap {
 
-    private String sourceName;
+    private SourceConfig sourceConfig;
+    private InputSource inputSource;
 
-    public LogicalTable(String source) {
-        sourceName = source;
+    protected LogicalTable(SourceConfig sourceConfig) {
+        this.sourceConfig = checkNotNull(sourceConfig, "Payload must not be null.");
     }
 
     @Override
-    public String getSource() {
-        return sourceName;
+    public EntityRecord getEntityRecord(int batchId) {
+        return inputSource.getEntityRecord(sourceConfig, batchId);
+    }
+
+    @Override
+    public SourceMap loadInputSource(InputSource s) {
+        inputSource = s;
+        return this;
+    }
+
+    @Override
+    public void forEachEntityRecord(Consumer<Record> action) {
+        Preconditions.checkNotNull(action);
+        int totalBatch = inputSource.calculateNumOfBatches(sourceConfig);
+        for (int batchId = 0; batchId < totalBatch; batchId++) {
+            EntityRecord entityRecord = getEntityRecord(batchId);
+            for (Record record : entityRecord) {
+                action.accept(record);
+            }
+        }
     }
 }

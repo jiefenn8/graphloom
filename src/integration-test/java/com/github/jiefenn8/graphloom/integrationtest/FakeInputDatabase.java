@@ -17,23 +17,27 @@
 package com.github.jiefenn8.graphloom.integrationtest;
 
 import com.github.jiefenn8.graphloom.api.InputSource;
-import com.google.common.collect.ImmutableList;
+import com.github.jiefenn8.graphloom.api.SourceConfig;
+import com.github.jiefenn8.graphloom.api.MutableRecord;
+import com.github.jiefenn8.graphloom.api.MutableEntityRecord;
 import com.google.common.collect.ImmutableMap;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 public class FakeInputDatabase implements InputSource {
 
     @Override
-    public List<Map<String, String>> getEntityRecords(String entity) {
-        Map<String, String> readonlyRecord = ImmutableMap.of(
+    public MutableEntityRecord getEntityRecord(SourceConfig config, int batchId) {
+        MutableEntityRecord entityRecord = new MutableEntityRecord();
+        entityRecord.addRecord(new MutableRecord(ImmutableMap.of(
                 "EMPNO", "7369",
                 "ENAME", "SMITH",
                 "JOB", "CLERK",
-                "DEPTNO", "10");
+                "DEPTNO", "10")));
 
-        return Collections.unmodifiableList(ImmutableList.of(readonlyRecord));
+        return entityRecord;
+    }
+
+    @Override
+    public int calculateNumOfBatches(SourceConfig config) {
+        return 1;
     }
 }

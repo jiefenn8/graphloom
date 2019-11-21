@@ -39,7 +39,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
-//todo: Refactor using fake r2rml map with mock. Also can trim unneeded mock calls.
+//todo: trim mock calls
 @RunWith(JUnitParamsRunner.class)
 public class R2RMLParserTest {
 
@@ -82,6 +82,7 @@ public class R2RMLParserTest {
         when(mockStatement.getPredicate()).thenReturn(mockProperty);
         when(mockLiteral.getString()).thenReturn("LITERAL");
         when(mockProperty.getLocalName()).thenReturn("PROPERTY");
+        when(mockStatement.getResource()).thenReturn(mockResource);
     }
 
     @Test
@@ -125,13 +126,35 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void WhenLogicalTableNameNotGiven_ThenThrowException() {
+    public void GivenNoBaseTableOrView_WhenParse_ThenSearchForSQLQueryProperty(){
         Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
         when(mockResource.hasProperty(tableName)).thenReturn(false);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage("No table name found.");
+        r2rmlParser.parse(filename);
+        verify(mockResource, times(1)).hasProperty(sqlQuery);
+    }
 
-        //Act, Assert
+    @Test
+    public void GivenNoR2RMLView_WhenParse_ThenThrowException(){
+        Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
+        when(mockResource.hasProperty(tableName)).thenReturn(false);
+        when(mockResource.hasProperty(sqlQuery)).thenReturn(false);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage("No BaseTableOrView or R2RMLView property found.");
+        r2rmlParser.parse(filename);
+    }
+
+    @Test
+    public void GivenNoSqlVersion_WhenParse_ThenThrowException(){
+        Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
+        Property sqlVersion = ResourceFactory.createProperty(r2rmlNamespace, "sqlVersion");
+        Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
+        when(mockResource.hasProperty(tableName)).thenReturn(false);
+        when(mockResource.hasProperty(sqlQuery)).thenReturn(true);
+        when(mockResource.hasProperty(sqlVersion)).thenReturn(false);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage("SqlVersion property not found with SqlQuery.");
         r2rmlParser.parse(filename);
     }
 
@@ -168,9 +191,9 @@ public class R2RMLParserTest {
         //Setup expectations
         Property template = ResourceFactory.createProperty(r2rmlNamespace, "template");
         Resource mockTermMapNode = mock(Resource.class);
+        when(mockTermMapStmt.getProperty(any(Property.class))).thenReturn(mockStatement);
         when(mockTermMapStmt.getObject()).thenReturn(mockTermMapNode);
         when(mockTermMapStmt.getPredicate()).thenReturn(mockProperty);
-        when(mockTermMapStmt.getProperty(any(Property.class))).thenReturn(mockStatement);
         when(mockTermMapNode.asResource()).thenReturn(mockTermMapNode);
         when(mockTermMapNode.hasProperty(any(Property.class))).thenReturn(true);
         when(mockTermMapNode.hasProperty(constant)).thenReturn(false);
