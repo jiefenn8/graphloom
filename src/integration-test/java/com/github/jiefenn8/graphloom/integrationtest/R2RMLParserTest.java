@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.integrationtest;
@@ -55,7 +44,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenNoLogicalTableSub_WhenParse_ThenThrowException(){
+    public void GivenNoLogicalTableSub_WhenParse_ThenThrowException() {
         String invalidLtR2rmlFile = "invalid_logical_table.ttl";
         exceptionRule.expect(ParserException.class);
         exceptionRule.expectMessage("No BaseTableOrView or R2RMLView property found.");
@@ -63,21 +52,21 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenBaseTableOrView_WhenParse_ThenReturnConfigMaps(){
+    public void GivenBaseTableOrView_WhenParse_ThenReturnConfigMaps() {
         String validBaseTableOrViewFile = "valid_r2rml.ttl";
         ConfigMaps result = r2rmlParser.parse(validBaseTableOrViewFile);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenR2RMLView_WhenParse_ThenReturnConfigMaps(){
+    public void GivenR2RMLView_WhenParse_ThenReturnConfigMaps() {
         String validR2RMLViewFile = "valid_r2rml_view.ttl";
         ConfigMaps result = r2rmlParser.parse(validR2RMLViewFile);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenR2RMLViewWithNoSqlVersion_WhenParse_ThenThrowException(){
+    public void GivenR2RMLViewWithNoSqlVersion_WhenParse_ThenThrowException() {
         String validR2RMLViewFile = "invalid_r2rml_view.ttl";
         exceptionRule.expect(ParserException.class);
         exceptionRule.expectMessage("SqlVersion property not found with SqlQuery.");

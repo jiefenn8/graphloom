@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -26,7 +15,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static com.github.jiefenn8.graphloom.api.SourceConfig.*;
+import static com.github.jiefenn8.graphloom.api.SourceConfig.DefaultType;
 import static com.github.jiefenn8.graphloom.api.SourceConfig.PayloadType;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,26 +23,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(JUnitParamsRunner.class)
 public class InputSourceConfigTest {
 
-    @Rule public ExpectedException expectedException = ExpectedException.none();
-
     private final String payload = "PAYLOAD";
     private final String iteratorDef = "";
+    @Rule public ExpectedException expectedException = ExpectedException.none();
     private InputSourceConfig sourceConfig;
 
-    public List<PayloadType> payloadTypeParameters(){
+    public List<PayloadType> payloadTypeParameters() {
         return ImmutableList.of(DefaultType.UNDEFINED);
     }
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenNullPayload_WhenCreateInstance_ThenThrowException(PayloadType t){
+    public void GivenNullPayload_WhenCreateInstance_ThenThrowException(PayloadType t) {
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Payload must not be null.");
         sourceConfig = new InputSourceConfig(null, t, iteratorDef);
     }
 
     @Test
-    public void GivenNullPayloadType_WhenCreateInstance_ThenThrowException(){
+    public void GivenNullPayloadType_WhenCreateInstance_ThenThrowException() {
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Payload type must not be null.");
         sourceConfig = new InputSourceConfig(payload, null, iteratorDef);
@@ -61,7 +49,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenNullIteratorDef_WhenCreateInstance_ThenThrowException(PayloadType t){
+    public void GivenNullIteratorDef_WhenCreateInstance_ThenThrowException(PayloadType t) {
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("Iterator definition must not be null.");
         sourceConfig = new InputSourceConfig(payload, t, null);
@@ -69,7 +57,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenPayloadType_WhenGetPayloadType_ThenReturnDatabaseType(PayloadType t){
+    public void GivenPayloadType_WhenGetPayloadType_ThenReturnDatabaseType(PayloadType t) {
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         PayloadType result = sourceConfig.getPayloadType();
         assertThat(result, is(notNullValue()));
@@ -77,7 +65,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenPayload_WhenGetPayload_ThenReturnString(PayloadType t){
+    public void GivenPayload_WhenGetPayload_ThenReturnString(PayloadType t) {
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         String result = sourceConfig.getPayload();
         assertThat(result, is(notNullValue()));
@@ -85,7 +73,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenIteratorDef_WhenGetIteratorDef_ThenReturnString(PayloadType t){
+    public void GivenIteratorDef_WhenGetIteratorDef_ThenReturnString(PayloadType t) {
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         String result = sourceConfig.getIteratorDef();
         assertThat(result, is(notNullValue()));
@@ -93,7 +81,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenPropertyWithValue_WhenGetProperty_ThenReturnString(PayloadType t){
+    public void GivenPropertyWithValue_WhenGetProperty_ThenReturnString(PayloadType t) {
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         sourceConfig.setProperty("PROPERTY", "VALUE");
         String result = sourceConfig.getProperty("PROPERTY");
@@ -102,7 +90,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenPropertyWithNullValue_WhenGetProperty_ThenReturnNull(PayloadType t){
+    public void GivenPropertyWithNullValue_WhenGetProperty_ThenReturnNull(PayloadType t) {
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         sourceConfig.setProperty("PROPERTY", null);
         String result = sourceConfig.getProperty("PROPERTY");
@@ -111,7 +99,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenProperty_WhenGetProperty_ThenReturnNull(PayloadType t){
+    public void GivenProperty_WhenGetProperty_ThenReturnNull(PayloadType t) {
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         sourceConfig.setProperty("PROPERTY", null);
         String result = sourceConfig.getProperty("PROPERTY");
@@ -120,7 +108,7 @@ public class InputSourceConfigTest {
 
     @Test
     @Parameters(method = "payloadTypeParameters")
-    public void GivenNullProperty_WhenSetProperty_ThenThrowException(PayloadType t){
+    public void GivenNullProperty_WhenSetProperty_ThenThrowException(PayloadType t) {
         expectedException.expect(NullPointerException.class);
         sourceConfig = new InputSourceConfig(payload, t, iteratorDef);
         sourceConfig.setProperty(null, null);

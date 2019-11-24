@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.parser;
@@ -126,7 +115,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenNoBaseTableOrView_WhenParse_ThenSearchForSQLQueryProperty(){
+    public void GivenNoBaseTableOrView_WhenParse_ThenSearchForSQLQueryProperty() {
         Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
         Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
         when(mockResource.hasProperty(tableName)).thenReturn(false);
@@ -135,7 +124,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenNoR2RMLView_WhenParse_ThenThrowException(){
+    public void GivenNoR2RMLView_WhenParse_ThenThrowException() {
         Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
         Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
         when(mockResource.hasProperty(tableName)).thenReturn(false);
@@ -146,7 +135,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenNoSqlVersion_WhenParse_ThenThrowException(){
+    public void GivenNoSqlVersion_WhenParse_ThenThrowException() {
         Property tableName = ResourceFactory.createProperty(r2rmlNamespace, "tableName");
         Property sqlVersion = ResourceFactory.createProperty(r2rmlNamespace, "sqlVersion");
         Property sqlQuery = ResourceFactory.createProperty(r2rmlNamespace, "sqlQuery");
