@@ -72,6 +72,7 @@ public interface EntityRecord extends Iterable<Record> {
      * @param o object to be compared for equality with this collection
      * @return true if given object is equal to this collection
      */
+    @Override
     boolean equals(Object o);
 
     /**
@@ -81,5 +82,6 @@ public interface EntityRecord extends Iterable<Record> {
      * @return the hash code value for this collection
      * @see Object#equals(Object)
      */
+    @Override
     int hashCode();
 }

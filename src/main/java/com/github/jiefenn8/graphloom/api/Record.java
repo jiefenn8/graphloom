@@ -77,6 +77,7 @@ public interface Record {
      * @param o object to be compared for equality with this Record.
      * @return true if given object is equal to this Record.
      */
+    @Override
     boolean equals(Object o);
 
     /**
@@ -87,6 +88,7 @@ public interface Record {
      * @return the hash code value for this Record
      * @see Object#equals(Object)
      */
+    @Override
     int hashCode();
 
     /**

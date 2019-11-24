@@ -31,6 +31,7 @@ public class RDFMapper implements GraphMapper {
      * @param configs to control the mapping function process.
      * @return the graph of the result from mapping.
      */
+    @Override
     public Model mapToGraph(InputSource source, ConfigMaps configs) {
         if (source == null) throw new MapperException("Cannot retrieve source data from null input source.");
         if (configs == null) throw new MapperException("Cannot map source from null config maps.");
