@@ -15,8 +15,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
-public class LogicalTable implements SourceMap {
+public class LogicalTable implements SourceMap, EntityChild {
 
+    private EntityMap parent;
     private SourceConfig sourceConfig;
     private InputSource inputSource;
 
@@ -45,5 +46,15 @@ public class LogicalTable implements SourceMap {
                 action.accept(record);
             }
         }
+    }
+
+    protected LogicalTable withParentMap(EntityMap em){
+        parent = em;
+        return this;
+    }
+
+    @Override
+    public EntityMap getParentMap() {
+        return parent;
     }
 }
