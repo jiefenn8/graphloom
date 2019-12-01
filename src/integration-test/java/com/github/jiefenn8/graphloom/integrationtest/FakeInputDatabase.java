@@ -5,22 +5,47 @@
 
 package com.github.jiefenn8.graphloom.integrationtest;
 
-import com.github.jiefenn8.graphloom.api.InputSource;
-import com.github.jiefenn8.graphloom.api.MutableEntityRecord;
-import com.github.jiefenn8.graphloom.api.MutableRecord;
-import com.github.jiefenn8.graphloom.api.SourceConfig;
+import com.github.jiefenn8.graphloom.api.*;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+/**
+ * Fake class simulating InputSource implementation of a database.
+ */
 public class FakeInputDatabase implements InputSource {
 
     @Override
-    public MutableEntityRecord getEntityRecord(SourceConfig config, int batchId) {
-        MutableEntityRecord entityRecord = new MutableEntityRecord();
-        entityRecord.addRecord(new MutableRecord(ImmutableMap.of(
+    public EntityRecord getEntityRecord(SourceConfig config, int batchId) {
+        //Ignore batchId since this is a single entry table
+        //Return EMP record as default
+        String payload = config.getPayload();
+        if(payload.equals("DEPT")) return getDeptRecords();
+
+        return getEmpRecords();
+    }
+
+    private EntityRecord getEmpRecords(){
+        Record record1 = new MutableRecord(ImmutableMap.of(
                 "EMPNO", "7369",
                 "ENAME", "SMITH",
                 "JOB", "CLERK",
-                "DEPTNO", "10")));
+                "DEPTNO", "10"));
+
+        MutableEntityRecord entityRecord = new MutableEntityRecord();
+        entityRecord.addRecord(record1);
+
+        return entityRecord;
+    }
+
+    private EntityRecord getDeptRecords(){
+        Record record1 = new MutableRecord(ImmutableMap.of(
+                "DEPTNO", "10",
+                "DNAME", "APPSERVER",
+                "LOC", "NEW YORK"
+        ));
+
+        MutableEntityRecord entityRecord = new MutableEntityRecord();
+        entityRecord.addRecord(record1);
 
         return entityRecord;
     }

@@ -9,7 +9,6 @@
                             (SELECT COUNT(*) FROM EMP WHERE EMP.DEPTNO=DEPT.DEPTNO) AS STAFF
                      FROM DEPT;
                      """;
-
                      rr:sqlVersion rr:SQL2008; ];
     rr:subjectMap [
         rr:template "http://data.example.com/employee/{EMPNO}";

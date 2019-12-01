@@ -1,0 +1,24 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#>.
+@prefix ex: <http://example.com/ns#>.
+
+<#TriplesMap1>
+    rr:logicalTable <#DeptTableView>;
+    rr:subjectMap [
+        rr:template "http://data.example.com/employee/{EMPNO}";
+        rr:class ex:Employee;
+    ];
+    rr:predicateObjectMap [
+        rr:predicate ex:name;
+        rr:objectMap [ rr:column "ENAME" ];
+    ].
+
+<#DeptTableView>
+    rr:sqlQuery """
+        SELECT DEPTNO,
+             DNAME,
+             LOC,
+             (SELECT COUNT(*) FROM EMP WHERE EMP.DEPTNO=DEPT.DEPTNO) AS STAFF
+        FROM DEPT;
+        """;
+    rr:sqlVersion rr:SQL2008.
+
