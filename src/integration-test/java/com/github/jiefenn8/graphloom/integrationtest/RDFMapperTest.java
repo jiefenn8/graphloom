@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 //Simple all ups integration test.
 public class RDFMapperTest {
 
-    private final String validFile = "/valid_r2rml.ttl";
+    private final String validFile = "/r2rml/valid_r2rml.ttl";
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
     private RDFMapper rdfMapper;
     private FakeInputDatabase fakeInputDatabase;
@@ -43,7 +43,7 @@ public class RDFMapperTest {
         //Graph should have 2 triples from the given input and configs.
         long result = graph.size();
 
-        assertThat(result, is(equalTo(Long.valueOf(2))));
+        assertThat(result, is(equalTo(2L)));
     }
 
     @Test

@@ -98,9 +98,4 @@ public class R2RMLFactory {
     private static ObjectMap createObjectMap(TermMap termMap) {
         return new ObjectMap(termMap);
     }
-
-    //TriplesMap
-    public static TriplesMap createTriplesMap(LogicalTable logicalTable, SubjectMap subjectMap) {
-        return new TriplesMap(logicalTable, subjectMap);
-    }
 }

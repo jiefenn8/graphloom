@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
+import com.google.common.collect.ImmutableMap;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.*;
@@ -14,16 +15,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML TriplesMap with {@link EntityMap} interface.
+ * This class is an immutable class and requires the use of its
+ * {@link Builder} class to populate and create an instance.
  */
 public class TriplesMap implements EntityMap {
 
-    private LogicalTable logicalTable;
-    private SubjectMap subjectMap;
-    private Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
+    private final LogicalTable logicalTable;
+    private final SubjectMap subjectMap;
+    private final Map<RelationMap, NodeMap> predicateObjectMaps;
 
-    protected TriplesMap(LogicalTable lt, SubjectMap sm) {
-        logicalTable = checkNotNull(lt, "Logical table must not be null.");
-        subjectMap = checkNotNull(sm, "Subject map must not be null.").withParentMap(this);
+    protected TriplesMap(Builder b) {
+        checkNotNull(b);
+        logicalTable = b.logicalTable.withParentMap(this);
+        subjectMap = b.subjectMap.withParentMap(this);
+        predicateObjectMaps = ImmutableMap.copyOf(b.predicateObjectMaps);
     }
 
     @Override
@@ -56,13 +61,42 @@ public class TriplesMap implements EntityMap {
         return subjectMap.listEntityClasses();
     }
 
-    /**
-     * Adds a {@code PredicateMap} and {@code ObjectMap} pair to {@code TriplesMap}.
-     *
-     * @param predicateMap to add as key to the map.
-     * @param objectMap    as value for {@code relationMap} key.
-     */
-    public void addRelationNodePair(PredicateMap predicateMap, ObjectMap objectMap) {
-        predicateObjectMaps.put(predicateMap.withParentMap(this), objectMap.withParentMap(this));
+    public static class Builder {
+
+        private final LogicalTable logicalTable;
+        private final SubjectMap subjectMap;
+        private final Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
+
+        /**
+         * Default constructor for triples map builder.
+         *
+         * @param lt the logical table to set on this triples map
+         * @param sm the subject map to set on this triples map
+         */
+        public Builder(LogicalTable lt, SubjectMap sm) {
+            logicalTable = checkNotNull(lt, "Logical table must not be null");
+            subjectMap = checkNotNull(sm, "Subject map must not be null.");
+        }
+
+        /**
+         * Adds a predicate map and object map pair to this triples map.
+         *
+         * @param pm the predicate map to add as key
+         * @param om the object map associated with the predicate map key
+         */
+        public Builder addPredicateObjectMap(PredicateMap pm, ObjectMap om) {
+            predicateObjectMaps.put(pm, om);
+            return this;
+        }
+
+        /**
+         * Returns an immutable instance of triples map containing the
+         * properties given to the its builder.
+         *
+         * @return the triples map created with this builder parameters
+         */
+        public TriplesMap build() {
+            return new TriplesMap(this);
+        }
     }
 }

@@ -61,14 +61,16 @@ public class R2RMLParser {
     private TriplesMap mapToTriplesMap(Resource tmRes) {
         LogicalTable logicalTable = mapToLogicalTable(findLogicalTable(tmRes));
         SubjectMap subjectMap = mapToSubjectMap(findSubjectMap(tmRes));
-        TriplesMap triplesMap = R2RMLFactory.createTriplesMap(logicalTable, subjectMap);
+
+        TriplesMap.Builder tmBuilder = new TriplesMap.Builder(logicalTable, subjectMap);
+
         findPredicateObjectMaps(tmRes).forEach(
                 (pom) -> {
                     Pair<PredicateMap, ObjectMap> pomPair = mapToPredicateObjectMap(pom);
-                    triplesMap.addRelationNodePair(pomPair.getKey(), pomPair.getValue());
+                    tmBuilder.addPredicateObjectMap(pomPair.getKey(), pomPair.getValue());
                 });
 
-        return triplesMap;
+        return tmBuilder.build();
     }
 
     //TriplesMap MUST have a logicalTable property so search for any with that
