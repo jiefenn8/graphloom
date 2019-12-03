@@ -3,10 +3,9 @@
  *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package com.github.jiefenn8.graphloom.integrationtest;
+package com.github.jiefenn8.graphloom;
 
 import com.github.jiefenn8.graphloom.api.*;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -19,12 +18,12 @@ public class FakeInputDatabase implements InputSource {
         //Ignore batchId since this is a single entry table
         //Return EMP record as default
         String payload = config.getPayload();
-        if(payload.equals("DEPT")) return getDeptRecords();
+        if (payload.equals("DEPT")) return getDeptRecords();
 
         return getEmpRecords();
     }
 
-    private EntityRecord getEmpRecords(){
+    private EntityRecord getEmpRecords() {
         Record record1 = new MutableRecord(ImmutableMap.of(
                 "EMPNO", "7369",
                 "ENAME", "SMITH",
@@ -37,7 +36,7 @@ public class FakeInputDatabase implements InputSource {
         return entityRecord;
     }
 
-    private EntityRecord getDeptRecords(){
+    private EntityRecord getDeptRecords() {
         Record record1 = new MutableRecord(ImmutableMap.of(
                 "DEPTNO", "10",
                 "DNAME", "APPSERVER",

@@ -7,6 +7,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.*;
@@ -81,11 +82,10 @@ public class TriplesMap implements EntityMap {
         /**
          * Adds a predicate map and object map pair to this triples map.
          *
-         * @param pm the predicate map to add as key
-         * @param om the object map associated with the predicate map key
+         * @param pom the pair to add to triples map
          */
-        public Builder addPredicateObjectMap(PredicateMap pm, ObjectMap om) {
-            predicateObjectMaps.put(pm, om);
+        public Builder addPredicateObjectMap(Pair<PredicateMap, ObjectMap> pom) {
+            predicateObjectMaps.put(pom.getKey(), pom.getValue());
             return this;
         }
 

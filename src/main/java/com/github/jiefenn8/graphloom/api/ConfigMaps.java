@@ -12,7 +12,7 @@ import java.util.Map;
  * This interface defines the base methods to express the rules
  * from many configurations that will map data-source to a graph model.
  */
-public interface ConfigMaps {
+public interface ConfigMaps extends Iterable<EntityMap> {
 
     /**
      * Returns map of all namespace prefix and URI that was used in the

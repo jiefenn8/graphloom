@@ -6,45 +6,68 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
 public class R2RMLMapTest {
 
-    @Mock private Map<String, String> mockNamespaceMap;
+    private static final String rrPrefix = "rr";
     private R2RMLMap r2rmlMap;
 
     @Test
-    public void WhenNoNamespaceMapGiven_ThenReturnMap() {
-        r2rmlMap = new R2RMLMap(mockNamespaceMap);
+    public void GivenNoNamespace_WhenGetNamespaceMap_ThenReturnMap() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .build();
+
         Map<String, String> result = r2rmlMap.getNamespaceMap();
         assertThat(result, notNullValue());
     }
 
     @Test
-    public void WhenNamespaceMapGiven_ThenReturnNonEmptyMap() {
-        Map<String, String> namespaceMap = ImmutableMap.of("rr", "http://www.w3.org/ns/r2rml#");
-        r2rmlMap = new R2RMLMap(namespaceMap);
-        boolean result = r2rmlMap.getNamespaceMap().isEmpty();
-        assertThat(result, is(false));
+    public void GivenNamespace_WhenGetNamespaceMap_ThenReturnMapWithNamespace() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .addNsPrefix("ex", "http://www.example.org/ns#")
+                .build();
+
+        Map<String, String> result = r2rmlMap.getNamespaceMap();
+        assertThat(result, is(not(anEmptyMap())));
     }
 
     @Test
-    public void WhenEntityMapGiven_ThenReturnNonEmptyList() {
-        r2rmlMap = new R2RMLMap(mockNamespaceMap);
-        r2rmlMap.addTriplesMap(mock(EntityMap.class));
-        boolean result = r2rmlMap.listEntityMaps().isEmpty();
-        assertThat(result, is(false));
+    public void GivenNoRRNamespace_WhenGetNamespaceMap_ThenReturnMapWithRRNamespace() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .build();
+
+        String expected = R2RMLSyntax.getURI();
+        String result = r2rmlMap.getNamespaceMap().get(rrPrefix);
+        assertThat(result, is(equalTo(expected)));
+    }
+
+    @Test
+    public void GivenNoTriplesMap_WhenListEntityMaps_ThenReturnEmptyList() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .addTriplesMap(mock(TriplesMap.class))
+                .build();
+
+        List<EntityMap> result = r2rmlMap.listEntityMaps();
+        assertThat(result, is(not(empty())));
+    }
+
+    @Test
+    public void GivenTriplesMap_WhenListEntityMaps_ThenReturnListWithEntityMap() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .addTriplesMap(mock(TriplesMap.class))
+                .build();
+
+        List<EntityMap> result = r2rmlMap.listEntityMaps();
+        assertThat(result, is(not(empty())));
     }
 }

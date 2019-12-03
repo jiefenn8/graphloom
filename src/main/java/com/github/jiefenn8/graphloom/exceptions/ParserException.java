@@ -18,6 +18,10 @@ public class ParserException extends GraphLoomException {
         super(message);
     }
 
+    public ParserException(String message, Object... args) {
+        super(String.format(message, args));
+    }
+
     public ParserException(Throwable cause) {
         super(cause);
     }

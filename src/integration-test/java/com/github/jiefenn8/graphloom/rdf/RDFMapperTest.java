@@ -3,11 +3,11 @@
  *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package com.github.jiefenn8.graphloom.integrationtest;
+package com.github.jiefenn8.graphloom.rdf;
 
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.github.jiefenn8.graphloom.rdf.RDFMapper;
-import com.github.jiefenn8.graphloom.rdf.parser.R2RMLParser;
+import com.github.jiefenn8.graphloom.FakeInputDatabase;
+import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Before;
@@ -22,17 +22,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 //Simple all ups integration test.
 public class RDFMapperTest {
 
-    private final String validFile = "/r2rml/valid_r2rml.ttl";
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
+
     private RDFMapper rdfMapper;
     private FakeInputDatabase fakeInputDatabase;
     private R2RMLMap mapperConfig;
 
     @Before
-    public void SetUp() throws Exception {
+    public void SetUp() {
+        String validFile = "/r2rml/valid_r2rml.ttl";
         String path = getClass().getResource(validFile).getPath();
-        R2RMLParser parser = new R2RMLParser();
-        mapperConfig = parser.parse(path);
+        R2RMLBuilder r2rmlBuilder = new R2RMLBuilder();
+        mapperConfig = r2rmlBuilder.parse(path);
         rdfMapper = new RDFMapper();
         fakeInputDatabase = new FakeInputDatabase();
     }

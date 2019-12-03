@@ -48,7 +48,7 @@ public class LogicalTable implements SourceMap, EntityChild {
         }
     }
 
-    protected LogicalTable withParentMap(EntityMap em){
+    protected LogicalTable withParentMap(EntityMap em) {
         parent = em;
         return this;
     }

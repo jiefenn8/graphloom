@@ -9,6 +9,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.MutableRecord;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class TriplesMapTest {
     public void WhenPredicateAndObjectMapGiven_TheReturnNonEmptyList() {
         triplesMap = new TriplesMap
                 .Builder(mockLogicalTable, mockSubjectMap)
-                .addPredicateObjectMap(mock(PredicateMap.class), mock(ObjectMap.class))
+                .addPredicateObjectMap(ImmutablePair.of(mock(PredicateMap.class), mock(ObjectMap.class)))
                 .build();
 
         boolean result = triplesMap.listRelationMaps().isEmpty();
@@ -53,7 +54,7 @@ public class TriplesMapTest {
     public void WhenPredicateAndObjectMapGiven_ThenReturnTrue() {
         triplesMap = new TriplesMap
                 .Builder(mockLogicalTable, mockSubjectMap)
-                .addPredicateObjectMap(mock(PredicateMap.class), mock(ObjectMap.class))
+                .addPredicateObjectMap(ImmutablePair.of(mock(PredicateMap.class), mock(ObjectMap.class)))
                 .build();
 
         boolean result = triplesMap.hasRelationNodeMaps();
@@ -64,10 +65,9 @@ public class TriplesMapTest {
     @Test
     public void WhenPredicateMapGiven_ThenReturnNodeMap() {
         PredicateMap mockPredicateMap = mock(PredicateMap.class);
-        ObjectMap mockObjectMap = mock(ObjectMap.class);
         triplesMap = new TriplesMap
                 .Builder(mockLogicalTable, mockSubjectMap)
-                .addPredicateObjectMap(mockPredicateMap, mockObjectMap)
+                .addPredicateObjectMap(ImmutablePair.of(mockPredicateMap, mock(ObjectMap.class)))
                 .build();
 
         NodeMap result = triplesMap.getNodeMapWithRelation(mockPredicateMap);
