@@ -5,8 +5,8 @@
 
 package com.github.jiefenn8.graphloom.rdf;
 
-import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.github.jiefenn8.graphloom.FakeInputDatabase;
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;

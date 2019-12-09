@@ -18,12 +18,12 @@ import static org.junit.Assert.assertThat;
 
 public class R2RMLBuilderTest {
 
-    @Rule ExpectedException exceptionRule = ExpectedException.none();
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
 
     private R2RMLBuilder r2rmlBuilder;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         r2rmlBuilder = new R2RMLBuilder();
     }
 

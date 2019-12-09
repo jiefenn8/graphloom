@@ -47,14 +47,16 @@ public class R2RMLParser {
     }
 
     /**
-     * Loads a given r2rml document into a model. Returns true if parsing
-     * of document is successful and this parser does not have another
-     * document opened. To close the opened document on this parser, refer
-     * to the {@link R2RMLParser#close()} method.
+     * Loads a given r2rml document into a model. Returns true if
+     * parsing of document is successful and this parser does not
+     * have another document opened. To close the opened document
+     * on this parser, refer to the {@link R2RMLParser#close()}
+     * method.
      *
      * @param filenameOrUri the filename or URI of the document
-     * @param baseUri the base URI of the mapping in the document
-     * @return true if the document is loaded successfully otherwise false
+     * @param baseUri       the base URI to use for the mapping
+     * @return true if the document is loaded successfully
+     * otherwise false
      */
     protected boolean parse(String filenameOrUri, String baseUri) {
         if (!r2rmlGraph.isClosed() && !this.filenameOrUri.isEmpty()) {
@@ -92,7 +94,8 @@ public class R2RMLParser {
     //TriplesMap parsing
 
     /**
-     * Returns a list of triples map represented as resources from the model.
+     * Returns a list of triples map represented as resources from
+     * the model.
      *
      * @return list of triples map as resources
      */
@@ -103,7 +106,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns true if given triples map resource has subject map property.
+     * Returns true if given triples map resource has subject map
+     * property.
      *
      * @param triplesMap the resource representing a triples map
      * @return true if the resource contains subject map property
@@ -115,8 +119,8 @@ public class R2RMLParser {
     //LogicalTable parsing
 
     /**
-     *  Returns the logical table property in the given triples map resource
-     *  as a resource.
+     * Returns the logical table property in the given triples map
+     * resource as a resource.
      *
      * @param tripleMap the resource representing a triples map
      * @return resource of the logical table property
@@ -127,7 +131,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns true if given logical table resource is a r2rml view subclass.
+     * Returns true if given logical table resource is a r2rml
+     * view subclass.
      *
      * @param logicalTable the resource representing a logical table
      * @return true if the resource is a r2rml view
@@ -137,7 +142,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns true if given logical table is a base table or view subclass.
+     * Returns true if given logical table is a base table or view
+     * subclass.
      *
      * @param logicalTable the resource representing a logical table
      * @return true if the resource is a base table or view
@@ -147,8 +153,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the sql query property in the given logical table resource
-     * that is a r2rml view subclass.
+     * Returns the sql query property in the given logical table
+     * resource that is a r2rml view subclass.
      *
      * @param logicalTable the resource representing a logical table
      * @return string of the sql query property
@@ -160,8 +166,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the sql version property in the given logical table resource
-     * that is a r2rml view subclass.
+     * Returns the sql version property in the given logical table
+     * resource that is a r2rml view subclass.
      *
      * @param logicalTable the resource representing a logical table
      * @return string of the sql version property
@@ -173,8 +179,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the table name property in the given logical table resource
-     * that is a base table or view subclass.
+     * Returns the table name property in the given logical table
+     * resource that is a base table or view subclass.
      *
      * @param logicalTable the resource representing a logical table
      * @return string of the table name property
@@ -188,7 +194,8 @@ public class R2RMLParser {
     //SubjectMap parsing
 
     /**
-     * Returns the subject map property in the given triples map resource.
+     * Returns the subject map property in the given triples map
+     * resource.
      *
      * @param triplesMap the resource representing a triples map
      * @return resource of the subject map property
@@ -198,8 +205,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns a list of entity classes represented as resources from
-     * the model.
+     * Returns a list of entity classes represented as resources
+     * from the model.
      *
      * @param subjectMap the resource representing a subject map
      * @return list of entity classes as resources
@@ -214,8 +221,8 @@ public class R2RMLParser {
     //PredicateObjectMap
 
     /**
-     * Returns a list of predicate object maps represented as resources
-     * from the model.
+     * Returns a list of predicate object maps represented as
+     * resources from the model.
      *
      * @param triplesMap the resource representing a triples map
      * @return list of predicate object maps as resources
@@ -230,11 +237,11 @@ public class R2RMLParser {
     //PredicateMap parsing
 
     /**
-     * Return the predicate map property in the given predicate object
-     * map resource.
+     * Return the predicate map property in the given predicate
+     * object map resource.
      *
-     * @param predicateObjectMap the resource representing a predicate
-     *                           object map
+     * @param predicateObjectMap the resource representing a
+     *                           predicate object map
      * @return statement containing the predicate map property
      */
     protected Statement getPredicateMap(Resource predicateObjectMap) {
@@ -261,7 +268,8 @@ public class R2RMLParser {
      * constant shortcut reference or as a constant property.
      *
      * @param termMap the statement containing a term map
-     * @return true if the statement is a constant valued otherwise false
+     * @return true if the statement is a constant valued
+     * otherwise false
      */
     protected boolean isConstant(Statement termMap) {
         return (isPropertyConstant(termMap.getResource()) || isShortcutConstant(termMap));
@@ -273,7 +281,7 @@ public class R2RMLParser {
      *
      * @param termMap the resource represent a term map
      * @return true if the resource contains a constant property
-     *              otherwise false
+     *         otherwise false
      */
     private boolean isPropertyConstant(Resource termMap) {
         return termMap.hasProperty(R2RMLSyntax.constant);
@@ -283,27 +291,27 @@ public class R2RMLParser {
      * Returns true if given term map is a shortcut term meaning that
      * it is a constant valued term map.
      *
-     * @param termMap the statement containing a term map
+     * @param termMapStmt the statement containing a term map
      * @return true if the term map property is a constant shortcut
-     *              term otherwise false
+     *         term otherwise false
      */
-    private boolean isShortcutConstant(Statement termMap) {
+    private boolean isShortcutConstant(Statement termMapStmt) {
         return R2RMLSyntax.getConstantShortcuts()
-                .contains(termMap.getPredicate());
+                .contains(termMapStmt.getPredicate());
     }
 
     /**
      * Returns the constant property in the given term map statement.
      *
-     * @param termMap the statement containing a term map
+     * @param termMapStmt the statement containing a term map
      * @return node of the constant property
      */
-    protected RDFNode getConstantValue(Statement termMap) {
-        if (isShortcutConstant(termMap)) {
-            return termMap.getObject();
+    protected RDFNode getConstantValue(Statement termMapStmt) {
+        if (isShortcutConstant(termMapStmt)) {
+            return termMapStmt.getObject();
         }
 
-        Resource termMapRes = termMap.getResource();
+        Resource termMapRes = termMapStmt.getResource();
         return getPropertyResourceValue(termMapRes, R2RMLSyntax.constant);
     }
 
@@ -314,7 +322,7 @@ public class R2RMLParser {
      *
      * @param termMap the resource representing a term map
      * @return true if the resource is a template valued term map
-     *              otherwise false
+     *         otherwise false
      */
     protected boolean isTemplate(Resource termMap) {
         return termMap.hasProperty(R2RMLSyntax.template);
@@ -340,7 +348,7 @@ public class R2RMLParser {
      *
      * @param termMap the resource representing a term map
      * @return true if the resource is a column valued term map
-     *              otherwise false
+     *         otherwise false
      */
     protected boolean isColumn(Resource termMap) {
         return termMap.hasProperty(R2RMLSyntax.column);
@@ -361,8 +369,9 @@ public class R2RMLParser {
     //Helper methods 2.0
 
     /**
-     * Returns the node of the given property of a resource otherwise throws an
-     * {@code ParserException} if the property does not exist in the given resource.
+     * Returns the node of the given property of a resource otherwise
+     * throws an {@code ParserException} if the property does not
+     * exist in the given resource.
      *
      * @param resource the resource representing a r2rml term
      * @param property the property to search the resource for
@@ -379,12 +388,12 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the statement containing the reference to the term map object otherwise
-     * throws an {@code ParserException} if either given term map properties is not found
-     * in the given resource.
+     * Returns the statement containing the reference to the term map
+     * object otherwise throws an {@code ParserException} if either
+     * given term map properties is not found in the given resource.
      *
-     * @param resource the resource containing a term map
-     * @param termMap the term map property to search with
+     * @param resource     the resource containing a term map
+     * @param termMap      the term map property to search with
      * @param constTermMap the shortcut term of term map to search with
      * @return statement containing the term map if found
      * @throws ParserException if no term map is found in given resource

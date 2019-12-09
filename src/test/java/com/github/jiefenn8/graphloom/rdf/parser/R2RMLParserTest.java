@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import javax.swing.text.html.parser.Parser;
 import java.util.List;
 import java.util.Map;
 
@@ -138,7 +137,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenResourceWithNoBaseTableOrView_WhenGetTableName_ThenThrowException(){
+    public void GivenResourceWithNoBaseTableOrView_WhenGetTableName_ThenThrowException() {
         Resource value = model.createResource("RESOURCE");
         String expected = String.format("%s property not found in %s.", R2RMLSyntax.tableName, value);
         exceptionRule.expect(ParserException.class);
@@ -148,7 +147,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenResourceWithR2RMLView_WhenGetSqlQuery_ThenThrowException(){
+    public void GivenResourceWithR2RMLView_WhenGetSqlQuery_ThenThrowException() {
         Resource value = model.createResource("RESOURCE");
         String expected = String.format("%s property not found in %s.", R2RMLSyntax.sqlQuery, value);
         exceptionRule.expect(ParserException.class);
@@ -158,7 +157,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenResourceWithR2RMLView_WhenGetSqlVersion_ThenThrowException(){
+    public void GivenResourceWithR2RMLView_WhenGetSqlVersion_ThenThrowException() {
         Resource value = model.createResource("RESOURCE");
         String expected = String.format("%s property not found in %s.", R2RMLSyntax.sqlVersion, value);
         exceptionRule.expect(ParserException.class);

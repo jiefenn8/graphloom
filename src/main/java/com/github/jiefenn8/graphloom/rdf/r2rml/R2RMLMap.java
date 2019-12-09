@@ -24,6 +24,12 @@ public class R2RMLMap implements ConfigMaps {
     private final Map<String, String> nsPrefixMap;
     private final List<EntityMap> triplesMaps;
 
+    /**
+     * Constructs a R2RMLMap using the parameters provided by the
+     * given class builder to create an immutable object.
+     *
+     * @param builder the class builder with the parameters
+     */
     protected R2RMLMap(Builder builder) {
         checkNotNull(builder);
         nsPrefixMap = ImmutableMap.copyOf(builder.nsPrefixMap);
@@ -51,16 +57,35 @@ public class R2RMLMap implements ConfigMaps {
         private final Map<String, String> nsPrefixMap = new HashMap<>();
         private List<TriplesMap> triplesMaps = new ArrayList<>();
 
+        /**
+         * Adds the prefix along with its namespace in the namespace map.
+         *
+         * @param prefix    the prefix that represent the namespace
+         * @param namespace the given value mapped to the prefix
+         * @return builder of this R2RMLMap class
+         */
         public Builder addNsPrefix(String prefix, String namespace) {
             nsPrefixMap.put(prefix, namespace);
             return this;
         }
 
+        /**
+         * Appends given triples map to this R2RMLMap.
+         *
+         * @param triplesMap the entity map to add
+         * @return builder of this R2RMLMap class
+         */
         public Builder addTriplesMap(TriplesMap triplesMap) {
             triplesMaps.add(triplesMap);
             return this;
         }
 
+        /**
+         * Returns an instance of R2RMLMap with this builder containing
+         * the parameters given to populate the object.
+         *
+         * @return instance of R2RMLMap with this builder
+         */
         public R2RMLMap build() {
             nsPrefixMap.putIfAbsent(RR_PREFIX, R2RMLSyntax.getURI());
             return new R2RMLMap(this);
