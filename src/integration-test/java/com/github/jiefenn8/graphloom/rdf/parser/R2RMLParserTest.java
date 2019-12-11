@@ -32,7 +32,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenInvalidFilePathGiven_WhenParse_ThenThrowException() {
+    public void GivenInvalidFile_WhenParse_ThenThrowException() {
         String invalidFile = "invalid_file.ttl";
         exceptionRule.expect(NotFoundException.class);
         r2rmlParser.parse(invalidFile, null);

@@ -34,7 +34,7 @@ public class R2RMLBuilderTest {
     }
 
     @Test
-    public void GivenInvalidFilePathGiven_ThenThrowException() {
+    public void GivenInvalidFile_WhenParse_ThenThrowException() {
         exceptionRule.expect(NotFoundException.class);
 
         String invalidFile = "invalid_file.ttl";

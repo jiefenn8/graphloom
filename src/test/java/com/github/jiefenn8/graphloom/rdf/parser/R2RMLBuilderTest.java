@@ -33,13 +33,24 @@ public class R2RMLBuilderTest {
 
     @Before
     public void setUp() {
-        r2rmlBuilder = new R2RMLBuilder(mockR2rmlParser);
+        Resource mockResource = mock(Resource.class);
+        Statement mockStatement = mock(Statement.class);
         when(mockR2rmlParser.parse(anyString(), any())).thenReturn(true);
+        when(mockR2rmlParser.getNsPrefixMap()).thenReturn(ImmutableMap.of());
+        when(mockR2rmlParser.getTriplesMap()).thenReturn(ImmutableList.of(mockResource));
+        when(mockR2rmlParser.getLogicalTable(mockResource)).thenReturn(mockResource);
+        when(mockR2rmlParser.isBaseTableOrView(mockResource)).thenReturn(true);
+        when(mockR2rmlParser.getTableName(mockResource)).thenReturn("TABLE_NAME");
+        when(mockR2rmlParser.getSubjectMap(mockResource)).thenReturn(mockStatement);
+        when(mockR2rmlParser.getPredicateObjectMaps(mockResource)).thenReturn(ImmutableList.of());
+        when(mockR2rmlParser.isConstant(mockStatement)).thenReturn(true);
+        when(mockR2rmlParser.getConstantValue(mockStatement)).thenReturn(mockResource);
+
+        r2rmlBuilder = new R2RMLBuilder(mockR2rmlParser);
     }
 
     @Test
-    public void GivenValidEmptyR2RMLFile_WhenParse_ThenReturnR2RMLMap() {
-        when(mockR2rmlParser.getNsPrefixMap()).thenReturn(ImmutableMap.of());
+    public void GivenEmptyFile_WhenParse_ThenReturnR2RMLMap() {
         when(mockR2rmlParser.getTriplesMap()).thenReturn(ImmutableList.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
@@ -47,21 +58,7 @@ public class R2RMLBuilderTest {
     }
 
     @Test
-    public void GivenValidR2RMLFileWithTripleMap_WhenParse_ThenReturnR2RMLMap() {
-        Resource mockResource = mock(Resource.class);
-        Statement mockStatement = mock(Statement.class);
-        when(mockR2rmlParser.getNsPrefixMap()).thenReturn(ImmutableMap.of());
-        when(mockR2rmlParser.getTriplesMap()).thenReturn(ImmutableList.of(mockResource));
-        when(mockR2rmlParser.getLogicalTable(mockResource)).thenReturn(mockResource);
-        when(mockR2rmlParser.isBaseTableOrView(mockResource)).thenReturn(true);
-        when(mockR2rmlParser.getTableName(mockResource)).thenReturn("TABLE_NAME");
-        when(mockR2rmlParser.getSubjectMap(mockResource)).thenReturn(mockStatement);
-        when(mockR2rmlParser.getPredicateObjectMaps(mockResource)).thenReturn(ImmutableList.of(mockResource));
-        when(mockR2rmlParser.getPredicateMap(mockResource)).thenReturn(mockStatement);
-        when(mockR2rmlParser.getObjectMap(mockResource)).thenReturn(mockStatement);
-        when(mockR2rmlParser.isConstant(mockStatement)).thenReturn(true);
-        when(mockR2rmlParser.getConstantValue(mockStatement)).thenReturn(mockResource);
-
+    public void GivenFileWithTriplesMap_WhenParse_ThenReturnR2RMLMap() {
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(not(emptyIterable())));
     }

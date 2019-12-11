@@ -52,7 +52,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenNullFileManager_WhenCreateCtor_TheThrowException() {
+    public void GivenNullFileManager_WhenCreateCtor_ThenThrowException() {
         exceptionRule.expect(NullPointerException.class);
 
         r2rmlParser = new R2RMLParser(null);
