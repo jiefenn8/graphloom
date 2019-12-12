@@ -112,6 +112,7 @@ public class R2RMLBuilder {
                 .map(this::buildPredicateObjectMap)
                 .forEach(builder::addPredicateObjectMap);
 
+
         return builder.build();
     }
 

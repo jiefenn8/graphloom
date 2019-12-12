@@ -19,8 +19,8 @@ import java.util.Map;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * This class defines the base methods that manages the parsing of
- * rdf mapping document to iterable r2rml terms.
+ * This class defines the base methods that manages the parsing
+ * of rdf mapping document to iterable r2rml terms.
  */
 public class R2RMLParser {
 
@@ -31,16 +31,18 @@ public class R2RMLParser {
     private Model r2rmlGraph = ModelFactory.createDefaultModel();
 
     /**
-     * Constructs a R2RMLParser with default file manager instance.
+     * Constructs a R2RMLParser with default file manager
+     * instance.
      */
     protected R2RMLParser() {
         fileManager = FileManager.get();
     }
 
     /**
-     * Constructs a R2RMLParser with the specified file manager instance.
+     * Constructs a R2RMLParser with the specified file manager
+     * instance.
      *
-     * @param fileManager the manager to handle the loading of file
+     * @param fileManager the manager to handle the file
      */
     protected R2RMLParser(FileManager fileManager) {
         this.fileManager = checkNotNull(fileManager);
@@ -71,8 +73,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Close the model of the loaded r2rml document on this parser.
-     * Returns true if the model is closed.
+     * Close the model of the loaded r2rml document on this
+     * parser. Returns true if the model is closed.
      *
      * @return true of the model is closed otherwise false
      */
@@ -83,7 +85,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the map of namespace and their prefix from the model.
+     * Returns the map of namespace and their prefix from the
+     * model.
      *
      * @return map containing prefixes and their namespace
      */
@@ -94,8 +97,8 @@ public class R2RMLParser {
     //TriplesMap parsing
 
     /**
-     * Returns a list of triples map represented as resources from
-     * the model.
+     * Returns a list of triples map represented as resources
+     * from the model.
      *
      * @return list of triples map as resources
      */
@@ -119,8 +122,8 @@ public class R2RMLParser {
     //LogicalTable parsing
 
     /**
-     * Returns the logical table property in the given triples map
-     * resource as a resource.
+     * Returns the logical table property in the given triples
+     * map resource as a resource.
      *
      * @param tripleMap the resource representing a triples map
      * @return resource of the logical table property
@@ -134,7 +137,8 @@ public class R2RMLParser {
      * Returns true if given logical table resource is a r2rml
      * view subclass.
      *
-     * @param logicalTable the resource representing a logical table
+     * @param logicalTable the resource representing a
+     *                     logical table
      * @return true if the resource is a r2rml view
      */
     protected boolean isR2RMLView(Resource logicalTable) {
@@ -142,10 +146,11 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns true if given logical table is a base table or view
-     * subclass.
+     * Returns true if given logical table is a base table or
+     * view subclass.
      *
-     * @param logicalTable the resource representing a logical table
+     * @param logicalTable the resource representing a
+     *                     logical table
      * @return true if the resource is a base table or view
      */
     protected boolean isBaseTableOrView(Resource logicalTable) {
@@ -153,10 +158,11 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the sql query property in the given logical table
-     * resource that is a r2rml view subclass.
+     * Returns the sql query property in the given logical
+     * table resource that is a r2rml view subclass.
      *
-     * @param logicalTable the resource representing a logical table
+     * @param logicalTable the resource representing a
+     *                     logical table
      * @return string of the sql query property
      */
     protected String getSqlQuery(Resource logicalTable) {
@@ -169,7 +175,8 @@ public class R2RMLParser {
      * Returns the sql version property in the given logical table
      * resource that is a r2rml view subclass.
      *
-     * @param logicalTable the resource representing a logical table
+     * @param logicalTable the resource representing a
+     *                     logical table
      * @return string of the sql version property
      */
     protected String getVersion(Resource logicalTable) {
@@ -182,7 +189,8 @@ public class R2RMLParser {
      * Returns the table name property in the given logical table
      * resource that is a base table or view subclass.
      *
-     * @param logicalTable the resource representing a logical table
+     * @param logicalTable the resource representing a
+     *                     logical table
      * @return string of the table name property
      */
     protected String getTableName(Resource logicalTable) {
@@ -251,10 +259,11 @@ public class R2RMLParser {
     //ObjectMap parsing
 
     /**
-     * Return the object map property in the given predicate object map
-     * resource.
+     * Return the object map property in the given predicate
+     * object map resource.
      *
-     * @param resource the resource representing a predicate object map
+     * @param resource the resource representing a predicate
+     *                 object map
      * @return statement containing the object map property
      */
     protected Statement getObjectMap(Resource resource) {
@@ -264,8 +273,8 @@ public class R2RMLParser {
     //Constant TermMap related parsing
 
     /**
-     * Returns true if given term map is a constant valued term map by
-     * constant shortcut reference or as a constant property.
+     * Returns true if given term map is a constant valued term
+     * map by constant shortcut reference or as a constant property.
      *
      * @param termMap the statement containing a term map
      * @return true if the statement is a constant valued
@@ -276,10 +285,10 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns true if given term map has a constant property meaning that
-     * it is a constant valued term map.
+     * Returns true if given term map has a constant property
+     * meaning that it is a constant valued term map.
      *
-     * @param termMap the resource represent a term map
+     * @param termMap the resource representing a term map
      * @return true if the resource contains a constant property
      *         otherwise false
      */
@@ -288,12 +297,12 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns true if given term map is a shortcut term meaning that
-     * it is a constant valued term map.
+     * Returns true if given term map is a shortcut term meaning
+     * that it is a constant valued term map.
      *
      * @param termMapStmt the statement containing a term map
-     * @return true if the term map property is a constant shortcut
-     *         term otherwise false
+     * @return true if the term map property is a constant
+     *         shortcut term otherwise false
      */
     private boolean isShortcutConstant(Statement termMapStmt) {
         return R2RMLSyntax.getConstantShortcuts()
@@ -301,7 +310,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the constant property in the given term map statement.
+     * Returns the constant property in the given term map
+     * statement.
      *
      * @param termMapStmt the statement containing a term map
      * @return node of the constant property
@@ -318,19 +328,20 @@ public class R2RMLParser {
     //Template TermMap related parsing
 
     /**
-     * Returns true if given term map is a template valued term map.
+     * Returns true if given term map is a template valued term
+     * map.
      *
      * @param termMap the resource representing a term map
-     * @return true if the resource is a template valued term map
-     *         otherwise false
+     * @return true if the resource is a template valued term
+     *         map otherwise false
      */
     protected boolean isTemplate(Resource termMap) {
         return termMap.hasProperty(R2RMLSyntax.template);
     }
 
     /**
-     * Returns the value of the template property in the given template
-     * valued term map.
+     * Returns the value of the template property in the given
+     * template valued term map.
      *
      * @param termMap the resource representing a term map
      * @return string of the template property
@@ -355,8 +366,8 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the value of the column property in the given column
-     * valued term map.
+     * Returns the value of the column property in the given
+     * column valued term map.
      *
      * @param termMap the resource representing a term map
      * @return string of the column property
@@ -369,14 +380,14 @@ public class R2RMLParser {
     //Helper methods 2.0
 
     /**
-     * Returns the node of the given property of a resource otherwise
-     * throws an {@code ParserException} if the property does not
-     * exist in the given resource.
+     * Returns the node of the given property of a resource
+     * otherwise throws an {@code ParserException} if the
+     * property does not exist in the given resource.
      *
      * @param resource the resource representing a r2rml term
      * @param property the property to search the resource for
      * @return node object of the property if found in resource
-     * @throws ParserException if no property exist in given resource
+     * @throws ParserException if no property exist in resource
      */
     private RDFNode getPropertyResourceValue(Resource resource, Property property) {
         Statement result = r2rmlGraph.getProperty(resource, property);
@@ -388,15 +399,16 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the statement containing the reference to the term map
-     * object otherwise throws an {@code ParserException} if either
-     * given term map properties is not found in the given resource.
+     * Returns the statement containing the reference to the term
+     * map object otherwise throws an {@code ParserException} if
+     * either given term map properties is not found in the given
+     * resource.
      *
      * @param resource     the resource containing a term map
      * @param termMap      the term map property to search with
-     * @param constTermMap the shortcut term of term map to search with
+     * @param constTermMap the shortcut term of term map to search
      * @return statement containing the term map if found
-     * @throws ParserException if no term map is found in given resource
+     * @throws ParserException if no term map is found in resource
      */
     private Statement getTermMap(Resource resource, Property termMap, Property constTermMap) {
         Statement result = r2rmlGraph.getProperty(resource, termMap);
@@ -409,5 +421,75 @@ public class R2RMLParser {
         }
 
         return result;
+    }
+
+    /**
+     * Returns true if the given object map is a reference object
+     * map.
+     *
+     * @param objectMap the resource representing the object map
+     * @return true if object map is a reference object map
+     *         otherwise false
+     */
+    public Object isRefObjectMap(Resource objectMap) {
+        return objectMap.hasProperty(R2RMLSyntax.parentTriplesMap);
+    }
+
+    /**
+     * Returns parent triples map property in the given object map
+     * resources.
+     *
+     * @param objectMap the resource representing an object map
+     * @return resource of the parent triples map property
+     */
+    public Resource getParentTriplesMap(Resource objectMap){
+        return getPropertyResourceValue(objectMap, R2RMLSyntax.parentTriplesMap)
+                .asResource();
+    }
+
+    /**
+     * Returns true if given object map has join condition property.
+     *
+     * @param objectMap the resource representing an object map
+     * @return return if resource has join condition property
+     */
+    public boolean hasJoinCondition(Resource objectMap){
+        return objectMap.hasProperty(R2RMLSyntax.joinCondition);
+    }
+
+    /**
+     * Returns join condition property in the given object map.
+     *
+     * @param objectMap the resource representing an object map
+     * @return resource of the object map property
+     */
+    public Resource getJoinCondition(Resource objectMap){
+        return getPropertyResourceValue(objectMap, R2RMLSyntax.joinCondition)
+                .asResource();
+    }
+
+    /**
+     * Returns child query property in the given join condition.
+     *
+     * @param joinCondition the resource representing a join
+     *                      condition
+     * @return string of the child query property
+     */
+    public String getChildQuery(Resource joinCondition){
+        return getPropertyResourceValue(joinCondition,  R2RMLSyntax.child)
+                .asLiteral()
+                .getString();
+    }
+
+    /**
+     * Returns parent query property in the given join condition.
+     *
+     * @param joinCondition
+     * @return string of the parent query property
+     */
+    public String getParentQuery(Resource joinCondition){
+        return getPropertyResourceValue(joinCondition, R2RMLSyntax.parent)
+                .asLiteral()
+                .getString();
     }
 }

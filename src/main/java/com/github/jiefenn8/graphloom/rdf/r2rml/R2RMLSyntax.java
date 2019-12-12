@@ -29,6 +29,10 @@ public class R2RMLSyntax {
     public static final Property predicate = ResourceFactory.createProperty(URI, "predicate");
     public static final Property objectMap = ResourceFactory.createProperty(URI, "objectMap");
     public static final Property object = ResourceFactory.createProperty(URI, "object");
+    public static final Property parentTriplesMap = ResourceFactory.createProperty(URI, "parentTriplesMap");
+    public static final Property joinCondition = ResourceFactory.createProperty(URI, "joinCondition");
+    public static final Property parent = ResourceFactory.createProperty(URI, "parent");
+    public static final Property child = ResourceFactory.createProperty(URI, "child");
     private static final List<Property> CONSTANT_SHORTCUTS = ImmutableList.of(subject, predicate, object);
 
     public static String getURI() {

@@ -40,4 +40,11 @@ public class R2RMLBuilderTest {
         String invalidFile = "invalid_file.ttl";
         r2rmlBuilder.parse(invalidFile, null);
     }
+
+    @Test
+    public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap(){
+        R2RMLMap result = r2rmlBuilder.parse("r2rml/valid_refObjectMap_withJoin.ttl");
+        assertThat(result, is(notNullValue()));
+    }
+
 }
