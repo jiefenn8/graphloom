@@ -24,6 +24,7 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.anEmptyMap;
@@ -105,7 +106,7 @@ public class R2RMLParserTest {
 
     @Test
     public void GivenNoTriplesMap_WhenGetTriplesMap_ThenReturnEmptyList() {
-        List<Resource> result = r2rmlParser.getTriplesMap();
+        Set<Resource> result = r2rmlParser.getTriplesMaps();
         assertThat(result, is(empty()));
     }
 
@@ -114,7 +115,7 @@ public class R2RMLParserTest {
         model.createResource("#TriplesMap1")
                 .addProperty(R2RMLSyntax.logicalTable, model.createResource())
                 .addProperty(R2RMLSyntax.subjectMap, model.createResource());
-        List<Resource> result = r2rmlParser.getTriplesMap();
+        Set<Resource> result = r2rmlParser.getTriplesMaps();
         assertThat(result, is(not(empty())));
     }
 
@@ -137,6 +138,16 @@ public class R2RMLParserTest {
     }
 
     @Test
+    public void GivenResourceWithR2RMLViewReference_WhenCheckIsBaseTableOrView_ThenReturnTrue() {
+        Resource value = model.createResource("#REFERENCE")
+                .addProperty(R2RMLSyntax.sqlQuery, "QUERY")
+                .addProperty(R2RMLSyntax.sqlVersion, "VERSION");
+        boolean result = r2rmlParser.isR2RMLView(value);
+        assertThat(result, is(true));
+
+    }
+
+    @Test
     public void GivenResourceWithNoBaseTableOrView_WhenGetTableName_ThenThrowException() {
         Resource value = model.createResource("RESOURCE");
         String expected = String.format("%s property not found in %s.", R2RMLSyntax.tableName, value);
@@ -147,7 +158,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenResourceWithR2RMLView_WhenGetSqlQuery_ThenThrowException() {
+    public void GivenResourceWithNoR2RMLView_WhenGetSqlQuery_ThenThrowException() {
         Resource value = model.createResource("RESOURCE");
         String expected = String.format("%s property not found in %s.", R2RMLSyntax.sqlQuery, value);
         exceptionRule.expect(ParserException.class);
@@ -157,7 +168,7 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenResourceWithR2RMLView_WhenGetSqlVersion_ThenThrowException() {
+    public void GivenResourceWithNoR2RMLView_WhenGetSqlVersion_ThenThrowException() {
         Resource value = model.createResource("RESOURCE");
         String expected = String.format("%s property not found in %s.", R2RMLSyntax.sqlVersion, value);
         exceptionRule.expect(ParserException.class);
@@ -171,6 +182,14 @@ public class R2RMLParserTest {
         Resource value = model.createResource("RESOURCE");
         boolean result = r2rmlParser.isBaseTableOrView(value);
         assertThat(result, is(false));
+    }
+
+    @Test
+    public void GivenResourceWithBaseTableOrViewReference_WhenCheckIsBaseTableOrView_ThenReturnTrue() {
+        Resource value = model.createResource("#REFERENCE")
+                .addProperty(R2RMLSyntax.tableName, "TABLE_NAME");
+        boolean result = r2rmlParser.isBaseTableOrView(value);
+        assertThat(result, is(true));
     }
 
     @Test
@@ -216,7 +235,7 @@ public class R2RMLParserTest {
     public void GivenResourceWithPredicateObjectMap_WhenGetPredicateObjectMap_ThenReturnList() {
         Resource triplesMap = model.createResource("#TriplesMap1")
                 .addProperty(R2RMLSyntax.predicateObjectMap, model.createResource());
-        List<Resource> result = r2rmlParser.getPredicateObjectMaps(triplesMap);
+        List<Statement> result = r2rmlParser.listPredicateObjectMaps(triplesMap);
         assertThat(result, is(not(empty())));
     }
 

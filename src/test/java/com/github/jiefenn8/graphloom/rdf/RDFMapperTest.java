@@ -8,8 +8,8 @@ package com.github.jiefenn8.graphloom.rdf;
 import com.github.jiefenn8.graphloom.api.ConfigMaps;
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Before;
 import org.junit.Rule;
@@ -38,7 +38,7 @@ public class RDFMapperTest {
 
         //Default mock behaviour setup
         when(mockConfigMaps.getNamespaceMap()).thenReturn(ImmutableMap.of());
-        when(mockConfigMaps.listEntityMaps()).thenReturn(ImmutableList.of());
+        when(mockConfigMaps.getEntityMaps()).thenReturn(ImmutableSet.of());
     }
 
     @Test

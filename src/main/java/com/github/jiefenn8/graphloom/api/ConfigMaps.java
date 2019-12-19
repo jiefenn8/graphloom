@@ -5,8 +5,8 @@
 
 package com.github.jiefenn8.graphloom.api;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This interface defines the base methods to express the rules
@@ -23,10 +23,10 @@ public interface ConfigMaps extends Iterable<EntityMap> {
     Map<String, String> getNamespaceMap();
 
     /**
-     * Returns all entity map that exists in the configuration mappings.
+     * Returns all unique entity map that exists in the configuration
+     * mappings.
      *
-     * @return the list containing all entity map associated
-     *         with the mapping
+     * @return the set containing all unique entity maps
      */
-    List<EntityMap> listEntityMaps();
+    Set<EntityMap> getEntityMaps();
 }

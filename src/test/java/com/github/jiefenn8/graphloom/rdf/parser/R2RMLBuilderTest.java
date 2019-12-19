@@ -5,13 +5,18 @@
 
 package com.github.jiefenn8.graphloom.rdf.parser;
 
+import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -21,68 +26,124 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLBuilderTest {
 
     private static final String VALID_FILENAME = "r2rml_file.ttl";
+    @Rule public ExpectedException exceptionRule = ExpectedException.none();
     @Mock R2RMLParser mockR2rmlParser;
     private R2RMLBuilder r2rmlBuilder;
+    @Mock private Resource mockResource;
+    private Model setupModel = ModelFactory.createDefaultModel();
 
+    /**
+     * Setup a fake graph emulating a valid r2rml file with a
+     * single triples map including one predicate object map.
+     * All term map are default constant type.
+     */
     @Before
     public void setUp() {
+        //General setup
         when(mockR2rmlParser.parse(anyString(), any())).thenReturn(true);
-        when(mockR2rmlParser.getNsPrefixMap()).thenReturn(ImmutableMap.of());
+        when(mockR2rmlParser.getTriplesMaps()).thenReturn(ImmutableSet.of(mockResource));
 
+        //Setup of one triples map
+        Statement mockStatement = mock(Statement.class);
+        when(mockStatement.getSubject()).thenReturn(mockResource);
+        when(mockStatement.getResource()).thenReturn(mockResource);
+        when(mockR2rmlParser.getTriplesMapIdName(mockResource)).thenReturn("TRIPLES_MAP_1");
+        when(mockR2rmlParser.getLogicalTable(any())).thenReturn(mockResource);
+        when(mockR2rmlParser.getSubjectMap(any())).thenReturn(mockStatement);
+        when(mockR2rmlParser.listPredicateObjectMaps(any())).thenReturn(ImmutableList.of(mockStatement));
+
+        //Logical table setup
+        when(mockR2rmlParser.isBaseTableOrView(any())).thenReturn(true);
+        when(mockR2rmlParser.getTableName(any())).thenReturn("TABLE_NAME");
+
+        //Term map setup
+        when(mockR2rmlParser.isConstant(any())).thenReturn(true);
+        when(mockR2rmlParser.getConstantValue(any())).thenReturn(mockResource);
+
+        //Predicate object map setup
+        when(mockR2rmlParser.getPredicateMap(any())).thenReturn(mockStatement);
+        when(mockR2rmlParser.getObjectMap(any())).thenReturn(mockStatement);
+
+        //SUT instance setup
         r2rmlBuilder = new R2RMLBuilder(mockR2rmlParser);
     }
 
     @Test
     public void GivenEmptyFile_WhenParse_ThenReturnR2RMLMap() {
-        when(mockR2rmlParser.getTriplesMap()).thenReturn(ImmutableList.of());
+        when(mockR2rmlParser.getTriplesMaps()).thenReturn(ImmutableSet.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenFileWithTriplesMap_WhenParse_ThenReturnR2RMLMap() {
-        Resource mockResource = mock(Resource.class);
-        Statement mockStatement = mock(Statement.class);
-        when(mockR2rmlParser.getTriplesMap()).thenReturn(ImmutableList.of(mockResource));
-        when(mockR2rmlParser.getLogicalTable(mockResource)).thenReturn(mockResource);
-        when(mockR2rmlParser.isBaseTableOrView(mockResource)).thenReturn(true);
-        when(mockR2rmlParser.getTableName(mockResource)).thenReturn("TABLE_NAME");
-        when(mockR2rmlParser.getSubjectMap(mockResource)).thenReturn(mockStatement);
-        when(mockR2rmlParser.getPredicateObjectMaps(mockResource)).thenReturn(ImmutableList.of());
-        when(mockR2rmlParser.isConstant(mockStatement)).thenReturn(true);
-        when(mockR2rmlParser.getConstantValue(mockStatement)).thenReturn(mockResource);
-
+    public void GivenValidTriplesMap_WhenParse_ThenReturnR2RMLMap() {
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(not(emptyIterable())));
     }
 
     @Test
-    public void GivenFileWithRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap(){
-        Resource mockResource = mock(Resource.class);
-        Statement mockStatement = mock(Statement.class);
-        when(mockR2rmlParser.getTriplesMap()).thenReturn(ImmutableList.of(mockResource));
-        when(mockR2rmlParser.getLogicalTable(mockResource)).thenReturn(mockResource);
-        when(mockR2rmlParser.isBaseTableOrView(mockResource)).thenReturn(true);
-        when(mockR2rmlParser.getTableName(mockResource)).thenReturn("TABLE_NAME");
-        when(mockR2rmlParser.getSubjectMap(mockResource)).thenReturn(mockStatement);
-        when(mockR2rmlParser.getPredicateObjectMaps(mockResource)).thenReturn(ImmutableList.of(mockResource));
-        when(mockR2rmlParser.getPredicateMap(mockResource)).thenReturn(mockStatement);
-        when(mockR2rmlParser.isRefObjectMap(mockResource)).thenReturn(true);
-        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource);
-        when(mockR2rmlParser.hasJoinCondition(mockResource)).thenReturn(true);
-        when(mockR2rmlParser.getJoinCondition(mockResource)).thenReturn(mockResource);
-        when(mockR2rmlParser.getChildQuery(mockResource)).thenReturn("CHILD_QUERY");
-        when(mockR2rmlParser.getParentQuery(mockResource)).thenReturn("PARENT_QUERY");
+    public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap() {
+        Resource triplesMap2 = mock(Resource.class);
+        when(mockR2rmlParser.getTriplesMapIdName(triplesMap2)).thenReturn("TRIPLES_MAP_2");
+        when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
+        when(mockR2rmlParser.getParentTriplesMap(any())).thenReturn(triplesMap2);
+        when(mockR2rmlParser.hasJoinCondition(any())).thenReturn(true);
+        when(mockR2rmlParser.getJoinCondition(any())).thenReturn(mock(Resource.class));
+        when(mockR2rmlParser.getChildQuery(any())).thenReturn("CHILD_QUERY");
+        when(mockR2rmlParser.getParentQuery(any())).thenReturn("PARENT_QUERY");
+        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableList.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
+        verify(mockR2rmlParser, times(1)).hasJoinCondition(any());
+    }
+
+    @Test
+    public void GivenRefObjectMap_WhenParse_ThenReturnR2RMLMap() {
+        Resource triplesMap2 = mock(Resource.class);
+        when(mockR2rmlParser.getTriplesMapIdName(triplesMap2)).thenReturn("TRIPLES_MAP_2");
+        when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
+        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(triplesMap2);
+        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableList.of());
+
+        R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenRefObjectMapWithOwnParentReference_WhenParse_ThenThrowException() {
+        when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
+        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource);
+        String expected = String.format("RefObjectMap must not reference own parent %s.", mockResource);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlBuilder.parse(VALID_FILENAME);
+    }
+
+    @Test
+    public void GivenRefObjectWithCircularDependency_WhenParse_ThenThrowException() {
+        Resource mockResource2 = mock(Resource.class);
+        Statement mockStatement2 = mock(Statement.class);
+        when(mockStatement2.getSubject()).thenReturn(mockResource2);
+        when(mockStatement2.getResource()).thenReturn(mockResource2);
+        when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
+        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
+        when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLE_MAP_2");
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableList.of(mockStatement2));
+        when(mockR2rmlParser.getObjectMap(mockResource2)).thenReturn(mockStatement2);
+        when(mockR2rmlParser.getParentTriplesMap(mockResource2)).thenReturn(mockResource);
+        String expected = String.format("Potential circular dependency found for mockResource.");
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlBuilder.parse(VALID_FILENAME);
     }
 }

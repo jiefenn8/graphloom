@@ -3,10 +3,10 @@
  *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package com.github.jiefenn8.graphloom.rdf;
+package com.github.jiefenn8.graphloom.integrationtest;
 
-import com.github.jiefenn8.graphloom.FakeInputDatabase;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.github.jiefenn8.graphloom.rdf.RDFMapper;
 import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;

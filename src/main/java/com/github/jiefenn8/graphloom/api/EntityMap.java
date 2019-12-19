@@ -23,6 +23,13 @@ public interface EntityMap extends PropertyMap {
     SourceMap applySource(InputSource s);
 
     /**
+     * Returns the unique id name that identify this entity map.
+     *
+     * @return unique id name of this entity map
+     */
+    String getIdName();
+
+    /**
      * Returns all relation maps that this entity map has.
      *
      * @return the set containing all relation maps in this entity map

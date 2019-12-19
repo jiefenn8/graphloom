@@ -9,6 +9,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.MutableRecord;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,7 +42,7 @@ public class TriplesMapTest {
     @Test
     public void WhenPredicateAndObjectMapGiven_TheReturnNonEmptyList() {
         triplesMap = new TriplesMap
-                .Builder(mockLogicalTable, mockSubjectMap)
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
                 .addPredicateObjectMap(ImmutablePair.of(mock(PredicateMap.class), mock(ObjectMap.class)))
                 .build();
 
@@ -53,7 +54,7 @@ public class TriplesMapTest {
     @Test
     public void WhenPredicateAndObjectMapGiven_ThenReturnTrue() {
         triplesMap = new TriplesMap
-                .Builder(mockLogicalTable, mockSubjectMap)
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
                 .addPredicateObjectMap(ImmutablePair.of(mock(PredicateMap.class), mock(ObjectMap.class)))
                 .build();
 
@@ -66,7 +67,7 @@ public class TriplesMapTest {
     public void WhenPredicateMapGiven_ThenReturnNodeMap() {
         PredicateMap mockPredicateMap = mock(PredicateMap.class);
         triplesMap = new TriplesMap
-                .Builder(mockLogicalTable, mockSubjectMap)
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
                 .addPredicateObjectMap(ImmutablePair.of(mockPredicateMap, mock(ObjectMap.class)))
                 .build();
 
@@ -79,7 +80,7 @@ public class TriplesMapTest {
     public void WhenNullLogicalTableGiven_ThrowException() {
         exceptionRule.expect(NullPointerException.class);
         triplesMap = new TriplesMap
-                .Builder(null, mockSubjectMap)
+                .Builder(StringUtils.EMPTY, null, mockSubjectMap)
                 .build();
     }
 
@@ -87,7 +88,7 @@ public class TriplesMapTest {
     public void WhenNullSubjectMapGiven_ThrowException() {
         exceptionRule.expect(NullPointerException.class);
         triplesMap = new TriplesMap
-                .Builder(mockLogicalTable, null)
+                .Builder(StringUtils.EMPTY, mockLogicalTable, null)
                 .build();
     }
 
@@ -96,7 +97,7 @@ public class TriplesMapTest {
     @Test
     public void WhenGenerateEntity_ThenVerifyCall() {
         triplesMap = new TriplesMap
-                .Builder(mockLogicalTable, mockSubjectMap)
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
                 .build();
 
         triplesMap.generateEntityTerm(mock(MutableRecord.class));
@@ -108,7 +109,7 @@ public class TriplesMapTest {
     public void WhenListEntityClasses_ThenVerifyCall() {
         when(mockSubjectMap.listEntityClasses()).thenReturn(ImmutableList.of());
         triplesMap = new TriplesMap
-                .Builder(mockLogicalTable, mockSubjectMap)
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
                 .build();
 
         triplesMap.listEntityClasses();

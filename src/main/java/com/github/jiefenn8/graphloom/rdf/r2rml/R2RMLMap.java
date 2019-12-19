@@ -7,8 +7,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.ConfigMaps;
 import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 public class R2RMLMap implements ConfigMaps {
 
     private final Map<String, String> nsPrefixMap;
-    private final List<EntityMap> triplesMaps;
+    private final Set<EntityMap> triplesMaps;
 
     /**
      * Constructs a R2RMLMap using the parameters provided by the
@@ -33,7 +33,7 @@ public class R2RMLMap implements ConfigMaps {
     protected R2RMLMap(Builder builder) {
         checkNotNull(builder);
         nsPrefixMap = ImmutableMap.copyOf(builder.nsPrefixMap);
-        triplesMaps = ImmutableList.copyOf(builder.triplesMaps);
+        triplesMaps = ImmutableSet.copyOf(builder.triplesMaps);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class R2RMLMap implements ConfigMaps {
     }
 
     @Override
-    public List<EntityMap> listEntityMaps() {
+    public Set<EntityMap> getEntityMaps() {
         return triplesMaps;
     }
 
@@ -55,7 +55,7 @@ public class R2RMLMap implements ConfigMaps {
 
         private static final String RR_PREFIX = "rr";
         private final Map<String, String> nsPrefixMap = new HashMap<>();
-        private List<TriplesMap> triplesMaps = new ArrayList<>();
+        private Set<TriplesMap> triplesMaps = new HashSet<>();
 
         /**
          * Adds the prefix along with its namespace in the namespace map.
@@ -65,6 +65,7 @@ public class R2RMLMap implements ConfigMaps {
          * @return builder of this R2RMLMap class
          */
         public Builder addNsPrefix(String prefix, String namespace) {
+
             nsPrefixMap.put(prefix, namespace);
             return this;
         }
@@ -72,7 +73,7 @@ public class R2RMLMap implements ConfigMaps {
         /**
          * Appends given triples map to this R2RMLMap.
          *
-         * @param triplesMap the entity map to add
+         * @param triplesMap the unique triples map to add
          * @return builder of this R2RMLMap class
          */
         public Builder addTriplesMap(TriplesMap triplesMap) {

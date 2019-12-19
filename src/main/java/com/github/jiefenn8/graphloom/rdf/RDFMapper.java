@@ -10,13 +10,12 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.GraphMapper;
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.github.jiefenn8.graphloom.rdf.parser.R2RMLParser;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link GraphMapper} interface using Jena; and R2RML
@@ -40,10 +39,10 @@ public class RDFMapper implements GraphMapper {
         Model outputGraph = ModelFactory.createDefaultModel();
         outputGraph.setNsPrefixes(configs.getNamespaceMap());
 
-        return outputGraph.add(mapSource(source, configs.listEntityMaps()));
+        return outputGraph.add(mapSource(source, configs.getEntityMaps()));
     }
 
-    private Model mapSource(InputSource source, List<EntityMap> triplesMaps) {
+    private Model mapSource(InputSource source, Set<EntityMap> triplesMaps) {
         Model outputGraph = ModelFactory.createDefaultModel();
         triplesMaps.forEach((e) -> outputGraph.add(mapEntity(e, source)));
 

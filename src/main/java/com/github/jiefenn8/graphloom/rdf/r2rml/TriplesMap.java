@@ -21,20 +21,27 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class TriplesMap implements EntityMap {
 
+    private final String idName;
     private final LogicalTable logicalTable;
     private final SubjectMap subjectMap;
     private final Map<RelationMap, NodeMap> predicateObjectMaps;
 
-    protected TriplesMap(Builder b) {
-        checkNotNull(b);
-        logicalTable = b.logicalTable.withParentMap(this);
-        subjectMap = b.subjectMap.withParentMap(this);
-        predicateObjectMaps = ImmutableMap.copyOf(b.predicateObjectMaps);
+    protected TriplesMap(Builder builder) {
+        checkNotNull(builder);
+        idName = builder.idName;
+        logicalTable = builder.logicalTable.withParentMap(this);
+        subjectMap = builder.subjectMap.withParentMap(this);
+        predicateObjectMaps = ImmutableMap.copyOf(builder.predicateObjectMaps);
     }
 
     @Override
     public SourceMap applySource(InputSource source) {
         return logicalTable.loadInputSource(source);
+    }
+
+    @Override
+    public String getIdName() {
+        return idName;
     }
 
     @Override
@@ -64,6 +71,7 @@ public class TriplesMap implements EntityMap {
 
     public static class Builder {
 
+        private final String idName;
         private final LogicalTable logicalTable;
         private final SubjectMap subjectMap;
         private final Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
@@ -71,12 +79,14 @@ public class TriplesMap implements EntityMap {
         /**
          * Default constructor for triples map builder.
          *
-         * @param lt the logical table to set on this triples map
-         * @param sm the subject map to set on this triples map
+         * @param idName       the name of this triples map definition
+         * @param logicalTable the logical table to set on this triples map
+         * @param subjectMap   the subject map to set on this triples map
          */
-        public Builder(LogicalTable lt, SubjectMap sm) {
-            logicalTable = checkNotNull(lt, "Logical table must not be null");
-            subjectMap = checkNotNull(sm, "Subject map must not be null.");
+        public Builder(String idName, LogicalTable logicalTable, SubjectMap subjectMap) {
+            this.idName = checkNotNull(idName, "ID name must not be null.");
+            this.logicalTable = checkNotNull(logicalTable, "Logical table must not be null.");
+            this.subjectMap = checkNotNull(subjectMap, "Subject map must not be null.");
         }
 
         /**
@@ -84,7 +94,7 @@ public class TriplesMap implements EntityMap {
          *
          * @param pom the pair to add to triples map
          */
-        public Builder addPredicateObjectMap(Pair<PredicateMap, ObjectMap> pom) {
+        public Builder addPredicateObjectMap(Pair<PredicateMap, NodeMap> pom) {
             predicateObjectMaps.put(pom.getKey(), pom.getValue());
             return this;
         }

@@ -3,8 +3,9 @@
  *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package com.github.jiefenn8.graphloom.rdf.parser;
+package com.github.jiefenn8.graphloom.integrationtest;
 
+import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.shared.NotFoundException;
 import org.junit.Before;
@@ -42,9 +43,8 @@ public class R2RMLBuilderTest {
     }
 
     @Test
-    public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap(){
+    public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap() {
         R2RMLMap result = r2rmlBuilder.parse("r2rml/valid_refObjectMap_withJoin.ttl");
         assertThat(result, is(notNullValue()));
     }
-
 }

@@ -45,7 +45,10 @@ public class SubjectMap implements PropertyMap, EntityChild {
     @Override
     public Resource generateEntityTerm(Record r) {
         RDFNode term = termMap.generateRDFTerm(r);
-        if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        if (term.isLiteral()) {
+            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        }
+
         return term.asResource();
     }
 

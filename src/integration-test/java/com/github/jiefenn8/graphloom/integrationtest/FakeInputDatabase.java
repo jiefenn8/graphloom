@@ -3,7 +3,7 @@
  *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package com.github.jiefenn8.graphloom;
+package com.github.jiefenn8.graphloom.integrationtest;
 
 import com.github.jiefenn8.graphloom.api.*;
 import com.google.common.collect.ImmutableMap;

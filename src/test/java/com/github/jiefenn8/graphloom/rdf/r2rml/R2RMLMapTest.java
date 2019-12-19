@@ -8,8 +8,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -57,8 +57,8 @@ public class R2RMLMapTest {
                 .addTriplesMap(mock(TriplesMap.class))
                 .build();
 
-        List<EntityMap> result = r2rmlMap.listEntityMaps();
-        assertThat(result, is(not(empty())));
+        Set<EntityMap> result = r2rmlMap.getEntityMaps();
+        assertThat(result, is(not(emptyIterable())));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class R2RMLMapTest {
                 .addTriplesMap(mock(TriplesMap.class))
                 .build();
 
-        List<EntityMap> result = r2rmlMap.listEntityMaps();
-        assertThat(result, is(not(empty())));
+        Set<EntityMap> result = r2rmlMap.getEntityMaps();
+        assertThat(result, is(not(emptyIterable())));
     }
 }
