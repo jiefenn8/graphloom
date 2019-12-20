@@ -163,7 +163,7 @@ public class R2RMLBuilder {
                 R2RMLFactory::createSubjectMap,
                 TermType.IRI);
 
-        r2rmlParser.getEntityClasses(triple.getResource())
+        r2rmlParser.listEntityClasses(triple.getResource())
                 .forEach(subjectMap::addEntityClass);
 
         return subjectMap;
@@ -215,8 +215,8 @@ public class R2RMLBuilder {
     }
 
     /**
-     * Builds and returns a TermMap with the properties and values
-     * defined in the given term map resource located in
+     * Builds and returns a TermMap with the properties and
+     * values defined in the given term map resource located in
      * the given statement; or throws a {@code ParserException}
      * if the statement is not a TermMap.
      *
@@ -247,9 +247,9 @@ public class R2RMLBuilder {
     }
 
     /**
-     * Builds and returns a TermMap with the properties and values
-     * defined in the given term map that is a constant valued
-     * term map.
+     * Builds and returns a TermMap with the properties and
+     * values defined in the given term map that is a constant
+     * valued term map.
      *
      * @param triple the statement containing the term map
      *               resource to map over
@@ -276,14 +276,15 @@ public class R2RMLBuilder {
 
     /**
      * Builds and returns a TermMap with the properties and values
-     * defined in the given term map that is a column valued term map.
+     * defined in the given term map that is a column valued
+     * term map.
      *
      * @param subject  the resource with the term map to map over
      * @param termType the default term type of this term map
      * @return instance of TermMap with mapped values
      */
     private TermMap buildColumnTermMap(Resource subject, TermType termType) {
-        String columnName = r2rmlParser.getColumnName(subject).getString();
+        String columnName = r2rmlParser.getColumnName(subject);
         return R2RMLFactory.createColumnTermMap(columnName, termType);
     }
 }

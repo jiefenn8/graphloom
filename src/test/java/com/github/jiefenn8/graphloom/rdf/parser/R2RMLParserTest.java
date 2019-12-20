@@ -220,14 +220,14 @@ public class R2RMLParserTest {
     @Test
     public void GivenResourceWithNoEntityClasses_WhenGetEntityClasses_ThenReturnEmptyList() {
         Resource value = model.createResource("RESOURCE");
-        List<Resource> result = r2rmlParser.getEntityClasses(value);
+        Set<Resource> result = r2rmlParser.listEntityClasses(value);
         assertThat(result, is(empty()));
     }
 
     @Test
     public void GivenResourceWithNoPredicateObjectMap_WhenGetPredicateObjectMap_ThenReturnEmptyList() {
         Resource value = model.createResource("RESOURCE");
-        List<Resource> result = r2rmlParser.getEntityClasses(value);
+        Set<Resource> result = r2rmlParser.listEntityClasses(value);
         assertThat(result, is(empty()));
     }
 
@@ -235,7 +235,7 @@ public class R2RMLParserTest {
     public void GivenResourceWithPredicateObjectMap_WhenGetPredicateObjectMap_ThenReturnList() {
         Resource triplesMap = model.createResource("#TriplesMap1")
                 .addProperty(R2RMLSyntax.predicateObjectMap, model.createResource());
-        List<Statement> result = r2rmlParser.listPredicateObjectMaps(triplesMap);
+        Set<Statement> result = r2rmlParser.listPredicateObjectMaps(triplesMap);
         assertThat(result, is(not(empty())));
     }
 

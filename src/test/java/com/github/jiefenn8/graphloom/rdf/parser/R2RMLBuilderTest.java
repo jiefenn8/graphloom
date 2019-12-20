@@ -7,10 +7,7 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.junit.Before;
@@ -33,10 +30,9 @@ public class R2RMLBuilderTest {
 
     private static final String VALID_FILENAME = "r2rml_file.ttl";
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
-    @Mock R2RMLParser mockR2rmlParser;
+    @Mock private R2RMLParser mockR2rmlParser;
     private R2RMLBuilder r2rmlBuilder;
     @Mock private Resource mockResource;
-    private Model setupModel = ModelFactory.createDefaultModel();
 
     /**
      * Setup a fake graph emulating a valid r2rml file with a
@@ -56,7 +52,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getTriplesMapIdName(mockResource)).thenReturn("TRIPLES_MAP_1");
         when(mockR2rmlParser.getLogicalTable(any())).thenReturn(mockResource);
         when(mockR2rmlParser.getSubjectMap(any())).thenReturn(mockStatement);
-        when(mockR2rmlParser.listPredicateObjectMaps(any())).thenReturn(ImmutableList.of(mockStatement));
+        when(mockR2rmlParser.listPredicateObjectMaps(any())).thenReturn(ImmutableSet.of(mockStatement));
 
         //Logical table setup
         when(mockR2rmlParser.isBaseTableOrView(any())).thenReturn(true);
@@ -98,7 +94,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getJoinCondition(any())).thenReturn(mock(Resource.class));
         when(mockR2rmlParser.getChildQuery(any())).thenReturn("CHILD_QUERY");
         when(mockR2rmlParser.getParentQuery(any())).thenReturn("PARENT_QUERY");
-        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableList.of());
+        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableSet.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -111,7 +107,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getTriplesMapIdName(triplesMap2)).thenReturn("TRIPLES_MAP_2");
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(triplesMap2);
-        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableList.of());
+        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableSet.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -137,7 +133,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
         when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLE_MAP_2");
-        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableList.of(mockStatement2));
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of(mockStatement2));
         when(mockR2rmlParser.getObjectMap(mockResource2)).thenReturn(mockStatement2);
         when(mockR2rmlParser.getParentTriplesMap(mockResource2)).thenReturn(mockResource);
         String expected = String.format("Potential circular dependency found for mockResource.");
