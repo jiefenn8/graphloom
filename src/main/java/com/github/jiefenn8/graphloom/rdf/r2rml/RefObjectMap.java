@@ -16,15 +16,19 @@ import org.apache.jena.rdf.model.RDFNode;
 public class RefObjectMap implements NodeMap, EntityChild {
 
     private final TriplesMap triplesMapRef;
-    private final String childQuery;
-    private final String parentQuery;
+    private final String childColumn;
+    private final String parentColumn;
     private TriplesMap parent;
 
     protected RefObjectMap(Builder builder) {
         triplesMapRef = builder.triplesMapRef;
         parent = builder.parent;
-        childQuery = builder.childQuery;
-        parentQuery = builder.parentQuery;
+        childColumn = builder.childQuery;
+        parentColumn = builder.parentQuery;
+    }
+
+    protected boolean isQueryEqual(LogicalTable logicalTable) {
+        return this.triplesMapRef.isQueryEqual(logicalTable);
     }
 
     @Override

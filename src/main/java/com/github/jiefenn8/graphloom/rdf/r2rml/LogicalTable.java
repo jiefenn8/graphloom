@@ -8,6 +8,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.*;
 import com.google.common.base.Preconditions;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -23,6 +24,19 @@ public class LogicalTable implements SourceMap, EntityChild {
 
     protected LogicalTable(SourceConfig sourceConfig) {
         this.sourceConfig = checkNotNull(sourceConfig, "Payload must not be null.");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LogicalTable that = (LogicalTable) o;
+        return Objects.equals(sourceConfig, that.sourceConfig);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sourceConfig);
     }
 
     @Override

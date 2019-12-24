@@ -5,10 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf;
 
-import com.github.jiefenn8.graphloom.api.ConfigMaps;
-import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.github.jiefenn8.graphloom.api.GraphMapper;
-import com.github.jiefenn8.graphloom.api.InputSource;
+import com.github.jiefenn8.graphloom.api.*;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -56,12 +53,11 @@ public class RDFMapper implements GraphMapper {
             triplesMap.listEntityClasses().forEach(
                     (c) -> entityGraph.add(subject, RDF.type, c));
 
-            //todo: Refactor to separate PredicateObjectMap class.
             triplesMap.listRelationMaps().forEach(
-                    (k) -> entityGraph.add(
-                            subject,
-                            k.generateRelationTerm(r),
-                            triplesMap.getNodeMapWithRelation(k).generateNodeTerm(r)));
+                    (k) -> {
+                        NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
+                        entityGraph.add(subject, k.generateRelationTerm(r), nodeMap.generateNodeTerm(r));
+                    });
         });
 
         return entityGraph;

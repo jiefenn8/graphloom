@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class InputSourceConfig implements SourceConfig {
 
@@ -21,6 +22,22 @@ public class InputSourceConfig implements SourceConfig {
         this.payload = Preconditions.checkNotNull(payload, "Payload must not be null.");
         this.payloadType = Preconditions.checkNotNull(pt, "Payload type must not be null.");
         this.iteratorDef = Preconditions.checkNotNull(iteratorDef, "Iterator definition must not be null.");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InputSourceConfig that = (InputSourceConfig) o;
+        return Objects.equals(payloadType, that.payloadType) &&
+                Objects.equals(payload, that.payload) &&
+                Objects.equals(iteratorDef, that.iteratorDef) &&
+                Objects.equals(properties, that.properties);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(payloadType, payload, iteratorDef, properties);
     }
 
     @Override

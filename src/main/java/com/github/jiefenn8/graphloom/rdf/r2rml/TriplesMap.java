@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
+import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.Resource;
@@ -32,6 +33,17 @@ public class TriplesMap implements EntityMap {
         logicalTable = builder.logicalTable.withParentMap(this);
         subjectMap = builder.subjectMap.withParentMap(this);
         predicateObjectMaps = ImmutableMap.copyOf(builder.predicateObjectMaps);
+    }
+
+    /**
+     * Returns true if this instance logical table source config is
+     * equal to the one given.
+     *
+     * @param logicalTable logical table to compare
+     * @return true if logical table query is equal
+     */
+    protected boolean isQueryEqual(LogicalTable logicalTable) {
+        return this.logicalTable.equals(logicalTable);
     }
 
     @Override
@@ -95,6 +107,12 @@ public class TriplesMap implements EntityMap {
          * @param pom the pair to add to triples map
          */
         public Builder addPredicateObjectMap(Pair<PredicateMap, NodeMap> pom) {
+            NodeMap nodeMap = pom.getValue();
+            if (nodeMap instanceof RefObjectMap) {
+                if (!((RefObjectMap) nodeMap).isQueryEqual(logicalTable)) {
+                    throw new ParserException("Triples Maps queries do not match. Must provide join condition.");
+                }
+            }
             predicateObjectMaps.put(pom.getKey(), pom.getValue());
             return this;
         }

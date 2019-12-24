@@ -86,15 +86,15 @@ public class R2RMLBuilderTest {
 
     @Test
     public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap() {
-        Resource triplesMap2 = mock(Resource.class);
-        when(mockR2rmlParser.getTriplesMapIdName(triplesMap2)).thenReturn("TRIPLES_MAP_2");
+        Resource mockResource2 = mock(Resource.class);
+        when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLES_MAP_2");
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
-        when(mockR2rmlParser.getParentTriplesMap(any())).thenReturn(triplesMap2);
+        when(mockR2rmlParser.getParentTriplesMap(any())).thenReturn(mockResource2);
         when(mockR2rmlParser.hasJoinCondition(any())).thenReturn(true);
         when(mockR2rmlParser.getJoinCondition(any())).thenReturn(mock(Resource.class));
         when(mockR2rmlParser.getChildQuery(any())).thenReturn("CHILD_QUERY");
         when(mockR2rmlParser.getParentQuery(any())).thenReturn("PARENT_QUERY");
-        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -103,11 +103,11 @@ public class R2RMLBuilderTest {
 
     @Test
     public void GivenRefObjectMap_WhenParse_ThenReturnR2RMLMap() {
-        Resource triplesMap2 = mock(Resource.class);
-        when(mockR2rmlParser.getTriplesMapIdName(triplesMap2)).thenReturn("TRIPLES_MAP_2");
+        Resource mockResource2 = mock(Resource.class);
+        when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLES_MAP_2");
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
-        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(triplesMap2);
-        when(mockR2rmlParser.listPredicateObjectMaps(triplesMap2)).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -125,7 +125,7 @@ public class R2RMLBuilderTest {
     }
 
     @Test
-    public void GivenRefObjectWithCircularDependency_WhenParse_ThenThrowException() {
+    public void GivenRefObjectMapWithCircularDependency_WhenParse_ThenThrowException() {
         Resource mockResource2 = mock(Resource.class);
         Statement mockStatement2 = mock(Statement.class);
         when(mockStatement2.getSubject()).thenReturn(mockResource2);
@@ -136,9 +136,23 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of(mockStatement2));
         when(mockR2rmlParser.getObjectMap(mockResource2)).thenReturn(mockStatement2);
         when(mockR2rmlParser.getParentTriplesMap(mockResource2)).thenReturn(mockResource);
-        String expected = String.format("Potential circular dependency found for mockResource.");
         exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage(expected);
+        exceptionRule.expectMessage("Potential circular dependency found for mockResource.");
+
+        r2rmlBuilder.parse(VALID_FILENAME);
+    }
+
+    @Test
+    public void GivenRefObjectMapWithDiffQueryAndNoJoin_WhenParse_ThenThrowException() {
+        Resource mockResource2 = mock(Resource.class);
+        when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLES_MAP_2");
+        when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
+        when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.getLogicalTable(mockResource2)).thenReturn(mockResource2);
+        when(mockR2rmlParser.getTableName(mockResource2)).thenReturn("DIFF_TABLE_NAME");
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage("Triples Maps queries do not match. Must provide join condition.");
 
         r2rmlBuilder.parse(VALID_FILENAME);
     }
