@@ -5,25 +5,34 @@
 
 package com.github.jiefenn8.graphloom.api;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
- * This class represents a single record of an Entity using HashMap implementation with the
- * property as String key its value as String value.
+ * This class represents a single record of an Entity using HashMap
+ * implementation with the property as String key its value as String
+ * value.
  */
 public class MutableRecord implements Record {
 
     private Map<String, String> recordValue;
 
-    //Default constructor
+    /**
+     * Constructs a MutableRecord with an initial column and its value.
+     *
+     * @param column the name of the column
+     * @param value the value associated with the column
+     */
     public MutableRecord(String column, String value) {
-        recordValue = new HashMap<>();
+        recordValue = new LinkedHashMap<>();
         recordValue.put(column, value);
     }
 
+    /**
+     * Constructs a MutableRecord with the specified map containing all
+     * the properties and their values to add into this record.
+     *
+     * @param m the map with all the properties and their values to add
+     */
     public MutableRecord(Map<String, String> m) {
         recordValue = new HashMap<>(m);
     }
@@ -69,5 +78,10 @@ public class MutableRecord implements Record {
     @Override
     public Set<String> properties() {
         return recordValue.keySet();
+    }
+
+    @Override
+    public int columnSize() {
+        return recordValue.size();
     }
 }

@@ -41,7 +41,7 @@ public class PredicateMap implements RelationMap, EntityChild {
     }
 
     @Override
-    public EntityMap getParentMap() {
+    public EntityMap getEntityMap() {
         return parent;
     }
 }

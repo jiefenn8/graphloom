@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * This class defines the base methods that manages the parsing
  * of rdf mapping document to iterable r2rml terms.
  * <p>
- * All methods in this parser will definitely cross check with
+ * All methods in this parser will likely to cross check with
  * this instance r2rml model in most cases to complete its call;
  * If a given resource (subject/object) or statement (triple)
  * origin is from another source and not from this instance,
@@ -498,16 +498,18 @@ public class R2RMLParser {
     }
 
     /**
-     * Returns the resource (object) associated to the join
+     * Returns a set of resources (object) associated to the join
      * condition property (predicate) in the given object map
      * resource (subject).
      *
      * @param subject the object map resource
-     * @return resource of the object map property
+     * @return set of resources associated with join condition
+     *         property
      */
-    public Resource getJoinCondition(Resource subject) {
-        return getPropertyResourceValue(subject, R2RMLSyntax.joinCondition)
-                .asResource();
+    public Set<Resource> listJoinConditions(Resource subject) {
+        return r2rmlGraph.listObjectsOfProperty(subject, R2RMLSyntax.joinCondition)
+                .mapWith(RDFNode::asResource)
+                .toSet();
     }
 
     /**

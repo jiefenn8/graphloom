@@ -91,7 +91,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(any())).thenReturn(mockResource2);
         when(mockR2rmlParser.hasJoinCondition(any())).thenReturn(true);
-        when(mockR2rmlParser.getJoinCondition(any())).thenReturn(mock(Resource.class));
+        when(mockR2rmlParser.listJoinConditions(any())).thenReturn(ImmutableSet.of(mock(Resource.class)));
         when(mockR2rmlParser.getChildQuery(any())).thenReturn("CHILD_QUERY");
         when(mockR2rmlParser.getParentQuery(any())).thenReturn("PARENT_QUERY");
         when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());

@@ -19,11 +19,12 @@ import java.util.Set;
  */
 public class MutableEntityRecord implements EntityRecord {
 
-    private Set<Record> records;
+    private Set<Record> records = new LinkedHashSet<>();
+    private int columnSize;
 
-    //Default constructor
-    public MutableEntityRecord() {
-        records = new LinkedHashSet<>();
+    @Override
+    public int columnSize() {
+        return columnSize;
     }
 
     @Override
@@ -53,6 +54,7 @@ public class MutableEntityRecord implements EntityRecord {
 
     @Override
     public boolean addRecord(Record r) {
+        columnSize = r.columnSize();
         Iterator<Record> iterator = records.iterator();
         if (iterator.hasNext()) {
             Record record = iterator.next();

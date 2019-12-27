@@ -16,6 +16,7 @@ import org.apache.jena.rdf.model.Statement;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import static com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
@@ -200,11 +201,13 @@ public class R2RMLBuilder {
             }
 
             RefObjectMap.Builder refObjectMapBuilder = new RefObjectMap.Builder(refTriplesMap);
-            if (r2rmlParser.hasJoinCondition(refTriplesMapResource)) {
-                Resource joinConditionResource = r2rmlParser.getJoinCondition(refTriplesMapResource);
-                String parent = r2rmlParser.getParentQuery(joinConditionResource);
-                String child = r2rmlParser.getChildQuery(joinConditionResource);
-                refObjectMapBuilder.setJoinCondition(parent, child);
+            if (r2rmlParser.hasJoinCondition(objectMapResource)) {
+                Set<Resource> joins = r2rmlParser.listJoinConditions(objectMapResource);
+                for (Resource joinConditionResource : joins) {
+                    String parent = r2rmlParser.getParentQuery(joinConditionResource);
+                    String child = r2rmlParser.getChildQuery(joinConditionResource);
+                    refObjectMapBuilder.addJoinCondition(parent, child);
+                }
             }
 
             return new ImmutablePair<>(predicateMap, refObjectMapBuilder.build());

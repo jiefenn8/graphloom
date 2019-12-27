@@ -65,6 +65,13 @@ public interface EntityRecord extends Iterable<Record> {
     boolean isEmpty();
 
     /**
+     * Returns the number of columns in this entity record.
+     *
+     * @return the number of columns
+     */
+    int columnSize();
+
+    /**
      * Compares the given object with this collection for equality. Returns
      * true if the given object is also a collection that has the same
      * amount of records and their values associated with them.

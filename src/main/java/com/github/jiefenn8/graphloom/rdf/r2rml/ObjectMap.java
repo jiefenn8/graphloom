@@ -32,7 +32,7 @@ public class ObjectMap implements NodeMap, EntityChild {
     }
 
     @Override
-    public EntityMap getParentMap() {
+    public EntityMap getEntityMap() {
         return parent;
     }
 

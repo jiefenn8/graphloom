@@ -98,4 +98,11 @@ public interface Record {
      * @see Map#keySet()
      */
     Set<String> properties();
+
+    /**
+     * Returns the number of columns this records has.
+     *
+     * @return the number of columns
+     */
+    int columnSize();
 }

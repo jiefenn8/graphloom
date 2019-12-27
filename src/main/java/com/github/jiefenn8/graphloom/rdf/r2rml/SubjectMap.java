@@ -63,7 +63,7 @@ public class SubjectMap implements PropertyMap, EntityChild {
     }
 
     @Override
-    public EntityMap getParentMap() {
+    public EntityMap getEntityMap() {
         return parent;
     }
 }

@@ -17,5 +17,5 @@ public interface EntityChild {
      *
      * @return the entity map that owns this map
      */
-    EntityMap getParentMap();
+    EntityMap getEntityMap();
 }
