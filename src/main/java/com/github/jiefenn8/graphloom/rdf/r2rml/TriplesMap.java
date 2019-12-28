@@ -33,10 +33,10 @@ public class TriplesMap implements EntityMap {
      *
      * @param builder the triples map builder to build from
      */
-    protected TriplesMap(Builder builder) {
+    private TriplesMap(Builder builder) {
         checkNotNull(builder);
         idName = builder.idName;
-        logicalTable = builder.logicalTable.withParentMap(this);
+        logicalTable = builder.logicalTable;
         subjectMap = builder.subjectMap.withParentMap(this);
         predicateObjectMaps = ImmutableMap.copyOf(builder.predicateObjectMaps);
     }

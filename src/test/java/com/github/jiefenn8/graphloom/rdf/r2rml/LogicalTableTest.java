@@ -35,24 +35,24 @@ public class LogicalTableTest {
 
     @Test
     public void GivenInputSource_WhenLoadInputSource_ThenReturnSourceMap() {
-        logicalTable = new LogicalTable(mockSourceConfig);
+        logicalTable = new LogicalTable.Builder(mockSourceConfig).build();
         SourceMap result = logicalTable.loadInputSource(mockInputSource);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
     public void GivenBatchId_WhenGetEntityRecord_ThenReturnEntityRecord() {
-        when(mockInputSource.getEntityRecord(any(SourceConfig.class), anyInt())).thenReturn(mock(EntityRecord.class));
-        logicalTable = new LogicalTable(mockSourceConfig);
+        when(mockInputSource.getEntityRecord(any(), anyInt())).thenReturn(mock(EntityRecord.class));
+        logicalTable = new LogicalTable.Builder(mockSourceConfig).build();
         logicalTable.loadInputSource(mockInputSource);
         EntityRecord result = logicalTable.getEntityRecord(0);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenNullSourceConfig_WhenCreateInstance_ThenThrowException() {
+    public void GivenNullSourceConfig_WhenBuildInstance_ThenThrowException() {
         exceptionRule.expect(NullPointerException.class);
         exceptionRule.expectMessage("Payload must not be null.");
-        logicalTable = new LogicalTable(null);
+        logicalTable = new LogicalTable.Builder((SourceConfig) null).build();
     }
 }

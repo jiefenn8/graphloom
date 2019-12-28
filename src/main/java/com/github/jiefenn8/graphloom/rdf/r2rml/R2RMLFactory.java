@@ -8,20 +8,27 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import org.apache.jena.rdf.model.RDFNode;
 
+/**
+ * This class defines the base methods that manages the setup
+ * and creation of R2RML related classes.
+ */
 public class R2RMLFactory {
 
     //LogicalTable
-    public static LogicalTable createBaseTableOrView(String source) {
-        R2RMLView r2rmlView = new R2RMLView(source);
 
-        return new LogicalTable(r2rmlView);
+    public static LogicalTable createLogicalBaseTableOrView(String source) {
+        return new LogicalTable.Builder(new BaseTableOrView(source)).build();
     }
 
-    public static LogicalTable createR2RMLView(String source, String version) {
-        BaseTableOrView baseTableOrView = new BaseTableOrView(source);
-        baseTableOrView.setProperty("sqlVersion", version);
+    public static LogicalTable createLogicalR2RMLView(String source, String version) {
+        R2RMLView r2rmlView = R2RMLFactory.createR2RMLView(source, version);
+        return new LogicalTable.Builder(r2rmlView).build();
+    }
 
-        return new LogicalTable(baseTableOrView);
+    protected static R2RMLView createR2RMLView(String source, String version) {
+        R2RMLView r2rmlView = new R2RMLView(source);
+        r2rmlView.setProperty("sqlVersion", version);
+        return r2rmlView;
     }
 
     //PredicateMap

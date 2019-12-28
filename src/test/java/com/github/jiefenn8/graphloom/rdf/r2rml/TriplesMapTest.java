@@ -35,7 +35,7 @@ public class TriplesMapTest {
 
     @Before
     public void setUp() {
-        when(mockLogicalTable.withParentMap(any())).thenReturn(mockLogicalTable);
+        //when(mockLogicalTable.withParentMap(any())).thenReturn(mockLogicalTable);
         when(mockSubjectMap.withParentMap(any())).thenReturn(mockSubjectMap);
     }
 

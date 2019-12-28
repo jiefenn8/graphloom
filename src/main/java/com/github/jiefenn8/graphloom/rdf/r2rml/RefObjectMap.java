@@ -16,6 +16,8 @@ import org.apache.jena.rdf.model.RDFNode;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of R2RML RefObjectMap with {@link NodeMap} interface.
  * This class is an immutable class and require the use of its {@link Builder}
@@ -23,17 +25,18 @@ import java.util.Set;
  */
 public class RefObjectMap implements NodeMap, EntityChild {
 
+    private final TriplesMap parent;
     private final TriplesMap parentTriplesMap;
     private final Set<JoinCondition> joinConditions;
-    private TriplesMap parent;
 
     /**
      * Constructs a RefObjectMap with the specified Builder containing the
-     * properties to populate and initialise this immutable instance.
+     * properties to populate and initialise an immutable instance.
      *
-     * @param builder the ref object map to builder to build from
+     * @param builder the ref object map builder to build from
      */
-    protected RefObjectMap(Builder builder) {
+    private RefObjectMap(Builder builder) {
+        checkNotNull(builder);
         parentTriplesMap = builder.parentTriplesMap;
         joinConditions = ImmutableSet.copyOf(builder.joinConditions);
         parent = builder.parent;
@@ -112,12 +115,13 @@ public class RefObjectMap implements NodeMap, EntityChild {
         }
 
         /**
-         * Adds association to an entity map that this ref object map belongs to.
+         * Adds association to an triples map that this ref object map
+         * belongs to.
          *
-         * @param triplesMap the entity map to associate to
+         * @param triplesMap the triples map to associate with
          * @return this builder for fluent method chaining
          */
-        public Builder withEntityMap(TriplesMap triplesMap) {
+        public Builder withTriplesMap(TriplesMap triplesMap) {
             parent = triplesMap;
             return this;
         }

@@ -137,14 +137,14 @@ public class R2RMLBuilder {
     private LogicalTable buildLogicalTable(Resource subject) {
         if (r2rmlParser.isBaseTableOrView(subject)) {
             String tableName = r2rmlParser.getTableName(subject);
-            return R2RMLFactory.createBaseTableOrView(tableName);
+            return R2RMLFactory.createLogicalBaseTableOrView(tableName);
         }
 
         if (r2rmlParser.isR2RMLView(subject)) {
             String sqlQuery = r2rmlParser.getSqlQuery(subject);
             String sqlVersion = r2rmlParser.getVersion(subject);
 
-            return R2RMLFactory.createR2RMLView(sqlQuery, sqlVersion);
+            return R2RMLFactory.createLogicalR2RMLView(sqlQuery, sqlVersion);
         }
 
         throw new ParserException("No BaseTableOrView or R2RMLView property found.");

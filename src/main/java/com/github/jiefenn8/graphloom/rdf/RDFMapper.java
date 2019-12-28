@@ -86,9 +86,12 @@ public class RDFMapper implements GraphMapper {
                 RefObjectMap refObjectMap = (RefObjectMap) nodeMap;
                 EntityMap refTriplesMap = refObjectMap.getParentTriplesMap();
                 LogicalTable refLogicalTable = (LogicalTable) refTriplesMap.applySource(null);
-                LogicalTable logicalTable = (LogicalTable) triplesMap.applySource(null);
-                logicalTable.withJointSQLQuery(refLogicalTable, refObjectMap.listJoinConditions())
-                        .loadInputSource(source)
+                LogicalTable rootLogicalTable = (LogicalTable) triplesMap.applySource(null);
+                LogicalTable jointLogicalTable = new LogicalTable.Builder(rootLogicalTable)
+                        .withJointSQLQuery(refLogicalTable, refObjectMap.listJoinConditions())
+                        .build();
+
+                jointLogicalTable.loadInputSource(source)
                         .forEachEntityRecord((r) -> {
                             Resource subject = triplesMap.generateEntityTerm(r);
                             entityGraph.add(subject, k.generateRelationTerm(r), refObjectMap.generateNodeTerm(r));
