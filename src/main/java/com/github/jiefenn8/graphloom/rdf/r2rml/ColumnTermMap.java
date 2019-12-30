@@ -10,12 +10,12 @@ import org.apache.jena.rdf.model.RDFNode;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ColTermMap implements TermMap {
+public class ColumnTermMap implements TermMap {
 
     private String columnName;
     private TermType termType;
 
-    protected ColTermMap(String columnName, TermType t) {
+    protected ColumnTermMap(String columnName, TermType t) {
         this.columnName = checkNotNull(columnName, "Column name must not be null.");
         termType = checkNotNull(t, "Term type must not be null.");
     }

@@ -14,13 +14,13 @@ import java.util.regex.Pattern;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
-public class TmplTermMap implements TermMap {
+public class TemplateTermMap implements TermMap {
 
-    private Pattern pattern = Pattern.compile("\\{(.*?)}");
+    private static final Pattern pattern = Pattern.compile("\\{(.*?)}");
     private String templateStr;
     private TermType termType;
 
-    protected TmplTermMap(String templateStr, TermType termType) {
+    protected TemplateTermMap(String templateStr, TermType termType) {
         this.templateStr = checkNotNull(templateStr, "Template string must not be null.");
         this.termType = checkNotNull(termType, "Term type must not be null.");
     }
