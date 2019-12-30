@@ -24,6 +24,9 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test class for {@link PredicateMap}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class PredicateMapTest {
 

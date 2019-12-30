@@ -45,7 +45,7 @@ public class RDFMapper implements GraphMapper {
      * Returns a model containing RDF triples generated from mapping the given
      * source using the provided set of mapping configs for each entity.
      *
-     * @param source the source to map over to RDF triples
+     * @param source      the source to map over to RDF triples
      * @param triplesMaps the set of mapping configs
      * @return
      */
@@ -61,7 +61,7 @@ public class RDFMapper implements GraphMapper {
      * from mapping with the given source and entity mapping.
      *
      * @param triplesMap the entity mapping to generate terms
-     * @param source the source to map into RDF triples
+     * @param source     the source to map into RDF triples
      * @return model containing RDF triples related to an entity
      */
     private Model mapEntity(EntityMap triplesMap, InputSource source) {

@@ -82,10 +82,10 @@ public class R2RMLMap implements ConfigMaps {
         }
 
         /**
-         * Returns an instance of R2RMLMap with this builder containing
+         * Returns an immutable instance of R2RMLMap with this builder containing
          * the parameters given to populate the object.
          *
-         * @return instance of R2RMLMap with this builder
+         * @return the instance of R2RMLMap created with the info in this builder
          */
         public R2RMLMap build() {
             nsPrefixMap.putIfAbsent(RR_PREFIX, R2RMLSyntax.getURI());

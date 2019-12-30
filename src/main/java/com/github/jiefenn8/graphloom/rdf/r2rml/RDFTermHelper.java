@@ -12,8 +12,20 @@ import org.apache.jena.rdf.model.ResourceFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * This class defines the base methods in managing common RDF related
+ * operations.
+ */
 public class RDFTermHelper {
 
+    /**
+     * Returns the term created from the given value and term type
+     * specified to be mapped to.
+     *
+     * @param value the value of the term
+     * @param type  the term type to map the value into
+     * @return the generated term value to the type specified
+     */
     public static RDFNode asRDFTerm(String value, TermType type) {
         checkNotNull(value);
         switch (checkNotNull(type)) {

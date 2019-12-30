@@ -24,6 +24,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test class for {@link LogicalTable}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalTableTest {
 

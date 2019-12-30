@@ -21,6 +21,9 @@ import static com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * Unit test class for {@link RDFTermHelper}.
+ */
 @RunWith(JUnitParamsRunner.class)
 public class RDFTermHelperTest {
 

@@ -25,6 +25,12 @@ public class PredicateMap implements RelationMap, EntityChild {
     private EntityMap parent;
     private TermMap termMap;
 
+    /**
+     * Constructs an PredicateMap with the specified term map that is either
+     * a constant, template or a column type.
+     *
+     * @param m the term map to use for this map config
+     */
     protected PredicateMap(TermMap m) {
         this.termMap = checkNotNull(m, "Term map must not be null.");
     }
@@ -35,6 +41,12 @@ public class PredicateMap implements RelationMap, EntityChild {
         return ResourceFactory.createProperty(term.getURI());
     }
 
+    /**
+     * Adds association to an triples map that this predicate map belongs to.
+     *
+     * @param m the triples map to associate with
+     * @return this builder for fluent method chaining
+     */
     protected PredicateMap withParentMap(EntityMap m) {
         parent = m;
         return this;

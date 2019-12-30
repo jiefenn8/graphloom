@@ -15,6 +15,9 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
+/**
+ * Unit test class for {@link MutableEntityRecord}.
+ */
 public class MutableEntityRecordTest {
 
     private MutableEntityRecord entityRecord;

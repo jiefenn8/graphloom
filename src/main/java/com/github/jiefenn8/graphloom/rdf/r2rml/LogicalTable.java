@@ -78,6 +78,9 @@ public class LogicalTable implements SourceMap, EntityChild {
         return parent;
     }
 
+    /**
+     * Builder class for LogicalTable.
+     */
     public static class Builder {
 
         private SourceConfig sourceConfig;
@@ -92,8 +95,7 @@ public class LogicalTable implements SourceMap, EntityChild {
         }
 
         /**
-         * Adds association to an triples map that this logical table belongs
-         * to.
+         * Adds association to an triples map that this logical table belongs to.
          *
          * @param triplesMap the triples map to associate with
          * @return this builder for fluent method chaining
@@ -108,7 +110,7 @@ public class LogicalTable implements SourceMap, EntityChild {
          * table or mixed that is associated to each other through join
          * conditions.
          *
-         * @param logicalTable the second query or table to build a joint SQL
+         * @param logicalTable   the second query or table to build a joint SQL
          * @param joinConditions the set of joins conditions to use
          * @return this builder for fluent method chaining
          */
@@ -134,10 +136,10 @@ public class LogicalTable implements SourceMap, EntityChild {
          * @param iterator of the join condition collection
          * @return the ending segment containing SQL built join conditions
          */
-        private String buildJoinStatement(Iterator<JoinCondition> iterator){
+        private String buildJoinStatement(Iterator<JoinCondition> iterator) {
             JoinCondition join = iterator.next();
             String joinStatement = String.format("q1.%s=q2.%s", join.getChild(), join.getParent());
-            if(iterator.hasNext()) {
+            if (iterator.hasNext()) {
                 joinStatement = joinStatement.concat(" AND " + buildJoinStatement(iterator));
             }
 
@@ -159,10 +161,12 @@ public class LogicalTable implements SourceMap, EntityChild {
             return sourceConfig.getPayload();
         }
 
-        private String generateSQLJoin(JoinCondition join) {
-            return String.format("q1.%s=q2.%s", join.getChild(), join.getParent());
-        }
-
+        /**
+         * Returns an immutable instance of logical table containing the properties
+         * given to its builder.
+         *
+         * @return instance of logical table created with the info in this builder
+         */
         public LogicalTable build() {
             return new LogicalTable(this);
         }

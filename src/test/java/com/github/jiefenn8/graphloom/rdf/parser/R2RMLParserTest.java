@@ -33,6 +33,9 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for {@link R2RMLParser}.
+ */
 @RunWith(JUnitParamsRunner.class)
 public class R2RMLParserTest {
 

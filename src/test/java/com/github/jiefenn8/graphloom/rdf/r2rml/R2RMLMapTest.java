@@ -17,6 +17,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
+/**
+ * Unit test class for {@link R2RMLMap}.
+ */
 public class R2RMLMapTest {
 
     private static final String rrPrefix = "rr";

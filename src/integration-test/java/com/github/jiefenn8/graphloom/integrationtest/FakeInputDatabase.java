@@ -23,6 +23,11 @@ public class FakeInputDatabase implements InputSource {
         return getEmpRecords();
     }
 
+    /**
+     * Returns the entity record of a predefined employee table.
+     *
+     * @return the entity record of employee records.
+     */
     private EntityRecord getEmpRecords() {
         Record record1 = new MutableRecord(ImmutableMap.of(
                 "EMPNO", "7369",
@@ -36,6 +41,11 @@ public class FakeInputDatabase implements InputSource {
         return entityRecord;
     }
 
+    /**
+     * Returns the entity record of a predefined department table.
+     *
+     * @return the entity record of department records.
+     */
     private EntityRecord getDeptRecords() {
         Record record1 = new MutableRecord(ImmutableMap.of(
                 "DEPTNO", "10",

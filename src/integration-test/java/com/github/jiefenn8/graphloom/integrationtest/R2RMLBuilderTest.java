@@ -17,6 +17,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+/**
+ * Integration test class for {@link R2RMLBuilder}.
+ */
 public class R2RMLBuilderTest {
 
     @Rule public ExpectedException exceptionRule = ExpectedException.none();

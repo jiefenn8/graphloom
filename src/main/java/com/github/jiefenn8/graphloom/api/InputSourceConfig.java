@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Implementation of {@link SourceConfig} interface.
+ */
 public class InputSourceConfig implements SourceConfig {
 
     private PayloadType payloadType;
@@ -18,6 +21,14 @@ public class InputSourceConfig implements SourceConfig {
     private String iteratorDef;
     private Map<String, String> properties = new HashMap<>();
 
+    /**
+     * Constructs an InputSourceConfig with the specified payload, type
+     * and iterator definition.
+     *
+     * @param payload     the payload query to use
+     * @param pt          the type of payload given
+     * @param iteratorDef the definition to iterate each row of results
+     */
     protected InputSourceConfig(String payload, PayloadType pt, String iteratorDef) {
         this.payload = Preconditions.checkNotNull(payload, "Payload must not be null.");
         this.payloadType = Preconditions.checkNotNull(pt, "Payload type must not be null.");

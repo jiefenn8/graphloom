@@ -25,6 +25,9 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test class for {@link ObjectMap}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectMapTest {
 

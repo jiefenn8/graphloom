@@ -133,7 +133,7 @@ public class TriplesMap implements EntityMap {
          * Returns an immutable instance of triples map containing the properties
          * given to its builder.
          *
-         * @return the triples map created with this builder parameters
+         * @return instance of triples map created with the info in this builder
          */
         public TriplesMap build() {
             return new TriplesMap(this);

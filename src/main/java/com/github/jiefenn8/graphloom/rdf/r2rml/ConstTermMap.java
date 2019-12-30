@@ -10,10 +10,21 @@ import org.apache.jena.rdf.model.RDFNode;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * This interface defines the base methods that manages the mapping of any
+ * source record to their respective rdf term through the use of a constant
+ * term.
+ */
 public class ConstTermMap implements TermMap {
 
     private RDFNode constTerm;
 
+    /**
+     * Constructs a ConstTermMap with the specified constant value to use
+     * as the term.
+     *
+     * @param n the constant value to use as term
+     */
     protected ConstTermMap(RDFNode n) {
         constTerm = checkNotNull(n, "Constant term must not be null.");
     }

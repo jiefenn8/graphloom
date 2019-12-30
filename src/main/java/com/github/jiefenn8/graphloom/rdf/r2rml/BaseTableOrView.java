@@ -9,8 +9,19 @@ import com.github.jiefenn8.graphloom.api.InputSourceConfig;
 import com.github.jiefenn8.graphloom.api.SourceConfig;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * This class extends the base methods of the {@link InputSourceConfig} to manage
+ * configuration to only handle SQL retrieval through the use of base table or
+ * view  name.
+ */
 public class BaseTableOrView extends InputSourceConfig implements SourceConfig {
 
+    /**
+     * Constructs a BaseTableOrView with the specified SQL table or view name
+     * as the source payload.
+     *
+     * @param payload the table or view name
+     */
     protected BaseTableOrView(String payload) {
         super(payload, DatabaseType.TABLE_NAME, StringUtils.EMPTY);
     }

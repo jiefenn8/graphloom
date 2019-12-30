@@ -24,6 +24,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for {@link TriplesMap}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class TriplesMapTest {
 

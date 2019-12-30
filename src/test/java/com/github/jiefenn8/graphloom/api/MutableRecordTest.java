@@ -11,6 +11,9 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * Unit class for {@link MutableRecord}.
+ */
 public class MutableRecordTest {
 
     private MutableRecord record;

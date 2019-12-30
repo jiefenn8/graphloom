@@ -11,6 +11,12 @@ import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.List;
 
+/**
+ * The class defines the base methods that manages the definition of R2RML
+ * vocabularies and their groups. The base R2RML {@code URI} is hardcoded
+ * to refer to the W3C R2RML namespace resource; Any matching must be refer
+ * to this uri as well.
+ */
 public class R2RMLSyntax {
 
     private static final String URI = "http://www.w3.org/ns/r2rml#";
@@ -35,10 +41,21 @@ public class R2RMLSyntax {
     public static final Property child = ResourceFactory.createProperty(URI, "child");
     private static final List<Property> CONSTANT_SHORTCUTS = ImmutableList.of(subject, predicate, object);
 
+    /**
+     * Returns the uri that is used for the definition of the R2RML
+     * vocabulary properties.
+     *
+     * @return the uri used to create the vocabulary
+     */
     public static String getURI() {
         return URI;
     }
 
+    /**
+     * Returns list of all R2RML vocabulary properties defined in this class.
+     *
+     * @return the list of R2RML properties
+     */
     public static List<Property> getConstantShortcuts() {
         return CONSTANT_SHORTCUTS;
     }

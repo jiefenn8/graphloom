@@ -8,6 +8,10 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.RDFNode;
 
+/**
+ * This interface defines the base methods that manages the common mapping of
+ * any given source to their respective rdf terms.
+ */
 public interface TermMap {
 
     /**

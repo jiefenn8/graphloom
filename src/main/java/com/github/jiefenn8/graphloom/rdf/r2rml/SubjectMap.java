@@ -29,6 +29,12 @@ public class SubjectMap implements PropertyMap, EntityChild {
     private TermMap termMap;
     private List<Resource> classes = new ArrayList<>();
 
+    /**
+     * Constructs a SubjectMap with the specified term map that is either
+     * a constant, template or a column typ.
+     *
+     * @param m the term map to use for this map config
+     */
     protected SubjectMap(TermMap m) {
         termMap = checkNotNull(m, "Must provide a TermMap.");
     }
@@ -52,6 +58,12 @@ public class SubjectMap implements PropertyMap, EntityChild {
         return term.asResource();
     }
 
+    /**
+     * Adds association to an triples map that this subject map belongs to.
+     *
+     * @param em the triples map to associate with
+     * @return this builder for fluent method chaining
+     */
     protected SubjectMap withParentMap(EntityMap em) {
         parent = em;
         return this;

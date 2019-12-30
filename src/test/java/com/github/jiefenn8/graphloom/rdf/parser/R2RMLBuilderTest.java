@@ -25,6 +25,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for {@link R2RMLBuilder}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class R2RMLBuilderTest {
 

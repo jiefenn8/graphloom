@@ -14,12 +14,23 @@ import java.util.regex.Pattern;
 
 import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * This interface defines the base methods that manages the mapping of any
+ * source record to their respective rdf term through the use of template.
+ */
 public class TemplateTermMap implements TermMap {
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)}");
     private String templateStr;
     private TermType termType;
 
+    /**
+     * Constructs a TemplateTermMap with the specified template pattern and
+     * term type to map into.
+     *
+     * @param templateStr the template pattern to use
+     * @param termType    the term type to map the value into
+     */
     protected TemplateTermMap(String templateStr, TermType termType) {
         this.templateStr = checkNotNull(templateStr, "Template string must not be null.");
         this.termType = checkNotNull(termType, "Term type must not be null.");
@@ -30,8 +41,8 @@ public class TemplateTermMap implements TermMap {
         checkNotNull(r, "Record is null.");
         Matcher matcher = pattern.matcher(templateStr);
         if (!matcher.find()) throw new MapperException("Invalid template string given.");
-        String generatedTerm = templateStr.replace(matcher.group(0), r.getPropertyValue(matcher.group(1)));
 
+        String generatedTerm = templateStr.replace(matcher.group(0), r.getPropertyValue(matcher.group(1)));
         return RDFTermHelper.asRDFTerm(generatedTerm, termType);
     }
 }

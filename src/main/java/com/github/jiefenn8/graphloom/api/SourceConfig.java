@@ -5,6 +5,11 @@
 
 package com.github.jiefenn8.graphloom.api;
 
+/**
+ * This interface defines the base methods to manage the handling of
+ * payload and its related properties for consumption by the input
+ * source.
+ */
 public interface SourceConfig {
 
     /**

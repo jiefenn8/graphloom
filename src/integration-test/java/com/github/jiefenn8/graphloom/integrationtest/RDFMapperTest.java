@@ -19,7 +19,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-//Simple all ups integration test.
+/**
+ * Integration test class for {@link RDFMapper}.
+ */
 public class RDFMapperTest {
 
     @Rule public ExpectedException exceptionRule = ExpectedException.none();

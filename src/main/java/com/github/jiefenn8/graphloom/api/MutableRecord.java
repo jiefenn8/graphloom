@@ -20,7 +20,7 @@ public class MutableRecord implements Record {
      * Constructs a MutableRecord with an initial column and its value.
      *
      * @param column the name of the column
-     * @param value the value associated with the column
+     * @param value  the value associated with the column
      */
     public MutableRecord(String column, String value) {
         recordValue = new LinkedHashMap<>();

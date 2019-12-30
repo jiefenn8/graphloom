@@ -20,6 +20,9 @@ import static com.github.jiefenn8.graphloom.api.SourceConfig.PayloadType;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+/**
+ * Unit test class for {@link InputSourceConfig} and {@link SourceConfig} interface.
+ */
 @RunWith(JUnitParamsRunner.class)
 public class InputSourceConfigTest {
 

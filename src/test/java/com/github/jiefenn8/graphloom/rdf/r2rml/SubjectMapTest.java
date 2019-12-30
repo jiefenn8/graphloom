@@ -23,6 +23,9 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test class for {@SubjectMap}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class SubjectMapTest {
 
