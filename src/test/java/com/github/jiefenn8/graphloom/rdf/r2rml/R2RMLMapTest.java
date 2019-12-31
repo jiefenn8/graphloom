@@ -1,61 +1,76 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
+/**
+ * Unit test class for {@link R2RMLMap}.
+ */
 public class R2RMLMapTest {
 
-    @Mock private Map<String, String> mockNamespaceMap;
+    private static final String rrPrefix = "rr";
     private R2RMLMap r2rmlMap;
 
     @Test
-    public void WhenNoNamespaceMapGiven_ThenReturnMap() {
-        r2rmlMap = new R2RMLMap(mockNamespaceMap);
+    public void GivenNoNamespace_WhenGetNamespaceMap_ThenReturnMap() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .build();
+
         Map<String, String> result = r2rmlMap.getNamespaceMap();
         assertThat(result, notNullValue());
     }
 
     @Test
-    public void WhenNamespaceMapGiven_ThenReturnNonEmptyMap() {
-        Map<String, String> namespaceMap = ImmutableMap.of("rr", "http://www.w3.org/ns/r2rml#");
-        r2rmlMap = new R2RMLMap(namespaceMap);
-        boolean result = r2rmlMap.getNamespaceMap().isEmpty();
-        assertThat(result, is(false));
+    public void GivenNamespace_WhenGetNamespaceMap_ThenReturnMapWithNamespace() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .addNsPrefix("ex", "http://www.example.org/ns#")
+                .build();
+
+        Map<String, String> result = r2rmlMap.getNamespaceMap();
+        assertThat(result, is(not(anEmptyMap())));
     }
 
     @Test
-    public void WhenEntityMapGiven_ThenReturnNonEmptyList() {
-        r2rmlMap = new R2RMLMap(mockNamespaceMap);
-        r2rmlMap.addTriplesMap(mock(EntityMap.class));
-        boolean result = r2rmlMap.listEntityMaps().isEmpty();
-        assertThat(result, is(false));
+    public void GivenNoRRNamespace_WhenGetNamespaceMap_ThenReturnMapWithRRNamespace() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .build();
+
+        String expected = R2RMLSyntax.getURI();
+        String result = r2rmlMap.getNamespaceMap().get(rrPrefix);
+        assertThat(result, is(equalTo(expected)));
+    }
+
+    @Test
+    public void GivenNoTriplesMap_WhenListEntityMaps_ThenReturnEmptyList() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .addTriplesMap(mock(TriplesMap.class))
+                .build();
+
+        Set<EntityMap> result = r2rmlMap.getEntityMaps();
+        assertThat(result, is(not(emptyIterable())));
+    }
+
+    @Test
+    public void GivenTriplesMap_WhenListEntityMaps_ThenReturnListWithEntityMap() {
+        r2rmlMap = new R2RMLMap.Builder()
+                .addTriplesMap(mock(TriplesMap.class))
+                .build();
+
+        Set<EntityMap> result = r2rmlMap.getEntityMaps();
+        assertThat(result, is(not(emptyIterable())));
     }
 }

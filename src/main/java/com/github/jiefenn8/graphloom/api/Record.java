@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -88,6 +77,7 @@ public interface Record {
      * @param o object to be compared for equality with this Record.
      * @return true if given object is equal to this Record.
      */
+    @Override
     boolean equals(Object o);
 
     /**
@@ -98,6 +88,7 @@ public interface Record {
      * @return the hash code value for this Record
      * @see Object#equals(Object)
      */
+    @Override
     int hashCode();
 
     /**
@@ -107,4 +98,11 @@ public interface Record {
      * @see Map#keySet()
      */
     Set<String> properties();
+
+    /**
+     * Returns the number of columns this records has.
+     *
+     * @return the number of columns
+     */
+    int columnSize();
 }

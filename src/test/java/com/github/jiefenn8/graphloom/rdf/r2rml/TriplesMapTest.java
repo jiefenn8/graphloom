@@ -1,26 +1,16 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.MutableRecord;
 import com.github.jiefenn8.graphloom.api.NodeMap;
-import org.apache.jena.rdf.model.Property;
+import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,6 +24,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit test class for {@link TriplesMap}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class TriplesMapTest {
 
@@ -45,13 +38,16 @@ public class TriplesMapTest {
 
     @Before
     public void setUp() {
-        when(mockSubjectMap.withParentMap(any(EntityMap.class))).thenReturn(mockSubjectMap);
+        //when(mockLogicalTable.withParentMap(any())).thenReturn(mockLogicalTable);
+        when(mockSubjectMap.withParentMap(any())).thenReturn(mockSubjectMap);
     }
 
     @Test
     public void WhenPredicateAndObjectMapGiven_TheReturnNonEmptyList() {
-        triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.addRelationNodePair(mock(PredicateMap.class), mock(ObjectMap.class));
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
+                .addPredicateObjectMap(ImmutablePair.of(mock(PredicateMap.class), mock(ObjectMap.class)))
+                .build();
 
         boolean result = triplesMap.listRelationMaps().isEmpty();
 
@@ -60,8 +56,10 @@ public class TriplesMapTest {
 
     @Test
     public void WhenPredicateAndObjectMapGiven_ThenReturnTrue() {
-        triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.addRelationNodePair(mock(PredicateMap.class), mock(ObjectMap.class));
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
+                .addPredicateObjectMap(ImmutablePair.of(mock(PredicateMap.class), mock(ObjectMap.class)))
+                .build();
 
         boolean result = triplesMap.hasRelationNodeMaps();
 
@@ -70,13 +68,13 @@ public class TriplesMapTest {
 
     @Test
     public void WhenPredicateMapGiven_ThenReturnNodeMap() {
-        PredicateMap predicateMap = R2RMLFactory.createConstPredicateMap(mock(Property.class));
-        ObjectMap mockObjectMap = mock(ObjectMap.class);
-        when(mockObjectMap.withParentMap(any(EntityMap.class))).thenReturn(mockObjectMap);
-        triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
-        triplesMap.addRelationNodePair(predicateMap, mockObjectMap);
+        PredicateMap mockPredicateMap = mock(PredicateMap.class);
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
+                .addPredicateObjectMap(ImmutablePair.of(mockPredicateMap, mock(ObjectMap.class)))
+                .build();
 
-        NodeMap result = triplesMap.getNodeMapWithRelation(predicateMap);
+        NodeMap result = triplesMap.getNodeMapWithRelation(mockPredicateMap);
 
         assertThat(result, notNullValue());
     }
@@ -84,20 +82,27 @@ public class TriplesMapTest {
     @Test
     public void WhenNullLogicalTableGiven_ThrowException() {
         exceptionRule.expect(NullPointerException.class);
-        triplesMap = new TriplesMap(null, mockSubjectMap);
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, null, mockSubjectMap)
+                .build();
     }
 
     @Test
     public void WhenNullSubjectMapGiven_ThrowException() {
         exceptionRule.expect(NullPointerException.class);
-        triplesMap = new TriplesMap(mockLogicalTable, null);
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, mockLogicalTable, null)
+                .build();
     }
 
     //Test delegate method are called.
 
     @Test
     public void WhenGenerateEntity_ThenVerifyCall() {
-        triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
+                .build();
+
         triplesMap.generateEntityTerm(mock(MutableRecord.class));
 
         verify(mockSubjectMap, times(1)).generateEntityTerm(any());
@@ -105,7 +110,11 @@ public class TriplesMapTest {
 
     @Test
     public void WhenListEntityClasses_ThenVerifyCall() {
-        triplesMap = new TriplesMap(mockLogicalTable, mockSubjectMap);
+        when(mockSubjectMap.listEntityClasses()).thenReturn(ImmutableList.of());
+        triplesMap = new TriplesMap
+                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
+                .build();
+
         triplesMap.listEntityClasses();
 
         verify(mockSubjectMap, times(1)).listEntityClasses();

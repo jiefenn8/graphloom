@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -35,6 +24,9 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test class for {@link LogicalTable}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalTableTest {
 
@@ -45,25 +37,25 @@ public class LogicalTableTest {
     @Mock private InputSource mockInputSource;
 
     @Test
-    public void GivenInputSource_WhenLoadInputSource_ThenReturnSourceMap(){
-        logicalTable = new LogicalTable(mockSourceConfig);
+    public void GivenInputSource_WhenLoadInputSource_ThenReturnSourceMap() {
+        logicalTable = new LogicalTable.Builder(mockSourceConfig).build();
         SourceMap result = logicalTable.loadInputSource(mockInputSource);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenBatchId_WhenGetEntityRecord_ThenReturnEntityRecord(){
-        when(mockInputSource.getEntityRecord(any(SourceConfig.class), anyInt())).thenReturn(mock(EntityRecord.class));
-        logicalTable = new LogicalTable(mockSourceConfig);
+    public void GivenBatchId_WhenGetEntityRecord_ThenReturnEntityRecord() {
+        when(mockInputSource.getEntityRecord(any(), anyInt())).thenReturn(mock(EntityRecord.class));
+        logicalTable = new LogicalTable.Builder(mockSourceConfig).build();
         logicalTable.loadInputSource(mockInputSource);
         EntityRecord result = logicalTable.getEntityRecord(0);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenNullSourceConfig_WhenCreateInstance_ThenThrowException(){
+    public void GivenNullSourceConfig_WhenBuildInstance_ThenThrowException() {
         exceptionRule.expect(NullPointerException.class);
         exceptionRule.expectMessage("Payload must not be null.");
-        logicalTable = new LogicalTable(null);
+        logicalTable = new LogicalTable.Builder((SourceConfig) null).build();
     }
 }

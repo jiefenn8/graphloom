@@ -1,32 +1,20 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf;
 
-import com.github.jiefenn8.graphloom.api.ConfigMaps;
-import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.github.jiefenn8.graphloom.api.GraphMapper;
-import com.github.jiefenn8.graphloom.api.InputSource;
+import com.github.jiefenn8.graphloom.api.*;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.github.jiefenn8.graphloom.rdf.r2rml.LogicalTable;
+import com.github.jiefenn8.graphloom.rdf.r2rml.RefObjectMap;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link GraphMapper} interface using Jena; and R2RML
@@ -35,13 +23,14 @@ import java.util.List;
 public class RDFMapper implements GraphMapper {
 
     /**
-     * Main mapping function converting a data-source to a RDF graph
-     * model form the provided DAO and mapping configurations.
+     * Main mapping function converting a data-source to a RDF graph model form
+     * the provided DAO and mapping configurations.
      *
      * @param source  DAO providing access to the entity to map.
      * @param configs to control the mapping function process.
      * @return the graph of the result from mapping.
      */
+    @Override
     public Model mapToGraph(InputSource source, ConfigMaps configs) {
         if (source == null) throw new MapperException("Cannot retrieve source data from null input source.");
         if (configs == null) throw new MapperException("Cannot map source from null config maps.");
@@ -49,31 +38,68 @@ public class RDFMapper implements GraphMapper {
         Model outputGraph = ModelFactory.createDefaultModel();
         outputGraph.setNsPrefixes(configs.getNamespaceMap());
 
-        return outputGraph.add(mapSource(source, configs.listEntityMaps()));
+        return outputGraph.add(mapSource(source, configs.getEntityMaps()));
     }
 
-    private Model mapSource(InputSource source, List<EntityMap> triplesMaps) {
+    /**
+     * Returns a model containing RDF triples generated from mapping the given
+     * source using the provided set of mapping configs for each entity.
+     *
+     * @param source      the source to map over to RDF triples
+     * @param triplesMaps the set of mapping configs
+     * @return
+     */
+    private Model mapSource(InputSource source, Set<EntityMap> triplesMaps) {
         Model outputGraph = ModelFactory.createDefaultModel();
         triplesMaps.forEach((e) -> outputGraph.add(mapEntity(e, source)));
 
         return outputGraph;
     }
 
+    /**
+     * Returns a model containing RDF triples related to an entity generated
+     * from mapping with the given source and entity mapping.
+     *
+     * @param triplesMap the entity mapping to generate terms
+     * @param source     the source to map into RDF triples
+     * @return model containing RDF triples related to an entity
+     */
     private Model mapEntity(EntityMap triplesMap, InputSource source) {
         Model entityGraph = ModelFactory.createDefaultModel();
         triplesMap.applySource(source).forEachEntityRecord((r) -> {
             Resource subject = triplesMap.generateEntityTerm(r);
-            triplesMap.listEntityClasses().forEach(
-                    (c) -> entityGraph.add(subject, RDF.type, c));
+            triplesMap.listEntityClasses()
+                    .forEach((c) -> entityGraph.add(subject, RDF.type, c));
 
-            //todo: Refactor to separate PredicateObjectMap class.
-            triplesMap.listRelationMaps().forEach(
-                    (k) -> entityGraph.add(
-                            subject,
-                            k.generateRelationTerm(r),
-                            triplesMap.getNodeMapWithRelation(k).generateNodeTerm(r)));
+            triplesMap.listRelationMaps()
+                    .forEach((k) -> {
+                        NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
+                        if (!(nodeMap instanceof RefObjectMap)) {
+                            entityGraph.add(subject, k.generateRelationTerm(r), nodeMap.generateNodeTerm(r));
+                        }
+                    });
+        });
+
+        triplesMap.listRelationMaps().forEach((k) -> {
+            NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
+            if (nodeMap instanceof RefObjectMap) {
+                RefObjectMap refObjectMap = (RefObjectMap) nodeMap;
+                EntityMap refTriplesMap = refObjectMap.getParentTriplesMap();
+                LogicalTable refLogicalTable = (LogicalTable) refTriplesMap.applySource(null);
+                LogicalTable rootLogicalTable = (LogicalTable) triplesMap.applySource(null);
+                LogicalTable jointLogicalTable = new LogicalTable.Builder(rootLogicalTable)
+                        .withJointSQLQuery(refLogicalTable, refObjectMap.listJoinConditions())
+                        .build();
+
+                jointLogicalTable.loadInputSource(source)
+                        .forEachEntityRecord((r) -> {
+                            Resource subject = triplesMap.generateEntityTerm(r);
+                            entityGraph.add(subject, k.generateRelationTerm(r), refObjectMap.generateNodeTerm(r));
+                        });
+            }
         });
 
         return entityGraph;
     }
+
 }

@@ -1,24 +1,13 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.integrationtest;
 
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.github.jiefenn8.graphloom.rdf.RDFMapper;
-import com.github.jiefenn8.graphloom.rdf.parser.R2RMLParser;
+import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Before;
@@ -30,20 +19,23 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-//Simple all ups integration test.
+/**
+ * Integration test class for {@link RDFMapper}.
+ */
 public class RDFMapperTest {
 
-    private final String validFile = "/valid_r2rml.ttl";
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
+
     private RDFMapper rdfMapper;
     private FakeInputDatabase fakeInputDatabase;
     private R2RMLMap mapperConfig;
 
     @Before
-    public void SetUp() throws Exception {
+    public void SetUp() {
+        String validFile = "/r2rml/valid_r2rml.ttl";
         String path = getClass().getResource(validFile).getPath();
-        R2RMLParser parser = new R2RMLParser();
-        mapperConfig = parser.parse(path);
+        R2RMLBuilder r2rmlBuilder = new R2RMLBuilder();
+        mapperConfig = r2rmlBuilder.parse(path);
         rdfMapper = new RDFMapper();
         fakeInputDatabase = new FakeInputDatabase();
     }
@@ -54,7 +46,7 @@ public class RDFMapperTest {
         //Graph should have 2 triples from the given input and configs.
         long result = graph.size();
 
-        assertThat(result, is(equalTo(Long.valueOf(2))));
+        assertThat(result, is(equalTo(2L)));
     }
 
     @Test

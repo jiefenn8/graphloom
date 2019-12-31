@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -33,17 +22,29 @@ public class ObjectMap implements NodeMap, EntityChild {
     private EntityMap parent;
     private TermMap termMap;
 
+    /**
+     * Constructs an ObjectMap with the specified term map that is either
+     * a constant, template or a column type.
+     *
+     * @param m the term map to use for this map config
+     */
     protected ObjectMap(TermMap m) {
         termMap = checkNotNull(m, "Term map must not be null.");
     }
 
+    /**
+     * Adds association to an triples map that this object map belongs to.
+     *
+     * @param m the triples map to associate with
+     * @return this builder for fluent method chaining
+     */
     protected ObjectMap withParentMap(EntityMap m) {
         parent = m;
         return this;
     }
 
     @Override
-    public EntityMap getParentMap() {
+    public EntityMap getEntityMap() {
         return parent;
     }
 

@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -40,6 +29,12 @@ public class SubjectMap implements PropertyMap, EntityChild {
     private TermMap termMap;
     private List<Resource> classes = new ArrayList<>();
 
+    /**
+     * Constructs a SubjectMap with the specified term map that is either
+     * a constant, template or a column typ.
+     *
+     * @param m the term map to use for this map config
+     */
     protected SubjectMap(TermMap m) {
         termMap = checkNotNull(m, "Must provide a TermMap.");
     }
@@ -56,10 +51,19 @@ public class SubjectMap implements PropertyMap, EntityChild {
     @Override
     public Resource generateEntityTerm(Record r) {
         RDFNode term = termMap.generateRDFTerm(r);
-        if (term.isLiteral()) throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        if (term.isLiteral()) {
+            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        }
+
         return term.asResource();
     }
 
+    /**
+     * Adds association to an triples map that this subject map belongs to.
+     *
+     * @param em the triples map to associate with
+     * @return this builder for fluent method chaining
+     */
     protected SubjectMap withParentMap(EntityMap em) {
         parent = em;
         return this;
@@ -71,7 +75,7 @@ public class SubjectMap implements PropertyMap, EntityChild {
     }
 
     @Override
-    public EntityMap getParentMap() {
+    public EntityMap getEntityMap() {
         return parent;
     }
 }

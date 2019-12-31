@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -64,7 +53,7 @@ public interface EntityRecord extends Iterable<Record> {
      *
      * @param r record to be added to the collection
      * @return true if the given record element did not exist in the
-     * collection or its properties matches with existing elements
+     *         collection or its properties matches with existing elements
      */
     boolean addRecord(Record r);
 
@@ -76,6 +65,13 @@ public interface EntityRecord extends Iterable<Record> {
     boolean isEmpty();
 
     /**
+     * Returns the number of columns in this entity record.
+     *
+     * @return the number of columns
+     */
+    int columnSize();
+
+    /**
      * Compares the given object with this collection for equality. Returns
      * true if the given object is also a collection that has the same
      * amount of records and their values associated with them.
@@ -83,6 +79,7 @@ public interface EntityRecord extends Iterable<Record> {
      * @param o object to be compared for equality with this collection
      * @return true if given object is equal to this collection
      */
+    @Override
     boolean equals(Object o);
 
     /**
@@ -92,5 +89,6 @@ public interface EntityRecord extends Iterable<Record> {
      * @return the hash code value for this collection
      * @see Object#equals(Object)
      */
+    @Override
     int hashCode();
 }

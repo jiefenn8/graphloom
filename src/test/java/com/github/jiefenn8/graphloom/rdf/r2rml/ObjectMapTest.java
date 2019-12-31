@@ -1,17 +1,6 @@
 /*
- *    Copyright (c) 2019 - Javen Liu (github.com/jiefenn8)
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
+ *    This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -36,6 +25,9 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Unit test class for {@link ObjectMap}.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectMapTest {
 
@@ -46,7 +38,7 @@ public class ObjectMapTest {
     @Mock private TermMap mockTermMap;
 
     @Test
-    public void GivenNoTermMap_WhenCreateInstance_ThenThrowException(){
+    public void GivenNoTermMap_WhenCreateInstance_ThenThrowException() {
         exceptionRule.expect(NullPointerException.class);
         exceptionRule.expectMessage("Term map must not be null.");
         objectMap = new ObjectMap(null);
@@ -55,7 +47,7 @@ public class ObjectMapTest {
     //generateNodeTerm()
 
     @Test
-    public void GivenNoRecord_WhenGenerateNodeTerm_ThenThrowException(){
+    public void GivenNoRecord_WhenGenerateNodeTerm_ThenThrowException() {
         when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
         exceptionRule.expect(NullPointerException.class);
         exceptionRule.expectMessage("Record is null.");
@@ -64,7 +56,7 @@ public class ObjectMapTest {
     }
 
     @Test
-    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnResource(){
+    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnResource() {
         Resource mockResource = mock(Resource.class);
         when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockResource);
         objectMap = new ObjectMap(mockTermMap);
@@ -73,7 +65,7 @@ public class ObjectMapTest {
     }
 
     @Test
-    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnLiteral(){
+    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnLiteral() {
         Literal mockLiteral = mock(Literal.class);
         when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockLiteral);
         objectMap = new ObjectMap(mockTermMap);
