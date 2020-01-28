@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -33,8 +33,8 @@ public class MutableEntityRecord implements EntityRecord {
     }
 
     @Override
-    public boolean containsRecord(Record r) {
-        return records.contains(r);
+    public boolean containsRecord(Record record) {
+        return records.contains(record);
     }
 
     @Override
@@ -48,20 +48,20 @@ public class MutableEntityRecord implements EntityRecord {
     }
 
     @Override
-    public boolean removeRecord(Record r) {
-        return records.remove(r);
+    public boolean removeRecord(Record record) {
+        return records.remove(record);
     }
 
     @Override
-    public boolean addRecord(Record r) {
-        columnSize = r.columnSize();
+    public boolean addRecord(Record record) {
+        columnSize = record.columnSize();
         Iterator<Record> iterator = records.iterator();
         if (iterator.hasNext()) {
-            Record record = iterator.next();
-            if (!record.properties().equals(r.properties())) return false;
+            Record thisRecord = iterator.next();
+            if (!thisRecord.properties().equals(record.properties())) return false;
         }
 
-        return records.add(r);
+        return records.add(record);
     }
 
     @Override
@@ -70,10 +70,10 @@ public class MutableEntityRecord implements EntityRecord {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MutableEntityRecord records1 = (MutableEntityRecord) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        MutableEntityRecord records1 = (MutableEntityRecord) obj;
         return Objects.equals(records, records1.records);
     }
 

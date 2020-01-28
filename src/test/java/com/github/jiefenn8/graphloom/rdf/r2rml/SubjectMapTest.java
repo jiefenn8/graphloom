@@ -1,11 +1,13 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Rule;

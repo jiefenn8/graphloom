@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -23,14 +23,14 @@ public class ConstTermMap implements TermMap {
      * Constructs a ConstTermMap with the specified constant value to use
      * as the term.
      *
-     * @param n the constant value to use as term
+     * @param node the constant value to use as term
      */
-    protected ConstTermMap(RDFNode n) {
-        constTerm = checkNotNull(n, "Constant term must not be null.");
+    protected ConstTermMap(RDFNode node) {
+        constTerm = checkNotNull(node, "Constant term must not be null.");
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record r) {
+    public RDFNode generateRDFTerm(Record record) {
         return constTerm;
     }
 }

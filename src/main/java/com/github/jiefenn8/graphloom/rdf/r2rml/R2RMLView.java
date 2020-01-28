@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -19,7 +19,7 @@ public class R2RMLView extends InputSourceConfig implements SourceConfig {
      * Constructs a R2RMLView with the specified custom SQL query as the source
      * payload.
      *
-     * @param payload
+     * @param payload the payload containing info needed to get the view
      */
     protected R2RMLView(String payload) {
         super(payload, DatabaseType.QUERY, StringUtils.EMPTY);

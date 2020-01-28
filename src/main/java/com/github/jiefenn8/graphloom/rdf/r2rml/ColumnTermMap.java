@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -33,8 +33,8 @@ public class ColumnTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record r) {
-        String columnValue = r.getPropertyValue(columnName);
+    public RDFNode generateRDFTerm(Record record) {
+        String columnValue = record.getPropertyValue(columnName);
         return RDFTermHelper.asRDFTerm(columnValue, termType);
     }
 }

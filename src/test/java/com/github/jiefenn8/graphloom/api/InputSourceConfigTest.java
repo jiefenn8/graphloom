@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -21,7 +21,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Unit test class for {@link InputSourceConfig} and {@link SourceConfig} interface.
+ * Unit test class for {@link InputSourceConfig}.
  */
 @RunWith(JUnitParamsRunner.class)
 public class InputSourceConfigTest {

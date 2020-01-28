@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -38,10 +38,10 @@ public class LogicalTable implements SourceMap, EntityChild {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LogicalTable that = (LogicalTable) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        LogicalTable that = (LogicalTable) obj;
         return Objects.equals(sourceConfig, that.sourceConfig);
     }
 
@@ -56,8 +56,8 @@ public class LogicalTable implements SourceMap, EntityChild {
     }
 
     @Override
-    public SourceMap loadInputSource(InputSource s) {
-        inputSource = s;
+    public SourceMap loadInputSource(InputSource inputSource) {
+        this.inputSource = inputSource;
         return this;
     }
 

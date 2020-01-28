@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -87,8 +87,8 @@ public class RefObjectMap implements NodeMap, EntityChild {
     }
 
     @Override
-    public RDFNode generateNodeTerm(Record r) {
-        RDFNode term = parentTriplesMap.generateEntityTerm(r);
+    public RDFNode generateNodeTerm(Record record) {
+        RDFNode term = parentTriplesMap.generateEntityTerm(record);
         if (term.isLiteral()) {
             throw new MapperException("RefObjectMap should only return IRI.");
         }

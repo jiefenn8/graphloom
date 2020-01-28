@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -15,13 +15,13 @@ public interface GraphMapper {
 
     /**
      * Returns the resulting mapping of input source applied to the config
-     * mappings given. Returns an empty model if the given
-     * input source or configuration mappings was not sufficient enough
-     * to generate any semantic terms.
+     * mappings given. Returns an empty model if the given input source or
+     * configuration mappings was not sufficient enough to generate any
+     * semantic terms.
      *
-     * @param s input source containing the data to map over to graph
-     * @param c config maps to manage the mapping of data
+     * @param inputSource the source containing the data to map over to graph
+     * @param configMaps  the configs to manage the mapping of data
      * @return the model containing the mapped source as a graph model
      */
-    Model mapToGraph(InputSource s, ConfigMaps c);
+    Model mapToGraph(InputSource inputSource, ConfigMaps configMaps);
 }

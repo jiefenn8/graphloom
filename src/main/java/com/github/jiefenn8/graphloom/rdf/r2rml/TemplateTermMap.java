@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -37,12 +37,12 @@ public class TemplateTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record r) {
-        checkNotNull(r, "Record is null.");
+    public RDFNode generateRDFTerm(Record record) {
+        checkNotNull(record, "Record is null.");
         Matcher matcher = pattern.matcher(templateStr);
         if (!matcher.find()) throw new MapperException("Invalid template string given.");
 
-        String generatedTerm = templateStr.replace(matcher.group(0), r.getPropertyValue(matcher.group(1)));
+        String generatedTerm = templateStr.replace(matcher.group(0), record.getPropertyValue(matcher.group(1)));
         return RDFTermHelper.asRDFTerm(generatedTerm, termType);
     }
 }

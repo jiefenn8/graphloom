@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.integrationtest;
@@ -14,10 +14,10 @@ import com.google.common.collect.ImmutableMap;
 public class FakeInputDatabase implements InputSource {
 
     @Override
-    public EntityRecord getEntityRecord(SourceConfig config, int batchId) {
+    public EntityRecord getEntityRecord(SourceConfig sourceConfig, int batchId) {
         //Ignore batchId since this is a single entry table
         //Return EMP record as default
-        String payload = config.getPayload();
+        String payload = sourceConfig.getPayload();
         if (payload.equals("DEPT")) return getDeptRecords();
 
         return getEmpRecords();
@@ -60,7 +60,7 @@ public class FakeInputDatabase implements InputSource {
     }
 
     @Override
-    public int calculateNumOfBatches(SourceConfig config) {
+    public int calculateNumOfBatches(SourceConfig sourceConfig) {
         return 1;
     }
 }

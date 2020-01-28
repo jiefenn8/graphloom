@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -20,18 +20,18 @@ public interface InputSource {
      * E.g. 2000 items, fetch size of 500 = 4 batches; batch 2 will be the 2nd
      * collection of data.
      *
-     * @param c       source config containing the query for this entity
-     * @param batchId the batch to return
+     * @param sourceConfig the config containing the query for this entity
+     * @param batchId      the batch with the given id to retrieve
      * @return the collection of records as EntityRecord. Else return empty
      *         entity map if there is no more records to return
      */
-    EntityRecord getEntityRecord(SourceConfig c, int batchId);
+    EntityRecord getEntityRecord(SourceConfig sourceConfig, int batchId);
 
     /**
      * Returns the number of batches to expect for a source config.
      *
-     * @param c source config containing the query for this entity
+     * @param sourceConfig the config containing the query for this entity
      * @return the number of batches possible
      */
-    int calculateNumOfBatches(SourceConfig c);
+    int calculateNumOfBatches(SourceConfig sourceConfig);
 }

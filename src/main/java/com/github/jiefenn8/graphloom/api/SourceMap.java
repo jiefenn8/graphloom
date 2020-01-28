@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -16,10 +16,10 @@ public interface SourceMap {
     /**
      * Returns this source map after applying it on the given input source.
      *
-     * @param s input source containing the data to map over to graph
+     * @param inputSource the source containing the data to map over to graph
      * @return the source map ready to be queried and iterated on
      */
-    SourceMap loadInputSource(InputSource s);
+    SourceMap loadInputSource(InputSource inputSource);
 
     /**
      * This call will consume each record given from the input source after

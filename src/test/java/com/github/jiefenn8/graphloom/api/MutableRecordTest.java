@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -124,7 +124,8 @@ public class MutableRecordTest {
         assertThat(result, is(not(equalTo(record.hashCode()))));
     }
 
-    //Negation case of WhenTwoDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch() for verification.
+    //Negation case of WhenTwoDiffRecordGenerateHashCode_ThenBothHashCodeNotMatch()
+    //for verification.
     @Test
     public void WhenTwoSameRecordGenerateHashCode_ThenBothHashCodeMatch() {
         MutableRecord record2 = new MutableRecord("PROPERTY", "VALUE");

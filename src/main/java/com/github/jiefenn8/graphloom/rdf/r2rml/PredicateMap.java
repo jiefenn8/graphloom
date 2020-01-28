@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -29,26 +29,26 @@ public class PredicateMap implements RelationMap, EntityChild {
      * Constructs an PredicateMap with the specified term map that is either
      * a constant, template or a column type.
      *
-     * @param m the term map to use for this map config
+     * @param termMap the term map that this instance will behave as
      */
-    protected PredicateMap(TermMap m) {
-        this.termMap = checkNotNull(m, "Term map must not be null.");
+    protected PredicateMap(TermMap termMap) {
+        this.termMap = checkNotNull(termMap, "Term map must not be null.");
     }
 
     @Override
-    public Property generateRelationTerm(Record r) {
-        Resource term = termMap.generateRDFTerm(r).asResource();
+    public Property generateRelationTerm(Record record) {
+        Resource term = termMap.generateRDFTerm(record).asResource();
         return ResourceFactory.createProperty(term.getURI());
     }
 
     /**
      * Adds association to an triples map that this predicate map belongs to.
      *
-     * @param m the triples map to associate with
+     * @param entityMap the triples map to associate with
      * @return this builder for fluent method chaining
      */
-    protected PredicateMap withParentMap(EntityMap m) {
-        parent = m;
+    protected PredicateMap withParentMap(EntityMap entityMap) {
+        parent = entityMap;
         return this;
     }
 

@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -26,20 +26,20 @@ public class ObjectMap implements NodeMap, EntityChild {
      * Constructs an ObjectMap with the specified term map that is either
      * a constant, template or a column type.
      *
-     * @param m the term map to use for this map config
+     * @param termMap the term map that this instance will behave as
      */
-    protected ObjectMap(TermMap m) {
-        termMap = checkNotNull(m, "Term map must not be null.");
+    protected ObjectMap(TermMap termMap) {
+        this.termMap = checkNotNull(termMap, "Term map must not be null.");
     }
 
     /**
      * Adds association to an triples map that this object map belongs to.
      *
-     * @param m the triples map to associate with
+     * @param entityMap the triples map to associate with
      * @return this builder for fluent method chaining
      */
-    protected ObjectMap withParentMap(EntityMap m) {
-        parent = m;
+    protected ObjectMap withParentMap(EntityMap entityMap) {
+        parent = entityMap;
         return this;
     }
 
@@ -49,7 +49,7 @@ public class ObjectMap implements NodeMap, EntityChild {
     }
 
     @Override
-    public RDFNode generateNodeTerm(Record r) {
-        return termMap.generateRDFTerm(r);
+    public RDFNode generateNodeTerm(Record record) {
+        return termMap.generateRDFTerm(record);
     }
 }

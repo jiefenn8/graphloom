@@ -1,13 +1,13 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
 
 /**
- * This interface defines the base methods to manage a collection
- * that contains multiple record with the same properties.
+ * This interface defines the base methods to manage a collection that contains
+ * multiple record with the same properties.
  */
 public interface EntityRecord extends Iterable<Record> {
 
@@ -23,12 +23,12 @@ public interface EntityRecord extends Iterable<Record> {
     /**
      * Returns true if this collection contains the given Record.
      *
-     * @param r record to be searched in collection
+     * @param record the record to be searched in collection
      * @return true if this collection contains the given record
      * @throws NullPointerException if the given record is null and this
      *                              collection does not allow null elements
      */
-    boolean containsRecord(Record r);
+    boolean containsRecord(Record record);
 
     /**
      * Removes all the records from this collection. The collection
@@ -40,10 +40,10 @@ public interface EntityRecord extends Iterable<Record> {
      * Removes the given record from this collection if it does exist.
      * Returns true if this collection contains given record and is removed.
      *
-     * @param r record to be removed from collection
-     * @return true if the given record exists and is removed.
+     * @param record the record to be removed from collection
+     * @return true if the given record exists and is removed
      */
-    boolean removeRecord(Record r);
+    boolean removeRecord(Record record);
 
     /**
      * Adds the given record to this collection if it does not exist.
@@ -51,11 +51,10 @@ public interface EntityRecord extends Iterable<Record> {
      * properties, the method will leave the collection unchanged and
      * returns false.
      *
-     * @param r record to be added to the collection
-     * @return true if the given record element did not exist in the
-     *         collection or its properties matches with existing elements
+     * @param record the record to be added to the collection
+     * @return true if the given record element does not exist and is added
      */
-    boolean addRecord(Record r);
+    boolean addRecord(Record record);
 
     /**
      * Returns true if this collection contains no records.
@@ -76,11 +75,11 @@ public interface EntityRecord extends Iterable<Record> {
      * true if the given object is also a collection that has the same
      * amount of records and their values associated with them.
      *
-     * @param o object to be compared for equality with this collection
+     * @param obj the object to be compared for equality with this collection
      * @return true if given object is equal to this collection
      */
     @Override
-    boolean equals(Object o);
+    boolean equals(Object obj);
 
     /**
      * Returns the hash code value for this collection. The hash code of

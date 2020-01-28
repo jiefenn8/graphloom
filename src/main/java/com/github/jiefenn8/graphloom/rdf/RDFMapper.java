@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf;
@@ -26,19 +26,19 @@ public class RDFMapper implements GraphMapper {
      * Main mapping function converting a data-source to a RDF graph model form
      * the provided DAO and mapping configurations.
      *
-     * @param source  DAO providing access to the entity to map.
-     * @param configs to control the mapping function process.
-     * @return the graph of the result from mapping.
+     * @param inputSource DAO providing access to the entity to map
+     * @param configMaps  to control the mapping function process
+     * @return the graph of the result from mapping
      */
     @Override
-    public Model mapToGraph(InputSource source, ConfigMaps configs) {
-        if (source == null) throw new MapperException("Cannot retrieve source data from null input source.");
-        if (configs == null) throw new MapperException("Cannot map source from null config maps.");
+    public Model mapToGraph(InputSource inputSource, ConfigMaps configMaps) {
+        if (inputSource == null) throw new MapperException("Cannot retrieve source data from null input source.");
+        if (configMaps == null) throw new MapperException("Cannot map source from null config maps.");
 
         Model outputGraph = ModelFactory.createDefaultModel();
-        outputGraph.setNsPrefixes(configs.getNamespaceMap());
+        outputGraph.setNsPrefixes(configMaps.getNamespaceMap());
 
-        return outputGraph.add(mapSource(source, configs.getEntityMaps()));
+        return outputGraph.add(mapSource(inputSource, configMaps.getEntityMaps()));
     }
 
     /**

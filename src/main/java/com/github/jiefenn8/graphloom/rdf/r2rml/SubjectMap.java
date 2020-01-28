@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -33,24 +33,24 @@ public class SubjectMap implements PropertyMap, EntityChild {
      * Constructs a SubjectMap with the specified term map that is either
      * a constant, template or a column typ.
      *
-     * @param m the term map to use for this map config
+     * @param termMap the term map that this instance will behave as
      */
-    protected SubjectMap(TermMap m) {
-        termMap = checkNotNull(m, "Must provide a TermMap.");
+    protected SubjectMap(TermMap termMap) {
+        this.termMap = checkNotNull(termMap, "Must provide a TermMap.");
     }
 
     /**
      * Adds class type to the entity associated with this subject map.
      *
-     * @param r class to associate with entity
+     * @param resource the class to associate with entity
      */
-    public void addEntityClass(Resource r) {
-        classes.add(r);
+    public void addEntityClass(Resource resource) {
+        classes.add(resource);
     }
 
     @Override
-    public Resource generateEntityTerm(Record r) {
-        RDFNode term = termMap.generateRDFTerm(r);
+    public Resource generateEntityTerm(Record record) {
+        RDFNode term = termMap.generateRDFTerm(record);
         if (term.isLiteral()) {
             throw new MapperException("SubjectMap can only return IRI or BlankNode.");
         }
@@ -61,11 +61,11 @@ public class SubjectMap implements PropertyMap, EntityChild {
     /**
      * Adds association to an triples map that this subject map belongs to.
      *
-     * @param em the triples map to associate with
+     * @param entityMap the triples map to associate with
      * @return this builder for fluent method chaining
      */
-    protected SubjectMap withParentMap(EntityMap em) {
-        parent = em;
+    protected SubjectMap withParentMap(EntityMap entityMap) {
+        parent = entityMap;
         return this;
     }
 

@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -74,18 +74,18 @@ public interface Record {
      * Returns true if the given object is also a Record that
      * has the same properties and values associated with them.
      *
-     * @param o object to be compared for equality with this Record.
-     * @return true if given object is equal to this Record.
+     * @param obj the object to be compared for equality with this record
+     * @return true if given object is equal to this record
      */
     @Override
-    boolean equals(Object o);
+    boolean equals(Object obj);
 
     /**
      * Returns the hash code value for this Record. The hash code
      * of this Record is defined to be the sum of the properties
      * and values of each elements in this Record.
      *
-     * @return the hash code value for this Record
+     * @return the hash code value for this record
      * @see Object#equals(Object)
      */
     @Override
@@ -94,7 +94,7 @@ public interface Record {
     /**
      * Returns a Set of properties contained in this Record.
      *
-     * @return the Set of the properties contained in Record.
+     * @return the Set of the properties contained in record
      * @see Map#keySet()
      */
     Set<String> properties();

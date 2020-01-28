@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
@@ -53,8 +53,8 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public SourceMap applySource(InputSource source) {
-        return logicalTable.loadInputSource(source);
+    public SourceMap applySource(InputSource inputSource) {
+        return logicalTable.loadInputSource(inputSource);
     }
 
     @Override
@@ -78,8 +78,8 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public Resource generateEntityTerm(Record entityProps) {
-        return subjectMap.generateEntityTerm(entityProps);
+    public Resource generateEntityTerm(Record record) {
+        return subjectMap.generateEntityTerm(record);
     }
 
     @Override

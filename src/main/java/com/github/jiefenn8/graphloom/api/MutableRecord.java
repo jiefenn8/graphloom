@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -31,10 +31,10 @@ public class MutableRecord implements Record {
      * Constructs a MutableRecord with the specified map containing all
      * the properties and their values to add into this record.
      *
-     * @param m the map with all the properties and their values to add
+     * @param columns the map with all the properties and their values to add
      */
-    public MutableRecord(Map<String, String> m) {
-        recordValue = new HashMap<>(m);
+    public MutableRecord(Map<String, String> columns) {
+        recordValue = new HashMap<>(columns);
     }
 
     @Override
@@ -63,10 +63,10 @@ public class MutableRecord implements Record {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MutableRecord that = (MutableRecord) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        MutableRecord that = (MutableRecord) obj;
         return Objects.equals(recordValue, that.recordValue);
     }
 

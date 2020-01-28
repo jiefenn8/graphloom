@@ -1,6 +1,6 @@
 /*
- *    Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
- *    This software is made available under the terms of Apache License, Version 2.0.
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * This software is made available under the terms of Apache License, Version 2.0.
  */
 
 package com.github.jiefenn8.graphloom.api;
@@ -26,20 +26,20 @@ public class InputSourceConfig implements SourceConfig {
      * and iterator definition.
      *
      * @param payload     the payload query to use
-     * @param pt          the type of payload given
+     * @param payloadType the type of payload given
      * @param iteratorDef the definition to iterate each row of results
      */
-    protected InputSourceConfig(String payload, PayloadType pt, String iteratorDef) {
+    protected InputSourceConfig(String payload, PayloadType payloadType, String iteratorDef) {
         this.payload = Preconditions.checkNotNull(payload, "Payload must not be null.");
-        this.payloadType = Preconditions.checkNotNull(pt, "Payload type must not be null.");
+        this.payloadType = Preconditions.checkNotNull(payloadType, "Payload type must not be null.");
         this.iteratorDef = Preconditions.checkNotNull(iteratorDef, "Iterator definition must not be null.");
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        InputSourceConfig that = (InputSourceConfig) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        InputSourceConfig that = (InputSourceConfig) obj;
         return Objects.equals(payloadType, that.payloadType) &&
                 Objects.equals(payload, that.payload) &&
                 Objects.equals(iteratorDef, that.iteratorDef) &&
