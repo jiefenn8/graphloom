@@ -11,12 +11,7 @@ package com.github.jiefenn8.graphloom.exceptions;
  */
 public class MapperException extends GraphLoomException {
 
-    /**
-     * Constructs a mapper exception with no message or cause.
-     */
-    public MapperException() {
-        super();
-    }
+    private static final long serialVersionUID = -7684939575195771431L;
 
     /**
      * Constructs a mapper exception with the specified detail message.
@@ -25,15 +20,6 @@ public class MapperException extends GraphLoomException {
      */
     public MapperException(String message) {
         super(message);
-    }
-
-    /**
-     * Constructs a mapper exception with the specified cause.
-     *
-     * @param cause the cause of the exception
-     */
-    public MapperException(Throwable cause) {
-        super(cause);
     }
 
     /**

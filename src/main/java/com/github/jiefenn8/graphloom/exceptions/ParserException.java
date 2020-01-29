@@ -10,12 +10,7 @@ package com.github.jiefenn8.graphloom.exceptions;
  */
 public class ParserException extends GraphLoomException {
 
-    /**
-     * Constructs a parser exception with no message or cause.
-     */
-    public ParserException() {
-        super();
-    }
+    private static final long serialVersionUID = 2244226488195283431L;
 
     /**
      * Constructs a parser exception with the specified detail message.
@@ -36,15 +31,6 @@ public class ParserException extends GraphLoomException {
      */
     public ParserException(String message, Object... args) {
         super(String.format(message, args));
-    }
-
-    /**
-     * Constructs a parser exception with the specified cause.
-     *
-     * @param cause the cause of the exception
-     */
-    public ParserException(Throwable cause) {
-        super(cause);
     }
 
     /**

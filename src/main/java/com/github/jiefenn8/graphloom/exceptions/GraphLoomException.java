@@ -11,12 +11,7 @@ package com.github.jiefenn8.graphloom.exceptions;
  */
 public class GraphLoomException extends RuntimeException {
 
-    /**
-     * Constructs a GraphLoom exception with no message or cause.
-     */
-    public GraphLoomException() {
-        super();
-    }
+    private static final long serialVersionUID = 8393174563699723669L;
 
     /**
      * Constructs a GraphLoom exception with the specified detail message.
@@ -25,15 +20,6 @@ public class GraphLoomException extends RuntimeException {
      */
     public GraphLoomException(String message) {
         super(message);
-    }
-
-    /**
-     * Constructs a GraphLoom exception with the specified cause.
-     *
-     * @param cause the cause of the exception
-     */
-    public GraphLoomException(Throwable cause) {
-        super(cause);
     }
 
     /**
