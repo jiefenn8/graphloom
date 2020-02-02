@@ -22,7 +22,7 @@ public class TemplateTermMap implements TermMap {
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)}");
     private String templateStr;
-    private TermType termType;
+    private TermType termType = TermType.IRI;
 
     /**
      * Constructs a TemplateTermMap with the specified template pattern and
@@ -33,7 +33,10 @@ public class TemplateTermMap implements TermMap {
      */
     protected TemplateTermMap(String templateStr, TermType termType) {
         this.templateStr = checkNotNull(templateStr, "Template string must not be null.");
-        this.termType = checkNotNull(termType, "Term type must not be null.");
+        checkNotNull(termType, "Term type must not be null.");
+        if (termType != TermType.UNDEFINED) {
+            this.termType = termType;
+        }
     }
 
     @Override

@@ -8,6 +8,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.*;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.google.common.base.Preconditions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -20,6 +22,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
 public class LogicalTable implements SourceMap, EntityChild {
+
+    private static final Logger logger = LogManager.getLogger();
 
     private final TriplesMap parent;
     private final SourceConfig sourceConfig;
@@ -86,10 +90,22 @@ public class LogicalTable implements SourceMap, EntityChild {
         private SourceConfig sourceConfig;
         private TriplesMap parent;
 
+        /**
+         * Constructs a Builder with the specified SourceConfig instance.
+         *
+         * @param sourceConfig the source config to set on this logical table
+         */
         public Builder(SourceConfig sourceConfig) {
             this.sourceConfig = checkNotNull(sourceConfig, "Payload must not be null.");
         }
 
+        /**
+         * Constructs a Builder with the specified LogicalTable containing the
+         * source config instance.
+         *
+         * @param logicalTable the logical table with the source config needed
+         *                     to set on this logical table
+         */
         public Builder(LogicalTable logicalTable) {
             this.sourceConfig = checkNotNull(logicalTable.sourceConfig, "Payload must not be null.");
         }
@@ -116,7 +132,9 @@ public class LogicalTable implements SourceMap, EntityChild {
          */
         public Builder withJointSQLQuery(LogicalTable logicalTable, Set<JoinCondition> joinConditions) {
             if (joinConditions.isEmpty()) {
-                throw new MapperException("Expected JoinConditions with joint SQL query creation.");
+                String message = "Expected JoinConditions with joint SQL query creation.";
+                logger.fatal(message);
+                throw new MapperException(message);
             }
 
             String parent = prepareSQLQuery(logicalTable.sourceConfig);

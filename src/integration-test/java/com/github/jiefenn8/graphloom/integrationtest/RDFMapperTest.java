@@ -31,7 +31,7 @@ public class RDFMapperTest {
     private R2RMLMap mapperConfig;
 
     @Before
-    public void SetUp() {
+    public void setUp() {
         String validFile = "/r2rml/valid_r2rml.ttl";
         String path = getClass().getResource(validFile).getPath();
         R2RMLBuilder r2rmlBuilder = new R2RMLBuilder();

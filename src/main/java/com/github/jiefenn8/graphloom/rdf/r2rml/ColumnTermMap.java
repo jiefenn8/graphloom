@@ -18,18 +18,21 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ColumnTermMap implements TermMap {
 
     private String columnName;
-    private TermType termType;
+    private TermType termType = TermType.LITERAL;
 
     /**
      * Constructs a ColumnTermMap with the specified column name and
      * term type to map into.
      *
      * @param columnName the column name to locate the value
-     * @param t          the term type to map the value into
+     * @param termType   the term type to map the value into
      */
-    protected ColumnTermMap(String columnName, TermType t) {
+    protected ColumnTermMap(String columnName, TermType termType) {
         this.columnName = checkNotNull(columnName, "Column name must not be null.");
-        termType = checkNotNull(t, "Term type must not be null.");
+        checkNotNull(termType, "Term type must not be null.");
+        if (termType != TermType.UNDEFINED) {
+            this.termType = termType;
+        }
     }
 
     @Override

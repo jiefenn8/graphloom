@@ -36,7 +36,7 @@ public class RDFTermHelperTest {
 
     @Test
     @Parameters(method = "termTypeParameters")
-    public void GivenNullValue_WhenCreateRDFTerm_ThenThrowException(TermType t) {
+    public void GivenNoValue_WhenCreateRDFTerm_ThenThrowException(TermType t) {
         expectedException.expect(NullPointerException.class);
         RDFTermHelper.asRDFTerm(null, t);
     }
@@ -49,7 +49,7 @@ public class RDFTermHelperTest {
     }
 
     @Test
-    public void GivenNullTermType_WhenCreateRDFTerm_ThenThrowException() {
+    public void GivenNoTermType_WhenCreateRDFTerm_ThenThrowException() {
         expectedException.expect(NullPointerException.class);
         RDFTermHelper.asRDFTerm(value, null);
     }

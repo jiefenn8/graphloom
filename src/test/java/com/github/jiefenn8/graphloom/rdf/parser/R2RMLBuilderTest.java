@@ -32,15 +32,18 @@ import static org.mockito.Mockito.*;
 public class R2RMLBuilderTest {
 
     private static final String VALID_FILENAME = "r2rml_file.ttl";
+    private static final String INVALID_FILENAME = "invalid_r2rml_file.ttl";
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
     @Mock private R2RMLParser mockR2rmlParser;
     private R2RMLBuilder r2rmlBuilder;
     @Mock private Resource mockResource;
+    @Mock private Statement mockStatement;
 
     /**
      * Setup a fake graph emulating a valid r2rml file with a
      * single triples map including one predicate object map.
-     * All term map are default constant type.
+     * The following setup will assume that all term map are
+     * constant type and source map are all base table or view.
      */
     @Before
     public void setUp() {
@@ -49,7 +52,6 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getTriplesMaps()).thenReturn(ImmutableSet.of(mockResource));
 
         //Setup of one triples map
-        Statement mockStatement = mock(Statement.class);
         when(mockStatement.getSubject()).thenReturn(mockResource);
         when(mockStatement.getResource()).thenReturn(mockResource);
         when(mockR2rmlParser.getTriplesMapIdName(mockResource)).thenReturn("TRIPLES_MAP_1");
@@ -71,6 +73,37 @@ public class R2RMLBuilderTest {
 
         //SUT instance setup
         r2rmlBuilder = new R2RMLBuilder(mockR2rmlParser);
+    }
+
+    @Test
+    public void GivenTemplateTermMap_WhenParse_ThenReturnR2RMLMap() {
+        when(mockR2rmlParser.isConstant(any())).thenReturn(false);
+        when(mockR2rmlParser.isTemplate(any())).thenReturn(true);
+        when(mockR2rmlParser.getTemplateValue(any(Resource.class))).thenReturn("{TEMPLATE}");
+
+        R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenColumnTermMap_WhenParse_ThenReturnR2RMLMap() {
+        when(mockR2rmlParser.isConstant(any())).thenReturn(false);
+        when(mockR2rmlParser.isColumn(any())).thenReturn(true);
+        when(mockR2rmlParser.getColumnName(any(Resource.class))).thenReturn("COLUMN_NAME");
+
+        R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenR2RMLView_WhenParse_ThenReturnR2RMLMap() {
+        when(mockR2rmlParser.isBaseTableOrView(any())).thenReturn(false);
+        when(mockR2rmlParser.isR2RMLView(any())).thenReturn(true);
+        when(mockR2rmlParser.getSqlQuery(any())).thenReturn("SQL_QUERY");
+        when(mockR2rmlParser.getVersion(any())).thenReturn("SQL_VERSION");
+
+        R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
+        assertThat(result, is(notNullValue()));
     }
 
     @Test
@@ -158,5 +191,34 @@ public class R2RMLBuilderTest {
         exceptionRule.expectMessage("Triples Maps queries do not match. Must provide join condition.");
 
         r2rmlBuilder.parse(VALID_FILENAME);
+    }
+
+    @Test
+    public void GivenLogicalTableWithNoSourceConfig_WhenParse_ThenThrowException() {
+        when(mockR2rmlParser.isBaseTableOrView(any())).thenReturn(false);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage("No BaseTableOrView or R2RMLView property found.");
+
+        r2rmlBuilder.parse(VALID_FILENAME);
+    }
+
+    @Test
+    public void GivenTermMapWithNo_WhenParse_ThenThrowException() {
+        when(mockR2rmlParser.isConstant(any())).thenReturn(false);
+        String expected = String.format("%s is not a TermMap.", mockStatement);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlBuilder.parse(VALID_FILENAME);
+    }
+
+    @Test
+    public void GivenInvalidFile_WhenParse_ThenThrowException() {
+        when(mockR2rmlParser.parse(any(), any())).thenReturn(false);
+        String expected = String.format("Failed to read file %s.", INVALID_FILENAME);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlBuilder.parse(INVALID_FILENAME);
     }
 }

@@ -7,6 +7,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import java.util.Objects;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Implementation of R2RML JoinCondition. This class defines
  * the base methods that manages the joins between two
@@ -25,8 +27,9 @@ public class JoinCondition {
      * @param child  the child column to join to parent
      */
     protected JoinCondition(String parent, String child) {
-        this.parent = parent;
-        this.child = child;
+
+        this.parent = checkNotNull(parent);
+        this.child = checkNotNull(child);
     }
 
     /**

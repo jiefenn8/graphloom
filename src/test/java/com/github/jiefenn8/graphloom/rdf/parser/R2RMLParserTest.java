@@ -142,7 +142,7 @@ public class R2RMLParserTest {
 
     @Test
     public void GivenResourceWithR2RMLViewReference_WhenCheckIsBaseTableOrView_ThenReturnTrue() {
-        Resource value = model.createResource("#REFERENCE")
+        Resource value = model.createResource("REFERENCE")
                 .addProperty(R2RMLSyntax.sqlQuery, "QUERY")
                 .addProperty(R2RMLSyntax.sqlVersion, "VERSION");
         boolean result = r2rmlParser.isR2RMLView(value);
@@ -379,5 +379,121 @@ public class R2RMLParserTest {
         exceptionRule.expectMessage(expected);
 
         r2rmlParser.getColumnName(value);
+    }
+
+    @Test
+    public void GivenTriplesMapResource_WhenGetTriplesMapIdName_ThenReturnString() {
+        Resource value = model.createResource("RESOURCE");
+
+        String result = r2rmlParser.getTriplesMapIdName(value);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenRefObjectMapResource_WhenCheckIsRefObjectMap_ThenReturnTrue() {
+        Resource value = model.createResource("RESOURCE")
+                .addProperty(R2RMLSyntax.parentTriplesMap, model.createResource());
+
+        Boolean result = r2rmlParser.isRefObjectMap(value);
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void GivenNoRefObjectMapResource_WhenCheckIsRefObjectMap_ThenReturnFalse() {
+        Resource value = model.createResource("RESOURCE");
+
+        Boolean result = r2rmlParser.isRefObjectMap(value);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void GivenResourceWithParentTriplesMap_WhenGetParentTriplesMap_ThenReturnResource() {
+        Resource value = model.createResource("RESOURCE")
+                .addProperty(R2RMLSyntax.parentTriplesMap, model.createResource());
+
+        Resource result = r2rmlParser.getParentTriplesMap(value);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenResourceWithNoParentTriplesMap_WhenGetParentTriplesMap_ThenThrowException() {
+        Resource value = model.createResource("RESOURCE");
+        String expected = String.format("%s property not found in %s.", R2RMLSyntax.parentTriplesMap, value);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlParser.getParentTriplesMap(value);
+    }
+
+    @Test
+    public void GivenResourceWithJoinCondition_WhenCheckHasJoinCondition_ThenReturnTrue() {
+        Resource value = model.createResource("RESOURCE")
+                .addProperty(R2RMLSyntax.joinCondition, model.createResource());
+
+        Boolean result = r2rmlParser.hasJoinCondition(value);
+        assertThat(result, is(true));
+    }
+
+    @Test
+    public void GivenResourceWithNoJoinCondition_WhenCheckHasJoinCondition_ThenReturnFalse() {
+        Resource value = model.createResource("RESOURCE");
+
+        Boolean result = r2rmlParser.hasJoinCondition(value);
+        assertThat(result, is(false));
+    }
+
+    @Test
+    public void GivenResourceWithJoinCondition_WhenListJoinCondition_ThenReturnSet() {
+        Resource value = model.createResource("RESOURCE")
+                .addProperty(R2RMLSyntax.joinCondition, model.createResource());
+
+        Set<Resource> result = r2rmlParser.listJoinConditions(value);
+        assertThat(result, is(not(empty())));
+    }
+
+    @Test
+    public void GivenResourceWithNoJoinCondition_WhenListJoinCondition_ThenReturnEmptySet() {
+        Resource value = model.createResource("RESOURCE");
+
+        Set<Resource> result = r2rmlParser.listJoinConditions(value);
+        assertThat(result, is(empty()));
+    }
+
+    @Test
+    public void GivenResourceWithChild_WhenGetChildQuery_ThenReturnString() {
+        Resource value = model.createResource("RESOURCE")
+                .addProperty(R2RMLSyntax.child, model.createLiteral("CHILD"));
+
+        String result = r2rmlParser.getChildQuery(value);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenResourceWithNoChild_WhenGetChildQuery_ThenThrowException() {
+        Resource value = model.createResource("RESOURCE");
+        String expected = String.format("%s property not found in %s.", R2RMLSyntax.child, value);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlParser.getChildQuery(value);
+    }
+
+    @Test
+    public void GivenResourceWithParent_WhenGetParentQuery_ThenReturnString() {
+        Resource value = model.createResource("RESOURCE")
+                .addProperty(R2RMLSyntax.parent, model.createLiteral("PARENT"));
+
+        String result = r2rmlParser.getParentQuery(value);
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenResourceWithNoParent_WhenGetParentQuery_ThenThrowException() {
+        Resource value = model.createResource("RESOURCE");
+        String expected = String.format("%s property not found in %s.", R2RMLSyntax.parent, value);
+        exceptionRule.expect(ParserException.class);
+        exceptionRule.expectMessage(expected);
+
+        r2rmlParser.getParentQuery(value);
     }
 }

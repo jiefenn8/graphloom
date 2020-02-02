@@ -65,10 +65,22 @@ public class SubjectMapTest {
         assertThat(result, is(notNullValue()));
     }
 
+    @Test
+    public void GivenRecord_WhenGenerateEntityTermIsLiteral_ThenThrowException() {
+        exceptionRule.expect(MapperException.class);
+        exceptionRule.expectMessage("SubjectMap can only return IRI or BlankNode.");
+        Literal mockLiteral = mock(Literal.class);
+        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockLiteral);
+        when(mockLiteral.isLiteral()).thenReturn(true);
+
+        subjectMap = new SubjectMap(mockTermMap);
+        subjectMap.generateEntityTerm(mockRecord);
+    }
+
     //addClass
 
     @Test(expected = NullPointerException.class)
-    public void GivenNullResource_WhenAddClass_ThenThrowException() {
+    public void GivenNoResource_WhenAddClass_ThenThrowException() {
         subjectMap.addEntityClass(null);
     }
 

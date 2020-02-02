@@ -9,6 +9,8 @@ import com.github.jiefenn8.graphloom.api.EntityRecord;
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.api.SourceConfig;
 import com.github.jiefenn8.graphloom.api.SourceMap;
+import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.google.common.collect.ImmutableSet;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,8 +18,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import java.util.Objects;
+
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -57,5 +60,59 @@ public class LogicalTableTest {
         exceptionRule.expect(NullPointerException.class);
         exceptionRule.expectMessage("Payload must not be null.");
         logicalTable = new LogicalTable.Builder((SourceConfig) null).build();
+    }
+
+    @Test
+    public void GivenSourceConfig_WhenGenerateHashCode_ThenReturnExpectedInt() {
+        SourceConfig mockSourceConfig = mock(SourceConfig.class);
+        int expected = Objects.hash(mockSourceConfig);
+
+        logicalTable = new LogicalTable.Builder(mockSourceConfig).build();
+        int result = logicalTable.hashCode();
+        assertThat(result, is(equalTo(expected)));
+    }
+
+    @Test
+    public void GivenSourceConfig_WhenCreateBuilder_ThenReturnBuilder() {
+        LogicalTable.Builder result = new LogicalTable.Builder(mock(SourceConfig.class));
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenTriplesMap_WhenBuildWithTriplesMap_ThenReturnBuilder() {
+        LogicalTable.Builder result = new LogicalTable.Builder(mock(SourceConfig.class))
+                .withTriplesMap(mock(TriplesMap.class));
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenLogicalTableAndJoinConditions_WhenBuildWithJointSQLQuery_ThenReturnBuilder() {
+        SourceConfig mockSourceConfig = mock(SourceConfig.class);
+        JoinCondition mockJoinCondition = mock(JoinCondition.class);
+        LogicalTable logicalTable = new LogicalTable.Builder(mockSourceConfig).build();
+        when(mockJoinCondition.getChild()).thenReturn("CHILD");
+        when(mockJoinCondition.getParent()).thenReturn("PARENT");
+        when(mockSourceConfig.getPayload()).thenReturn("PAYLOAD");
+
+        LogicalTable.Builder result = new LogicalTable.Builder(mockSourceConfig)
+                .withJointSQLQuery(logicalTable, ImmutableSet.of(mockJoinCondition));
+        assertThat(result, is(notNullValue()));
+    }
+
+    @Test
+    public void GivenLogicalTableAndNoJoinConditions_WhenBuildWithJointSQLQuery_ThenThrowException() {
+        exceptionRule.expect(NullPointerException.class);
+
+        new LogicalTable.Builder(mock(SourceConfig.class))
+                .withJointSQLQuery(mock(LogicalTable.class), null);
+    }
+
+    @Test
+    public void GivenLogicalTableAndEmptyJoinConditions_WhenBuildWithJointSQLQuery_ThenReturnBuilder() {
+        exceptionRule.expect(MapperException.class);
+        exceptionRule.expectMessage("Expected JoinConditions with joint SQL query creation.");
+
+        new LogicalTable.Builder(mock(SourceConfig.class))
+                .withJointSQLQuery(mock(LogicalTable.class), ImmutableSet.of());
     }
 }

@@ -26,8 +26,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(JUnitParamsRunner.class)
 public class InputSourceConfigTest {
 
-    private final String payload = "PAYLOAD";
-    private final String iteratorDef = "";
+    private static final String payload = "PAYLOAD";
+    private static final String iteratorDef = "";
     @Rule public ExpectedException expectedException = ExpectedException.none();
     private InputSourceConfig sourceConfig;
 
