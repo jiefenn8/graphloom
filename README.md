@@ -12,11 +12,11 @@ A relational database to semantic graph mapping library. Mapping relational data
 
 ## Getting Started
 
-To get started on using GraphLoom on your project, ensure you have met all prequisities and follow any instructions below to get the library in your build up and running for development or testing purposes.
+To get started on using GraphLoom on your project, ensure you have met all prerequisites and follow any instructions below to get the library in your build up and running for development or testing purposes.
 
 ### Prerequisites
 
-GraphLoom v0.2 target compatibility is Java 8. Your Java SDK must have compatibility for Java 8 for this library to work properly. To obtain Java SDK, go to either [OpenJDK](https://openjdk.java.net/) or [OracleJDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) depending on your own project license requirement.
+GraphLoom target compatibility is Java 8. Your Java SDK must have compatibility for Java 8 for this library to work properly. To obtain Java SDK, go to either [OpenJDK](https://openjdk.java.net/) or [OracleJDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) depending on your own project license requirement.
  
 ### Adding GraphLoom to your build
 
@@ -25,7 +25,7 @@ For Maven build:
 <dependency>
   <groupId>com.github.jiefenn8.graphloom</groupId>
   <artifactId>graphloom-core</artifactId>
-  <version>0.2.0</version>
+  <version>0.4.1</version>
   <type>pom</type>
 </dependency>
 ```
@@ -33,7 +33,7 @@ For Maven build:
 For Gradle build:
 ```
 dependencies {
-  compile 'com.github.jiefenn8.graphloom:graphloom-core:0.2.0'
+  compile 'com.github.jiefenn8.graphloom:graphloom-core:0.4.1'
 }
 ```
 
