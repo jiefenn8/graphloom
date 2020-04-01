@@ -20,20 +20,44 @@ GraphLoom target compatibility is Java 8. Your Java SDK must have compatibility 
  
 ### Adding GraphLoom to your build
 
-For Maven build: 
+#### Maven
+
+Repository:
+```
+<repository>
+    <snapshots>
+        <enabled>false</enabled>
+    </snapshots>
+    <id>bintray-jiefenn8-graphloom</id>
+    <name>bintray</name>
+    <url>https://dl.bintray.com/jiefenn8/graphloom</url>
+</repository>
+```
+
+Dependency:
 ```
 <dependency>
   <groupId>com.github.jiefenn8.graphloom</groupId>
   <artifactId>graphloom-core</artifactId>
   <version>0.4.1</version>
-  <type>pom</type>
 </dependency>
 ```
 
-For Gradle build:
+#### Gradle
+
+Repository:
+```
+repositories {
+    maven {
+        url  "https://dl.bintray.com/jiefenn8/graphloom" 
+    }
+}
+```
+
+Dependency:
 ```
 dependencies {
-  compile 'com.github.jiefenn8.graphloom:graphloom-core:0.4.1'
+  implementation 'com.github.jiefenn8.graphloom:graphloom-core:0.4.1'
 }
 ```
 
