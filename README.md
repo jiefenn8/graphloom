@@ -39,7 +39,7 @@ Dependency:
 <dependency>
   <groupId>com.github.jiefenn8.graphloom</groupId>
   <artifactId>graphloom-core</artifactId>
-  <version>0.4.1</version>
+  <version>0.4.2</version>
 </dependency>
 ```
 
@@ -57,7 +57,7 @@ repositories {
 Dependency:
 ```
 dependencies {
-  implementation 'com.github.jiefenn8.graphloom:graphloom-core:0.4.1'
+  implementation 'com.github.jiefenn8.graphloom:graphloom-core:0.4.2'
 }
 ```
 
