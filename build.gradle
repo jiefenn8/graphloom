@@ -88,7 +88,7 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.25'
 
     //Core
-    implementation group: 'org.apache.jena', name: 'jena-core', version: '3.5.0'
+    api group: 'org.apache.jena', name: 'jena-core', version: '3.5.0'
 
     //Utils
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
