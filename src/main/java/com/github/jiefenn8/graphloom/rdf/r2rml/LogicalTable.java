@@ -122,7 +122,7 @@ public class LogicalTable implements SourceMap, EntityChild {
         }
 
         /**
-         * Builds a source config with a join SQL query consisting of two query,
+         * Builds a source config with a join query consisting of two query,
          * table or mixed that is associated to each other through join
          * conditions.
          *
@@ -137,18 +137,33 @@ public class LogicalTable implements SourceMap, EntityChild {
                 throw new MapperException(message);
             }
 
-            String parent = prepareSQLQuery(logicalTable.sourceConfig);
-            String child = prepareSQLQuery(sourceConfig);
-            String joins = buildJoinStatement(joinConditions.iterator());
-            String jointSQLQuery = String.format("SELECT * FROM %s AS q1, %s as q2 WHERE %s", child, parent, joins);
-
-            String parentSqlVersion = sourceConfig.getProperty("sqlVersion");
-            this.sourceConfig = R2RMLFactory.createR2RMLView(jointSQLQuery, parentSqlVersion);
+            String jointQuery = "SELECT " + buildSelective(joinConditions.iterator());
+            jointQuery += " FROM " + prepareQuery(sourceConfig) + " AS child, ";
+            jointQuery += prepareQuery(logicalTable.sourceConfig) + " AS parent";
+            jointQuery += " WHERE " + buildJoinStatement(joinConditions.iterator());
+            String parentVersion = sourceConfig.getProperty("sqlVersion");
+            this.sourceConfig = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
             return this;
         }
 
         /**
-         * Returns the ending SQL query segment containing all the join conditions
+         * Returns the starting select query segment containing all the join
+         * conditions recursively added from the {@link JoinCondition} iterator.
+         *
+         * @param iterator of the join condition collection
+         * @return the starting select segment containing the join conditions
+         */
+        private String buildSelective(Iterator<JoinCondition> iterator) {
+            JoinCondition join = iterator.next();
+            String selective = "child." + join.getChild() + ", parent." + join.getParent();
+            if (iterator.hasNext()) {
+                selective += ", " + buildSelective(iterator);
+            }
+            return selective;
+        }
+
+        /**
+         * Returns the ending query segment containing all the join conditions
          * recursively built from the given iterator of a join condition collection.
          *
          * @param iterator of the join condition collection
@@ -156,25 +171,24 @@ public class LogicalTable implements SourceMap, EntityChild {
          */
         private String buildJoinStatement(Iterator<JoinCondition> iterator) {
             JoinCondition join = iterator.next();
-            String joinStatement = String.format("q1.%s=q2.%s", join.getChild(), join.getParent());
+            String joinStatement = "child." + join.getChild() + "=parent." + join.getParent();
             if (iterator.hasNext()) {
                 joinStatement = joinStatement.concat(" AND " + buildJoinStatement(iterator));
             }
-
-            return joinStatement.concat(";");
+            return joinStatement;
         }
 
         /**
-         * Returns a prepared SQL query using the query/table in the given source
+         * Returns a prepared query using the query/table in the given source
          * config. If the source config is a r2rml view, wrap the query before
          * returning it.
          *
          * @param sourceConfig the config to containing the query
          * @return the query prepared for further manipulation
          */
-        private String prepareSQLQuery(SourceConfig sourceConfig) {
+        private String prepareQuery(SourceConfig sourceConfig) {
             if (sourceConfig instanceof R2RMLView) {
-                return String.format("(%s)", sourceConfig.getPayload());
+                return "(" + sourceConfig.getPayload() + ")";
             }
             return sourceConfig.getPayload();
         }
