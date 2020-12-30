@@ -64,7 +64,7 @@ public class R2RMLParser {
      * @param filenameOrUri the filename or URI of the document
      * @param baseUri       the base URI to use for the mapping
      * @return true if the document is loaded successfully
-     *         otherwise false
+     * otherwise false
      */
     protected boolean parse(String filenameOrUri, String baseUri) {
         if (!r2rmlGraph.isClosed() && !this.filenameOrUri.isEmpty()) {
@@ -257,7 +257,7 @@ public class R2RMLParser {
      *
      * @param subject the triples map resource
      * @return set of statement with resource associated to
-     *         predicate object map property
+     * predicate object map property
      */
     protected Set<Statement> listPredicateObjectMaps(Resource subject) {
         return r2rmlGraph.listStatements(subject, R2RMLSyntax.predicateObjectMap, (RDFNode) null)
@@ -285,7 +285,7 @@ public class R2RMLParser {
      *
      * @param subject the predicate object map resource
      * @return statement with resource associated to the predicate
-     *         map property
+     * map property
      */
     protected Statement getPredicateMap(Resource subject) {
         return getTermMap(subject, R2RMLSyntax.predicateMap, R2RMLSyntax.predicate);
@@ -300,7 +300,7 @@ public class R2RMLParser {
      *
      * @param subject the predicate object map resource
      * @return statement with resource associated to the object
-     *         map property
+     * map property
      */
     protected Statement getObjectMap(Resource subject) {
         return getTermMap(subject, R2RMLSyntax.objectMap, R2RMLSyntax.object);
@@ -504,7 +504,7 @@ public class R2RMLParser {
      *
      * @param subject the object map resource
      * @return set of resources associated with join condition
-     *         property
+     * property
      */
     public Set<Resource> listJoinConditions(Resource subject) {
         return r2rmlGraph.listObjectsOfProperty(subject, R2RMLSyntax.joinCondition)

@@ -82,7 +82,7 @@ public class TriplesMap implements EntityMap {
         return subjectMap.generateEntityTerm(record);
     }
 
-    public Resource generateEntityTerm(Set<JoinCondition> joins, Record record){
+    public Resource generateEntityTerm(Set<JoinCondition> joins, Record record) {
         return subjectMap.generateEntityTerm(joins, record);
     }
 

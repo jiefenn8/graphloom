@@ -28,7 +28,7 @@ import static com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 public class R2RMLBuilder {
 
     private final R2RMLParser r2rmlParser;
-    private Map<String, TriplesMap> triplesMapRegister = new HashMap<>();
+    private final Map<String, TriplesMap> triplesMapRegister = new HashMap<>();
 
     /**
      * Constructs a R2RMLBuilder with default parser.

@@ -23,7 +23,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 public class TemplateTermMap implements TermMap {
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)}");
-    private String templateStr;
+    private final String templateStr;
     private TermType termType = TermType.IRI;
 
     /**
@@ -59,9 +59,9 @@ public class TemplateTermMap implements TermMap {
             throw new MapperException("Invalid template string given.");
         }
         String alt = StringUtils.EMPTY;
-        for(JoinCondition join : joins){
+        for (JoinCondition join : joins) {
             String match = matcher.group(1);
-            if(join.getParent().equals(match)){
+            if (join.getParent().equals(match)) {
                 alt = join.getChild();
             }
         }

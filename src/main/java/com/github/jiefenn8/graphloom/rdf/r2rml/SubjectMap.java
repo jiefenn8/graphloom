@@ -26,9 +26,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class SubjectMap implements PropertyMap, EntityChild {
 
-    private EntityMap parent;
     private final TermMap termMap;
     private final List<Resource> classes = new ArrayList<>();
+    private EntityMap parent;
 
     /**
      * Constructs a SubjectMap with the specified term map that is either
@@ -59,7 +59,7 @@ public class SubjectMap implements PropertyMap, EntityChild {
         return term.asResource();
     }
 
-    public Resource generateEntityTerm(Set<JoinCondition> joins, Record record){
+    public Resource generateEntityTerm(Set<JoinCondition> joins, Record record) {
         RDFNode term = termMap.generateRDFTerm(joins, record);
         if (term.isLiteral()) {
             throw new MapperException("SubjectMap can only return IRI or BlankNode.");
