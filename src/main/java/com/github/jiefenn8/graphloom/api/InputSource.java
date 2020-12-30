@@ -23,7 +23,7 @@ public interface InputSource {
      * @param sourceConfig the config containing the query for this entity
      * @param batchId      the batch with the given id to retrieve
      * @return the collection of records as EntityRecord. Else return empty
-     *         entity map if there is no more records to return
+     * entity map if there is no more records to return
      */
     EntityRecord getEntityRecord(SourceConfig sourceConfig, int batchId);
 

@@ -55,7 +55,7 @@ public class R2RMLMap implements ConfigMaps {
 
         private static final String RR_PREFIX = "rr";
         private final Map<String, String> nsPrefixMap = new HashMap<>();
-        private Set<TriplesMap> triplesMaps = new HashSet<>();
+        private final Set<TriplesMap> triplesMaps = new HashSet<>();
 
         /**
          * Adds the prefix along with its namespace in the namespace map.
@@ -65,7 +65,6 @@ public class R2RMLMap implements ConfigMaps {
          * @return builder of this R2RMLMap class
          */
         public Builder addNsPrefix(String prefix, String namespace) {
-
             nsPrefixMap.put(prefix, namespace);
             return this;
         }

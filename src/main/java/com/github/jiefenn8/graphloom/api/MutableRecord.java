@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class MutableRecord implements Record {
 
-    private Map<String, String> recordValue;
+    private final Map<String, String> recordValue;
 
     /**
      * Constructs a MutableRecord with an initial column and its value.

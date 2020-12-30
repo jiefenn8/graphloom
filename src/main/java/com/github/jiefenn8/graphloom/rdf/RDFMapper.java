@@ -71,13 +71,12 @@ public class RDFMapper implements GraphMapper {
             triplesMap.listEntityClasses()
                     .forEach((c) -> entityGraph.add(subject, RDF.type, c));
 
-            triplesMap.listRelationMaps()
-                    .forEach((k) -> {
-                        NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
-                        if (!(nodeMap instanceof RefObjectMap)) {
-                            entityGraph.add(subject, k.generateRelationTerm(r), nodeMap.generateNodeTerm(r));
-                        }
-                    });
+            triplesMap.listRelationMaps().forEach((k) -> {
+                NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
+                if (!(nodeMap instanceof RefObjectMap)) {
+                    entityGraph.add(subject, k.generateRelationTerm(r), nodeMap.generateNodeTerm(r));
+                }
+            });
         });
 
         triplesMap.listRelationMaps().forEach((k) -> {
@@ -88,14 +87,13 @@ public class RDFMapper implements GraphMapper {
                 LogicalTable refLogicalTable = (LogicalTable) refTriplesMap.applySource(null);
                 LogicalTable rootLogicalTable = (LogicalTable) triplesMap.applySource(null);
                 LogicalTable jointLogicalTable = new LogicalTable.Builder(rootLogicalTable)
-                        .withJointSQLQuery(refLogicalTable, refObjectMap.listJoinConditions())
+                        .withJointQuery(refLogicalTable, refObjectMap.listJoinConditions())
                         .build();
 
-                jointLogicalTable.loadInputSource(source)
-                        .forEachEntityRecord((r) -> {
-                            Resource subject = triplesMap.generateEntityTerm(r);
-                            entityGraph.add(subject, k.generateRelationTerm(r), refObjectMap.generateNodeTerm(r));
-                        });
+                jointLogicalTable.loadInputSource(source).forEachEntityRecord((r) -> {
+                    Resource subject = triplesMap.generateEntityTerm(r);
+                    entityGraph.add(subject, k.generateRelationTerm(r), refObjectMap.generateNodeTerm(r));
+                });
             }
         });
 

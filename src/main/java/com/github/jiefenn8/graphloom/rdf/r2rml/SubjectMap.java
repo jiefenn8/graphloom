@@ -16,6 +16,7 @@ import org.apache.jena.rdf.model.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,8 +27,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class SubjectMap implements PropertyMap, EntityChild {
 
     private EntityMap parent;
-    private TermMap termMap;
-    private List<Resource> classes = new ArrayList<>();
+    private final TermMap termMap;
+    private final List<Resource> classes = new ArrayList<>();
 
     /**
      * Constructs a SubjectMap with the specified term map that is either
@@ -55,6 +56,14 @@ public class SubjectMap implements PropertyMap, EntityChild {
             throw new MapperException("SubjectMap can only return IRI or BlankNode.");
         }
 
+        return term.asResource();
+    }
+
+    public Resource generateEntityTerm(Set<JoinCondition> joins, Record record){
+        RDFNode term = termMap.generateRDFTerm(joins, record);
+        if (term.isLiteral()) {
+            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        }
         return term.asResource();
     }
 

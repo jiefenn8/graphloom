@@ -7,8 +7,10 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
 
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,6 +48,24 @@ public class TemplateTermMap implements TermMap {
         if (!matcher.find()) throw new MapperException("Invalid template string given.");
 
         String generatedTerm = templateStr.replace(matcher.group(0), record.getPropertyValue(matcher.group(1)));
+        return RDFTermHelper.asRDFTerm(generatedTerm, termType);
+    }
+
+    @Override
+    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
+        checkNotNull(record, "Record is null.");
+        Matcher matcher = pattern.matcher(templateStr);
+        if (!matcher.find()) {
+            throw new MapperException("Invalid template string given.");
+        }
+        String alt = StringUtils.EMPTY;
+        for(JoinCondition join : joins){
+            String match = matcher.group(1);
+            if(join.getParent().equals(match)){
+                alt = join.getChild();
+            }
+        }
+        String generatedTerm = templateStr.replace(matcher.group(0), record.getPropertyValue(alt));
         return RDFTermHelper.asRDFTerm(generatedTerm, termType);
     }
 }

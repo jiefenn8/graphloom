@@ -6,7 +6,10 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.Record;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
+
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -17,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ColumnTermMap implements TermMap {
 
-    private String columnName;
+    private final String columnName;
     private TermType termType = TermType.LITERAL;
 
     /**
@@ -38,6 +41,18 @@ public class ColumnTermMap implements TermMap {
     @Override
     public RDFNode generateRDFTerm(Record record) {
         String columnValue = record.getPropertyValue(columnName);
+        return RDFTermHelper.asRDFTerm(columnValue, termType);
+    }
+
+    @Override
+    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
+        String alt = StringUtils.EMPTY;
+        for (JoinCondition join : joins) {
+            if (join.getParent().equals(columnName)) {
+                alt = join.getChild();
+            }
+        }
+        String columnValue = record.getPropertyValue(alt);
         return RDFTermHelper.asRDFTerm(columnValue, termType);
     }
 }

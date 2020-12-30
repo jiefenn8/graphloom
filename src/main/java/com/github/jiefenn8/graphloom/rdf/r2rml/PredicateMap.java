@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class PredicateMap implements RelationMap, EntityChild {
 
     private EntityMap parent;
-    private TermMap termMap;
+    private final TermMap termMap;
 
     /**
      * Constructs an PredicateMap with the specified term map that is either

@@ -8,6 +8,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.Record;
 import org.apache.jena.rdf.model.RDFNode;
 
+import java.util.Set;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -17,7 +19,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ConstTermMap implements TermMap {
 
-    private RDFNode constTerm;
+    private final RDFNode constTerm;
 
     /**
      * Constructs a ConstTermMap with the specified constant value to use
@@ -32,5 +34,10 @@ public class ConstTermMap implements TermMap {
     @Override
     public RDFNode generateRDFTerm(Record record) {
         return constTerm;
+    }
+
+    @Override
+    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
+        return generateRDFTerm(record);
     }
 }

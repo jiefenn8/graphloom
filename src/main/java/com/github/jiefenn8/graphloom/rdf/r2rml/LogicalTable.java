@@ -126,40 +126,23 @@ public class LogicalTable implements SourceMap, EntityChild {
          * table or mixed that is associated to each other through join
          * conditions.
          *
-         * @param logicalTable   the second query or table to build a joint SQL
+         * @param logicalTable   the second query or table to build a joint query
          * @param joinConditions the set of joins conditions to use
          * @return this builder for fluent method chaining
          */
-        public Builder withJointSQLQuery(LogicalTable logicalTable, Set<JoinCondition> joinConditions) {
+        public Builder withJointQuery(LogicalTable logicalTable, Set<JoinCondition> joinConditions) {
             if (joinConditions.isEmpty()) {
-                String message = "Expected JoinConditions with joint SQL query creation.";
+                String message = "Expected JoinConditions with joint query creation.";
                 logger.fatal(message);
                 throw new MapperException(message);
             }
 
-            String jointQuery = "SELECT " + buildSelective(joinConditions.iterator());
-            jointQuery += " FROM " + prepareQuery(sourceConfig) + " AS child, ";
+            String jointQuery = "SELECT child.* FROM " + prepareQuery(sourceConfig) + " AS child, ";
             jointQuery += prepareQuery(logicalTable.sourceConfig) + " AS parent";
             jointQuery += " WHERE " + buildJoinStatement(joinConditions.iterator());
             String parentVersion = sourceConfig.getProperty("sqlVersion");
             this.sourceConfig = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
             return this;
-        }
-
-        /**
-         * Returns the starting select query segment containing all the join
-         * conditions recursively added from the {@link JoinCondition} iterator.
-         *
-         * @param iterator of the join condition collection
-         * @return the starting select segment containing the join conditions
-         */
-        private String buildSelective(Iterator<JoinCondition> iterator) {
-            JoinCondition join = iterator.next();
-            String selective = "child." + join.getChild() + ", parent." + join.getParent();
-            if (iterator.hasNext()) {
-                selective += ", " + buildSelective(iterator);
-            }
-            return selective;
         }
 
         /**

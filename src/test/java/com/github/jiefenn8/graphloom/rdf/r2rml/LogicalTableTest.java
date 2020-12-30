@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Objects;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -95,7 +96,7 @@ public class LogicalTableTest {
         when(mockSourceConfig.getPayload()).thenReturn("PAYLOAD");
 
         LogicalTable.Builder result = new LogicalTable.Builder(mockSourceConfig)
-                .withJointSQLQuery(logicalTable, ImmutableSet.of(mockJoinCondition));
+                .withJointQuery(logicalTable, ImmutableSet.of(mockJoinCondition));
         assertThat(result, is(notNullValue()));
     }
 
@@ -104,15 +105,15 @@ public class LogicalTableTest {
         exceptionRule.expect(NullPointerException.class);
 
         new LogicalTable.Builder(mock(SourceConfig.class))
-                .withJointSQLQuery(mock(LogicalTable.class), null);
+                .withJointQuery(mock(LogicalTable.class), null);
     }
 
     @Test
     public void GivenLogicalTableAndEmptyJoinConditions_WhenBuildWithJointSQLQuery_ThenReturnBuilder() {
         exceptionRule.expect(MapperException.class);
-        exceptionRule.expectMessage("Expected JoinConditions with joint SQL query creation.");
+        exceptionRule.expectMessage("Expected JoinConditions with joint query creation.");
 
         new LogicalTable.Builder(mock(SourceConfig.class))
-                .withJointSQLQuery(mock(LogicalTable.class), ImmutableSet.of());
+                .withJointQuery(mock(LogicalTable.class), ImmutableSet.of());
     }
 }

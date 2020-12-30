@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ObjectMap implements NodeMap, EntityChild {
 
     private EntityMap parent;
-    private TermMap termMap;
+    private final TermMap termMap;
 
     /**
      * Constructs an ObjectMap with the specified term map that is either

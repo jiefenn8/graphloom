@@ -88,7 +88,7 @@ public class RefObjectMap implements NodeMap, EntityChild {
 
     @Override
     public RDFNode generateNodeTerm(Record record) {
-        RDFNode term = parentTriplesMap.generateEntityTerm(record);
+        RDFNode term = parentTriplesMap.generateEntityTerm(joinConditions, record);
         if (term.isLiteral()) {
             throw new MapperException("RefObjectMap should only return IRI.");
         }

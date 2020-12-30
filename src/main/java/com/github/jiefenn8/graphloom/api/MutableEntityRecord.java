@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class MutableEntityRecord implements EntityRecord {
 
-    private Set<Record> records = new LinkedHashSet<>();
+    private final Set<Record> records = new LinkedHashSet<>();
     private int columnSize;
 
     @Override

@@ -16,10 +16,10 @@ import java.util.Objects;
  */
 public class InputSourceConfig implements SourceConfig {
 
-    private PayloadType payloadType;
-    private String payload;
-    private String iteratorDef;
-    private Map<String, String> properties = new HashMap<>();
+    private final PayloadType payloadType;
+    private final String payload;
+    private final String iteratorDef;
+    private final Map<String, String> properties = new HashMap<>();
 
     /**
      * Constructs an InputSourceConfig with the specified payload, type
