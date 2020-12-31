@@ -40,8 +40,8 @@ public class ColumnTermMap implements TermMap {
 
     @Override
     public RDFNode generateRDFTerm(Record record) {
-        String columnValue = record.getPropertyValue(columnName);
-        return RDFTermHelper.asRDFTerm(columnValue, termType);
+        String value = record.getPropertyValue(columnName);
+        return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
     }
 
     @Override
@@ -52,7 +52,8 @@ public class ColumnTermMap implements TermMap {
                 alt = join.getChild();
             }
         }
-        String columnValue = record.getPropertyValue(alt);
-        return RDFTermHelper.asRDFTerm(columnValue, termType);
+
+        String value = record.getPropertyValue(alt);
+        return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
     }
 }

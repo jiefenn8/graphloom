@@ -11,6 +11,7 @@ import com.github.jiefenn8.graphloom.rdf.r2rml.LogicalTable;
 import com.github.jiefenn8.graphloom.rdf.r2rml.RefObjectMap;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
 
@@ -74,7 +75,10 @@ public class RDFMapper implements GraphMapper {
             triplesMap.listRelationMaps().forEach((k) -> {
                 NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
                 if (!(nodeMap instanceof RefObjectMap)) {
-                    entityGraph.add(subject, k.generateRelationTerm(r), nodeMap.generateNodeTerm(r));
+                    RDFNode node = nodeMap.generateNodeTerm(r);
+                    if (node != null) {
+                        entityGraph.add(subject, k.generateRelationTerm(r), node);
+                    }
                 }
             });
         });
@@ -92,12 +96,14 @@ public class RDFMapper implements GraphMapper {
 
                 jointLogicalTable.loadInputSource(source).forEachEntityRecord((r) -> {
                     Resource subject = triplesMap.generateEntityTerm(r);
-                    entityGraph.add(subject, k.generateRelationTerm(r), refObjectMap.generateNodeTerm(r));
+                    RDFNode node = refObjectMap.generateNodeTerm(r);
+                    if (node != null) {
+                        entityGraph.add(subject, k.generateRelationTerm(r), node);
+                    }
                 });
             }
         });
 
         return entityGraph;
     }
-
 }

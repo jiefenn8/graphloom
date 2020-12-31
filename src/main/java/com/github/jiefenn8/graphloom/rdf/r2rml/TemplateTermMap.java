@@ -7,8 +7,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -23,18 +23,18 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 public class TemplateTermMap implements TermMap {
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)}");
-    private final String templateStr;
+    private final String template;
     private TermType termType = TermType.IRI;
 
     /**
      * Constructs a TemplateTermMap with the specified template pattern and
      * term type to map into.
      *
-     * @param templateStr the template pattern to use
-     * @param termType    the term type to map the value into
+     * @param template the template pattern to use
+     * @param termType the term type to map the value into
      */
-    protected TemplateTermMap(String templateStr, TermType termType) {
-        this.templateStr = checkNotNull(templateStr, "Template string must not be null.");
+    protected TemplateTermMap(String template, TermType termType) {
+        this.template = checkNotNull(template, "Template string must not be null.");
         checkNotNull(termType, "Term type must not be null.");
         if (termType != TermType.UNDEFINED) {
             this.termType = termType;
@@ -44,28 +44,37 @@ public class TemplateTermMap implements TermMap {
     @Override
     public RDFNode generateRDFTerm(Record record) {
         checkNotNull(record, "Record is null.");
-        Matcher matcher = pattern.matcher(templateStr);
-        if (!matcher.find()) throw new MapperException("Invalid template string given.");
+        Matcher matcher = pattern.matcher(template);
+        if (!matcher.find()) {
+            throw new MapperException("Template given cannot be matched. Must have: {name}.");
+        }
 
-        String generatedTerm = templateStr.replace(matcher.group(0), record.getPropertyValue(matcher.group(1)));
-        return RDFTermHelper.asRDFTerm(generatedTerm, termType);
+        String value = record.getPropertyValue(matcher.group(1));
+        return value == null ? null : createRDFTerm(template, matcher, value);
     }
 
     @Override
     public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
         checkNotNull(record, "Record is null.");
-        Matcher matcher = pattern.matcher(templateStr);
+        Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
-            throw new MapperException("Invalid template string given.");
+            throw new MapperException("Template given cannot be matched. Must have: {name}.");
         }
-        String alt = StringUtils.EMPTY;
+
+        String alt = "";
         for (JoinCondition join : joins) {
-            String match = matcher.group(1);
-            if (join.getParent().equals(match)) {
+            String parent = join.getParent();
+            if (parent.equals(matcher.group(1))) {
                 alt = join.getChild();
             }
         }
-        String generatedTerm = templateStr.replace(matcher.group(0), record.getPropertyValue(alt));
-        return RDFTermHelper.asRDFTerm(generatedTerm, termType);
+
+        String value = record.getPropertyValue(alt);
+        return value == null ? null : createRDFTerm(template, matcher, value);
+    }
+    
+    private RDFNode createRDFTerm(@NonNull String template, @NonNull Matcher matcher, @NonNull String value) {
+        String term = template.replace(matcher.group(0), value);
+        return RDFTermHelper.asRDFTerm(term, termType);
     }
 }
