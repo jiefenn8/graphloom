@@ -7,7 +7,6 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLSyntax;
-import com.google.common.collect.ImmutableList;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.jena.rdf.model.*;
@@ -208,7 +207,7 @@ public class R2RMLParserTest {
     }
 
     public List<Property> subjectMapParameters() {
-        return ImmutableList.of(R2RMLSyntax.subject, R2RMLSyntax.subjectMap);
+        return List.of(R2RMLSyntax.subject, R2RMLSyntax.subjectMap);
     }
 
     @Test
@@ -255,7 +254,7 @@ public class R2RMLParserTest {
     }
 
     public List<Property> predicateMapParameters() {
-        return ImmutableList.of(R2RMLSyntax.predicate, R2RMLSyntax.predicateMap);
+        return List.of(R2RMLSyntax.predicate, R2RMLSyntax.predicateMap);
     }
 
     @Test
@@ -280,7 +279,7 @@ public class R2RMLParserTest {
     }
 
     public List<Property> objectMapParameters() {
-        return ImmutableList.of(R2RMLSyntax.object, R2RMLSyntax.objectMap);
+        return List.of(R2RMLSyntax.object, R2RMLSyntax.objectMap);
     }
 
     @Test
@@ -318,11 +317,11 @@ public class R2RMLParserTest {
     }
 
     public List<Property> constTermMapShortcutParameters() {
-        return ImmutableList.of(R2RMLSyntax.subject, R2RMLSyntax.predicate, R2RMLSyntax.object);
+        return List.of(R2RMLSyntax.subject, R2RMLSyntax.predicate, R2RMLSyntax.object);
     }
 
     public List<Property> constTermMapParameters() {
-        return ImmutableList.of(R2RMLSyntax.subjectMap, R2RMLSyntax.predicateMap, R2RMLSyntax.objectMap);
+        return List.of(R2RMLSyntax.subjectMap, R2RMLSyntax.predicateMap, R2RMLSyntax.objectMap);
     }
 
     @Test

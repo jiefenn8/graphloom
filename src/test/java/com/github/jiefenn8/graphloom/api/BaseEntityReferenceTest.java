@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.api;
 
-import com.google.common.collect.ImmutableList;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Rule;
@@ -32,7 +31,7 @@ public class BaseEntityReferenceTest {
     private BaseEntityReference sourceConfig;
 
     public List<PayloadType> payloadTypeParameters() {
-        return ImmutableList.of(DefaultType.UNDEFINED);
+        return List.of(DefaultType.UNDEFINED);
     }
 
     @Test

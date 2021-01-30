@@ -92,7 +92,6 @@ dependencies {
 
     //Utils
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
-    implementation group: 'com.google.guava', name: 'guava', version: '28.1-jre'
 }
 
 jacocoTestReport {

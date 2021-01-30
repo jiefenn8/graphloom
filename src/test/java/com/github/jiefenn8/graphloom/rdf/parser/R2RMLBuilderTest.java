@@ -7,7 +7,6 @@ package com.github.jiefenn8.graphloom.rdf.parser;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
-import com.google.common.collect.ImmutableSet;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.junit.Before;
@@ -17,6 +16,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,7 +49,7 @@ public class R2RMLBuilderTest {
     public void setUp() {
         //General setup
         when(mockR2rmlParser.parse(anyString(), any())).thenReturn(true);
-        when(mockR2rmlParser.getTriplesMaps()).thenReturn(ImmutableSet.of(mockResource));
+        when(mockR2rmlParser.getTriplesMaps()).thenReturn(Set.of(mockResource));
 
         //Setup of one triples map
         when(mockStatement.getSubject()).thenReturn(mockResource);
@@ -56,7 +57,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getTriplesMapIdName(mockResource)).thenReturn("TRIPLES_MAP_1");
         when(mockR2rmlParser.getLogicalTable(any())).thenReturn(mockResource);
         when(mockR2rmlParser.getSubjectMap(any())).thenReturn(mockStatement);
-        when(mockR2rmlParser.listPredicateObjectMaps(any())).thenReturn(ImmutableSet.of(mockStatement));
+        when(mockR2rmlParser.listPredicateObjectMaps(any())).thenReturn(Set.of(mockStatement));
 
         //Logical table setup
         when(mockR2rmlParser.isBaseTableOrView(any())).thenReturn(true);
@@ -107,7 +108,7 @@ public class R2RMLBuilderTest {
 
     @Test
     public void GivenEmptyFile_WhenParse_ThenReturnR2RMLMap() {
-        when(mockR2rmlParser.getTriplesMaps()).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.getTriplesMaps()).thenReturn(Set.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -126,10 +127,10 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(any())).thenReturn(mockResource2);
         when(mockR2rmlParser.hasJoinCondition(any())).thenReturn(true);
-        when(mockR2rmlParser.listJoinConditions(any())).thenReturn(ImmutableSet.of(mock(Resource.class)));
+        when(mockR2rmlParser.listJoinConditions(any())).thenReturn(Set.of(mock(Resource.class)));
         when(mockR2rmlParser.getChildQuery(any())).thenReturn("CHILD_QUERY");
         when(mockR2rmlParser.getParentQuery(any())).thenReturn("PARENT_QUERY");
-        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(Set.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -142,7 +143,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLES_MAP_2");
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
-        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(Set.of());
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -168,7 +169,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
         when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLE_MAP_2");
-        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of(mockStatement2));
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(Set.of(mockStatement2));
         when(mockR2rmlParser.getObjectMap(mockResource2)).thenReturn(mockStatement2);
         when(mockR2rmlParser.getParentTriplesMap(mockResource2)).thenReturn(mockResource);
         exceptionRule.expect(ParserException.class);
@@ -183,7 +184,7 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.getTriplesMapIdName(mockResource2)).thenReturn("TRIPLES_MAP_2");
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource2);
-        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(ImmutableSet.of());
+        when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(Set.of());
         when(mockR2rmlParser.getLogicalTable(mockResource2)).thenReturn(mockResource2);
         when(mockR2rmlParser.getTableName(mockResource2)).thenReturn("DIFF_TABLE_NAME");
         exceptionRule.expect(ParserException.class);

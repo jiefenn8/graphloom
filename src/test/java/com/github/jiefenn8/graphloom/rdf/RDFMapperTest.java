@@ -8,8 +8,6 @@ package com.github.jiefenn8.graphloom.rdf;
 import com.github.jiefenn8.graphloom.api.ConfigMaps;
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,6 +16,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.Map;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -40,8 +41,8 @@ public class RDFMapperTest {
         rdfMapper = new RDFMapper();
 
         //Default mock behaviour setup
-        when(mockConfigMaps.getNamespaceMap()).thenReturn(ImmutableMap.of());
-        when(mockConfigMaps.getEntityMaps()).thenReturn(ImmutableSet.of());
+        when(mockConfigMaps.getNamespaceMap()).thenReturn(Map.of());
+        when(mockConfigMaps.getEntityMaps()).thenReturn(Set.of());
     }
 
     @Test

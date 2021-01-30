@@ -14,8 +14,6 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
@@ -34,7 +32,7 @@ public class LogicalTable implements SourceMap, EntityChild {
      * @param builder the logical table builder to build from
      */
     private LogicalTable(Builder builder) {
-        checkNotNull(builder);
+        Objects.requireNonNull(builder);
         entityReference = builder.entityReference;
         parent = builder.parent;
     }
@@ -76,7 +74,7 @@ public class LogicalTable implements SourceMap, EntityChild {
          * @param entityReference the query config to set on this logical table
          */
         public Builder(EntityReference entityReference) {
-            this.entityReference = checkNotNull(entityReference, "Payload must not be null.");
+            this.entityReference = Objects.requireNonNull(entityReference, "Payload must not be null.");
         }
 
         /**
@@ -87,7 +85,7 @@ public class LogicalTable implements SourceMap, EntityChild {
          *                     to set on this logical table
          */
         public Builder(LogicalTable logicalTable) {
-            this.entityReference = checkNotNull(logicalTable.entityReference, "Payload must not be null.");
+            this.entityReference = Objects.requireNonNull(logicalTable.entityReference, "Payload must not be null.");
         }
 
         /**

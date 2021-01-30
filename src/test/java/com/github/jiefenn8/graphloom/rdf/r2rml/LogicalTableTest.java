@@ -7,7 +7,6 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableSet;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Objects;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -79,7 +79,7 @@ public class LogicalTableTest {
         when(mockEntityReference.getPayload()).thenReturn("PAYLOAD");
 
         LogicalTable.Builder result = new LogicalTable.Builder(mockEntityReference)
-                .withJointQuery(logicalTable, ImmutableSet.of(mockJoinCondition));
+                .withJointQuery(logicalTable, Set.of(mockJoinCondition));
         assertThat(result, is(notNullValue()));
     }
 
@@ -97,6 +97,6 @@ public class LogicalTableTest {
         exceptionRule.expectMessage("Expected JoinConditions with joint query creation.");
 
         new LogicalTable.Builder(mock(EntityReference.class))
-                .withJointQuery(mock(LogicalTable.class), ImmutableSet.of());
+                .withJointQuery(mock(LogicalTable.class), Set.of());
     }
 }

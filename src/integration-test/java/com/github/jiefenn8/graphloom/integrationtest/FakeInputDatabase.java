@@ -11,11 +11,10 @@ import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.api.inputsource.EntityResult;
 import com.github.jiefenn8.graphloom.integrationtest.fake.FakeEntity;
 import com.github.jiefenn8.graphloom.integrationtest.fake.FakeEntityResult;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -24,25 +23,25 @@ import java.util.function.Consumer;
 public class FakeInputDatabase implements InputSource {
 
     private EntityResult getEMPEntityResults() {
-        Map<String, String> record = ImmutableMap.of(
+        Map<String, String> record = Map.of(
                 "EMPNO", "7369",
                 "ENAME", "SMITH",
                 "JOB", "CLERK",
                 "DEPTNO", "10"
         );
         Entity fakeEntity = new FakeEntity(record);
-        return new FakeEntityResult(ImmutableSet.of(fakeEntity));
+        return new FakeEntityResult(Set.of(fakeEntity));
     }
 
     private EntityResult getDEPTEntityResults() {
-        Map<String, String> record = ImmutableMap.of(
+        Map<String, String> record = Map.of(
                 "DEPTNO", "10",
                 "ENAME", "SMITH",
                 "JOB", "CLERK",
                 "DEPTNO", "10"
         );
         Entity fakeEntity = new FakeEntity(record);
-        return new FakeEntityResult(ImmutableSet.of(fakeEntity));
+        return new FakeEntityResult(Set.of(fakeEntity));
     }
 
     @Override

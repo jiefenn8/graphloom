@@ -8,7 +8,6 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.junit.Before;
@@ -18,6 +17,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -110,7 +111,7 @@ public class TriplesMapTest {
 
     @Test
     public void WhenListEntityClasses_ThenVerifyCall() {
-        when(mockSubjectMap.listEntityClasses()).thenReturn(ImmutableList.of());
+        when(mockSubjectMap.listEntityClasses()).thenReturn(List.of());
         triplesMap = new TriplesMap
                 .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
                 .build();

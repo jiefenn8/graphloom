@@ -5,16 +5,16 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.*;
+import com.github.jiefenn8.graphloom.api.EntityMap;
+import com.github.jiefenn8.graphloom.api.NodeMap;
+import com.github.jiefenn8.graphloom.api.RelationMap;
+import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
-import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.*;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML TriplesMap with {@link EntityMap} interface.
@@ -35,11 +35,11 @@ public class TriplesMap implements EntityMap {
      * @param builder the triples map builder to build from
      */
     private TriplesMap(Builder builder) {
-        checkNotNull(builder);
+        Objects.requireNonNull(builder);
         idName = builder.idName;
         logicalTable = builder.logicalTable;
         subjectMap = builder.subjectMap.withParentMap(this);
-        predicateObjectMaps = ImmutableMap.copyOf(builder.predicateObjectMaps);
+        predicateObjectMaps = Map.copyOf(builder.predicateObjectMaps);
     }
 
     /**
@@ -111,9 +111,9 @@ public class TriplesMap implements EntityMap {
          * @param subjectMap   the subject map to set on this triples map
          */
         public Builder(String idName, LogicalTable logicalTable, SubjectMap subjectMap) {
-            this.idName = checkNotNull(idName, "ID name must not be null.");
-            this.logicalTable = checkNotNull(logicalTable, "Logical table must not be null.");
-            this.subjectMap = checkNotNull(subjectMap, "Subject map must not be null.");
+            this.idName = Objects.requireNonNull(idName, "ID name must not be null.");
+            this.logicalTable = Objects.requireNonNull(logicalTable, "Logical table must not be null.");
+            this.subjectMap = Objects.requireNonNull(subjectMap, "Subject map must not be null.");
         }
 
         /**

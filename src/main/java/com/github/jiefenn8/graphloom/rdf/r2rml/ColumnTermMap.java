@@ -9,9 +9,8 @@ import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
 
+import java.util.Objects;
 import java.util.Set;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This interface defines the base methods that manages the mapping of any
@@ -31,8 +30,8 @@ public class ColumnTermMap implements TermMap {
      * @param termType   the term type to map the value into
      */
     protected ColumnTermMap(String columnName, TermType termType) {
-        this.columnName = checkNotNull(columnName, "Column name must not be null.");
-        checkNotNull(termType, "Term type must not be null.");
+        this.columnName = Objects.requireNonNull(columnName, "Column name must not be null.");
+        Objects.requireNonNull(termType, "Term type must not be null.");
         if (termType != TermType.UNDEFINED) {
             this.termType = termType;
         }

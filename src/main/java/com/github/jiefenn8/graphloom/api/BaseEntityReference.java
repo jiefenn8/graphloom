@@ -5,8 +5,6 @@
 
 package com.github.jiefenn8.graphloom.api;
 
-import com.google.common.base.Preconditions;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,9 +28,9 @@ public class BaseEntityReference implements EntityReference {
      * @param iteratorDef the definition to iterate each row of results
      */
     protected BaseEntityReference(String payload, PayloadType payloadType, String iteratorDef) {
-        this.payload = Preconditions.checkNotNull(payload, "Payload must not be null.");
-        this.payloadType = Preconditions.checkNotNull(payloadType, "Payload type must not be null.");
-        this.iteratorDef = Preconditions.checkNotNull(iteratorDef, "Iterator definition must not be null.");
+        this.payload = Objects.requireNonNull(payload, "Payload must not be null.");
+        this.payloadType = Objects.requireNonNull(payloadType, "Payload type must not be null.");
+        this.iteratorDef = Objects.requireNonNull(iteratorDef, "Iterator definition must not be null.");
     }
 
     @Override
@@ -76,7 +74,7 @@ public class BaseEntityReference implements EntityReference {
      * @return the previous value that was associated with the given property
      */
     public String setProperty(String property, String value) {
-        Preconditions.checkNotNull(property);
+        Objects.requireNonNull(property);
         return properties.put(property, value);
     }
 

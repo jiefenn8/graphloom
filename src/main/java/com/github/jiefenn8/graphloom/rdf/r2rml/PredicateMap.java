@@ -13,8 +13,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
+import java.util.Objects;
 
 /**
  * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
@@ -32,7 +31,7 @@ public class PredicateMap implements RelationMap, EntityChild {
      * @param termMap the term map that this instance will behave as
      */
     protected PredicateMap(TermMap termMap) {
-        this.termMap = checkNotNull(termMap, "Term map must not be null.");
+        this.termMap = Objects.requireNonNull(termMap, "Term map must not be null.");
     }
 
     @Override

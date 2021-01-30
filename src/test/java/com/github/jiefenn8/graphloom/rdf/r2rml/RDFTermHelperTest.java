@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableList;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.jena.rdf.model.RDFNode;
@@ -31,7 +30,7 @@ public class RDFTermHelperTest {
     @Rule public ExpectedException expectedException = ExpectedException.none();
 
     public List<TermType> termTypeParameters() {
-        return ImmutableList.of(TermType.IRI, TermType.LITERAL);
+        return List.of(TermType.IRI, TermType.LITERAL);
     }
 
     @Test
