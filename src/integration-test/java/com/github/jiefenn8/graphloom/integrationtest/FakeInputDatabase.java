@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableMap;
 public class FakeInputDatabase implements InputSource {
 
     @Override
-    public EntityRecord getEntityRecord(SourceConfig sourceConfig, int batchId) {
+    public EntityRecord getEntityRecord(EntityReference sourceConfig, int batchId) {
         //Ignore batchId since this is a single entry table
         //Return EMP record as default
         String payload = sourceConfig.getPayload();
@@ -60,7 +60,7 @@ public class FakeInputDatabase implements InputSource {
     }
 
     @Override
-    public int calculateNumOfBatches(SourceConfig sourceConfig) {
+    public int calculateNumOfBatches(EntityReference sourceConfig) {
         return 1;
     }
 }

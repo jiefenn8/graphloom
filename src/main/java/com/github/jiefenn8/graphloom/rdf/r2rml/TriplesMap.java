@@ -42,7 +42,7 @@ public class TriplesMap implements EntityMap {
     }
 
     /**
-     * Returns true if this instance logical table source config is equal to the
+     * Returns true if this instance logical table query config is equal to the
      * given logical table.
      *
      * @param logicalTable logical table to compare

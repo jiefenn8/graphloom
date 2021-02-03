@@ -26,7 +26,7 @@ public class LogicalTable implements SourceMap, EntityChild {
     private static final Logger logger = LogManager.getLogger();
 
     private final TriplesMap parent;
-    private final SourceConfig sourceConfig;
+    private final EntityReference sourceConfig;
     private InputSource inputSource;
 
     /**
@@ -87,23 +87,23 @@ public class LogicalTable implements SourceMap, EntityChild {
      */
     public static class Builder {
 
-        private SourceConfig sourceConfig;
+        private EntityReference sourceConfig;
         private TriplesMap parent;
 
         /**
          * Constructs a Builder with the specified SourceConfig instance.
          *
-         * @param sourceConfig the source config to set on this logical table
+         * @param sourceConfig the query config to set on this logical table
          */
-        public Builder(SourceConfig sourceConfig) {
+        public Builder(EntityReference sourceConfig) {
             this.sourceConfig = checkNotNull(sourceConfig, "Payload must not be null.");
         }
 
         /**
          * Constructs a Builder with the specified LogicalTable containing the
-         * source config instance.
+         * query config instance.
          *
-         * @param logicalTable the logical table with the source config needed
+         * @param logicalTable the logical table with the query config needed
          *                     to set on this logical table
          */
         public Builder(LogicalTable logicalTable) {
@@ -122,7 +122,7 @@ public class LogicalTable implements SourceMap, EntityChild {
         }
 
         /**
-         * Builds a source config with a join query consisting of two query,
+         * Builds a query config with a join query consisting of two query,
          * table or mixed that is associated to each other through join
          * conditions.
          *
@@ -163,13 +163,13 @@ public class LogicalTable implements SourceMap, EntityChild {
 
         /**
          * Returns a prepared query using the query/table in the given source
-         * config. If the source config is a r2rml view, wrap the query before
+         * config. If the query config is a r2rml view, wrap the query before
          * returning it.
          *
          * @param sourceConfig the config to containing the query
          * @return the query prepared for further manipulation
          */
-        private String prepareQuery(SourceConfig sourceConfig) {
+        private String prepareQuery(EntityReference sourceConfig) {
             if (sourceConfig instanceof R2RMLView) {
                 return "(" + sourceConfig.getPayload() + ")";
             }

@@ -25,13 +25,13 @@ public interface InputSource {
      * @return the collection of records as EntityRecord. Else return empty
      * entity map if there is no more records to return
      */
-    EntityRecord getEntityRecord(SourceConfig sourceConfig, int batchId);
+    EntityRecord getEntityRecord(EntityReference sourceConfig, int batchId);
 
     /**
-     * Returns the number of batches to expect for a source config.
+     * Returns the number of batches to expect for a query.
      *
      * @param sourceConfig the config containing the query for this entity
      * @return the number of batches possible
      */
-    int calculateNumOfBatches(SourceConfig sourceConfig);
+    int calculateNumOfBatches(EntityReference sourceConfig);
 }

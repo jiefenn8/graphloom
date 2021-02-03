@@ -21,7 +21,7 @@ public class R2RMLFactory {
      * payload.
      *
      * @param source the payload that this logical table represents
-     * @return instance of logical table created with a source config
+     * @return instance of logical table created with a query config
      */
     public static LogicalTable createLogicalBaseTableOrView(String source) {
         return new LogicalTable.Builder(new BaseTableOrView(source)).build();
@@ -33,7 +33,7 @@ public class R2RMLFactory {
      *
      * @param source  the payload that this logical table represents
      * @param version the SQL version that this payload supports
-     * @return instance of logical table created with a source config
+     * @return instance of logical table created with a query config
      */
     public static LogicalTable createLogicalR2RMLView(String source, String version) {
         R2RMLView r2rmlView = R2RMLFactory.createR2RMLView(source, version);
