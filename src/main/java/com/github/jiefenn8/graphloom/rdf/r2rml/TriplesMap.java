@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
@@ -58,6 +59,11 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
+    public SourceMap getSourceMap() {
+        return logicalTable;
+    }
+
+    @Override
     public String getIdName() {
         return idName;
     }
@@ -82,8 +88,17 @@ public class TriplesMap implements EntityMap {
         return subjectMap.generateEntityTerm(record);
     }
 
+    @Override
+    public Resource generateEntityTerm(Entity entity) {
+        return subjectMap.generateEntityTerm(entity);
+    }
+
     public Resource generateEntityTerm(Set<JoinCondition> joins, Record record) {
         return subjectMap.generateEntityTerm(joins, record);
+    }
+
+    public Resource generateEntityTerm(Set<JoinCondition> joins, Entity entity) {
+        return subjectMap.generateEntityTerm(joins, entity);
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.PropertyMap;
 import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -55,12 +56,28 @@ public class SubjectMap implements PropertyMap, EntityChild {
         if (term.isLiteral()) {
             throw new MapperException("SubjectMap can only return IRI or BlankNode.");
         }
+        return term.asResource();
+    }
 
+    @Override
+    public Resource generateEntityTerm(Entity entity) {
+        RDFNode term = termMap.generateRDFTerm(entity);
+        if (term.isLiteral()) {
+            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        }
         return term.asResource();
     }
 
     public Resource generateEntityTerm(Set<JoinCondition> joins, Record record) {
         RDFNode term = termMap.generateRDFTerm(joins, record);
+        if (term.isLiteral()) {
+            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
+        }
+        return term.asResource();
+    }
+
+    public Resource generateEntityTerm(Set<JoinCondition> joins, Entity entity) {
+        RDFNode term = termMap.generateRDFTerm(joins, entity);
         if (term.isLiteral()) {
             throw new MapperException("SubjectMap can only return IRI or BlankNode.");
         }

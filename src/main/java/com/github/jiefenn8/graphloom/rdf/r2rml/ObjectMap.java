@@ -9,6 +9,7 @@ import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.RDFNode;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -51,5 +52,10 @@ public class ObjectMap implements NodeMap, EntityChild {
     @Override
     public RDFNode generateNodeTerm(Record record) {
         return termMap.generateRDFTerm(record);
+    }
+
+    @Override
+    public RDFNode generateNodeTerm(Entity entity) {
+        return termMap.generateRDFTerm(entity);
     }
 }

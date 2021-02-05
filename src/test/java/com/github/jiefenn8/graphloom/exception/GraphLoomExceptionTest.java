@@ -17,7 +17,7 @@ import org.junit.rules.ExpectedException;
 public class GraphLoomExceptionTest {
 
     @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
+    public final ExpectedException exceptionRule = ExpectedException.none();
 
     @Test
     public void GivenMessage_WhenThrow_ThenThrowWithMessage() {

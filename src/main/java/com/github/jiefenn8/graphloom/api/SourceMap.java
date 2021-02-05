@@ -5,6 +5,9 @@
 
 package com.github.jiefenn8.graphloom.api;
 
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -38,4 +41,29 @@ public interface SourceMap {
      * @return the collection of records for an entity
      */
     EntityRecord getEntityRecord(int batchId);
+
+    /**
+     * Returns the {@link EntityReference} associated with this instance. Every
+     * instance should have a reference containing the required information to
+     * locate the specific data from the source to map into an entity.
+     *
+     * @return the reference containing information to locate entity data
+     */
+    EntityReference getEntityReference();
+
+    /**
+     * Iterates through the received collection of entities from source and
+     * apply any defined actions to each entity.
+     *
+     * @param inputSource containing the data source to query
+     * @param action      to apply to each entity found
+     */
+    default void forEachEntity(InputSource inputSource, Consumer<Entity> action) {
+        Objects.requireNonNull(action);
+        inputSource.executeEntityQuery(getEntityReference(), (r) -> {
+            while (r.hasNext()) {
+                action.accept(r.nextEntity());
+            }
+        });
+    }
 }

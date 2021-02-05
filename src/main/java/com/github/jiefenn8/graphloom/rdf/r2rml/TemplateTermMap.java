@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -54,6 +55,18 @@ public class TemplateTermMap implements TermMap {
     }
 
     @Override
+    public RDFNode generateRDFTerm(Entity entity) {
+        checkNotNull(entity, "Record is null.");
+        Matcher matcher = pattern.matcher(template);
+        if (!matcher.find()) {
+            throw new MapperException("Template given cannot be matched. Must have: {name}.");
+        }
+
+        String value = entity.getPropertyValue(matcher.group(1));
+        return value == null ? null : createRDFTerm(template, matcher, value);
+    }
+
+    @Override
     public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
         checkNotNull(record, "Record is null.");
         Matcher matcher = pattern.matcher(template);
@@ -72,7 +85,27 @@ public class TemplateTermMap implements TermMap {
         String value = record.getPropertyValue(alt);
         return value == null ? null : createRDFTerm(template, matcher, value);
     }
-    
+
+    @Override
+    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
+        checkNotNull(entity, "Record is null.");
+        Matcher matcher = pattern.matcher(template);
+        if (!matcher.find()) {
+            throw new MapperException("Template given cannot be matched. Must have: {name}.");
+        }
+
+        String alt = "";
+        for (JoinCondition join : joins) {
+            String parent = join.getParent();
+            if (parent.equals(matcher.group(1))) {
+                alt = join.getChild();
+            }
+        }
+
+        String value = entity.getPropertyValue(alt);
+        return value == null ? null : createRDFTerm(template, matcher, value);
+    }
+
     private RDFNode createRDFTerm(@NonNull String template, @NonNull Matcher matcher, @NonNull String value) {
         String term = template.replace(matcher.group(0), value);
         return RDFTermHelper.asRDFTerm(term, termType);

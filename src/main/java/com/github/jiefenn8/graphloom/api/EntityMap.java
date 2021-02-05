@@ -23,6 +23,14 @@ public interface EntityMap extends PropertyMap {
     SourceMap applySource(InputSource inputSource);
 
     /**
+     * Returns the source map that has the information and data required to
+     * map into graph.
+     *
+     * @return the source map associated with this entity map
+     */
+    SourceMap getSourceMap();
+
+    /**
      * Returns the unique id name that identify this entity map.
      *
      * @return unique id name of this entity map
