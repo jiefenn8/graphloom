@@ -5,7 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.google.common.collect.ImmutableList;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -35,11 +35,11 @@ public class TermMapTest {
 
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
-    @Mock private Record mockRecord;
+    @Mock private Entity mockEntity;
 
     @Before
     public void setUp() {
-        when(mockRecord.getPropertyValue(any())).thenReturn("VALUE");
+        when(mockEntity.getPropertyValue(any())).thenReturn("VALUE");
     }
 
     public List<TermMap> termMapParameters() {
@@ -52,7 +52,7 @@ public class TermMapTest {
     @Test
     @Parameters(method = "termMapParameters")
     public void GivenTermMap_WhenGenerateRDFTerm_ThenReturnRDFNode(TermMap termMap) {
-        RDFNode result = termMap.generateRDFTerm(mockRecord);
+        RDFNode result = termMap.generateRDFTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }
 }
