@@ -35,7 +35,7 @@ public class RDFMapperTest {
     private RDFMapper rdfMapper;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         //SUT instance creation
         rdfMapper = new RDFMapper();
 
