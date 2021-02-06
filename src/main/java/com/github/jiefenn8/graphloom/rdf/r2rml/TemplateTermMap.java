@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
@@ -43,18 +42,6 @@ public class TemplateTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record record) {
-        checkNotNull(record, "Record is null.");
-        Matcher matcher = pattern.matcher(template);
-        if (!matcher.find()) {
-            throw new MapperException("Template given cannot be matched. Must have: {name}.");
-        }
-
-        String value = record.getPropertyValue(matcher.group(1));
-        return value == null ? null : createRDFTerm(template, matcher, value);
-    }
-
-    @Override
     public RDFNode generateRDFTerm(Entity entity) {
         checkNotNull(entity, "Record is null.");
         Matcher matcher = pattern.matcher(template);
@@ -63,26 +50,6 @@ public class TemplateTermMap implements TermMap {
         }
 
         String value = entity.getPropertyValue(matcher.group(1));
-        return value == null ? null : createRDFTerm(template, matcher, value);
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
-        checkNotNull(record, "Record is null.");
-        Matcher matcher = pattern.matcher(template);
-        if (!matcher.find()) {
-            throw new MapperException("Template given cannot be matched. Must have: {name}.");
-        }
-
-        String alt = "";
-        for (JoinCondition join : joins) {
-            String parent = join.getParent();
-            if (parent.equals(matcher.group(1))) {
-                alt = join.getChild();
-            }
-        }
-
-        String value = record.getPropertyValue(alt);
         return value == null ? null : createRDFTerm(template, matcher, value);
     }
 

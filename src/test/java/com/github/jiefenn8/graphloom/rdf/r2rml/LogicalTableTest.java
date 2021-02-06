@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityRecord;
 import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.api.SourceMap;
@@ -16,17 +15,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit test class for {@link LogicalTable}.
@@ -44,15 +40,6 @@ public class LogicalTableTest {
     public void GivenInputSource_WhenLoadInputSource_ThenReturnSourceMap() {
         logicalTable = new LogicalTable.Builder(mockEntityReference).build();
         SourceMap result = logicalTable.loadInputSource(mockInputSource);
-        assertThat(result, is(notNullValue()));
-    }
-
-    @Test
-    public void GivenBatchId_WhenGetEntityRecord_ThenReturnEntityRecord() {
-        when(mockInputSource.getEntityRecord(any(), anyInt())).thenReturn(mock(EntityRecord.class));
-        logicalTable = new LogicalTable.Builder(mockEntityReference).build();
-        logicalTable.loadInputSource(mockInputSource);
-        EntityRecord result = logicalTable.getEntityRecord(0);
         assertThat(result, is(notNullValue()));
     }
 

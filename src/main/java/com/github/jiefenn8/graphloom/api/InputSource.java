@@ -16,32 +16,6 @@ import java.util.function.Consumer;
 public interface InputSource {
 
     /**
-     * Returns a collection of record for an entity containing data
-     * representing it properties and their values. If the query result
-     * is a large data-set, the InputSource may split the result and return
-     * several batches of the result. The retrieval of specific batch can be
-     * controlled by specifying the seq number.
-     * E.g. 2000 items, fetch size of 500 = 4 batches; batch 2 will be the 2nd
-     * collection of data.
-     *
-     * @param sourceConfig the config containing the query for this entity
-     * @param batchId      the batch with the given id to retrieve
-     * @return the collection of records as EntityRecord. Else return empty
-     * entity map if there is no more records to return
-     */
-    @Deprecated
-    EntityRecord getEntityRecord(EntityReference sourceConfig, int batchId);
-
-    /**
-     * Returns the number of batches to expect for a query.
-     *
-     * @param sourceConfig the config containing the query for this entity
-     * @return the number of batches possible
-     */
-    @Deprecated
-    int calculateNumOfBatches(EntityReference sourceConfig);
-
-    /**
      * Execute the reference or query in {@link EntityReference} to obtain
      * relevant data as {@link EntityResult} and apply any action to it.
      *

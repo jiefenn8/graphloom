@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.RDFNode;
 
@@ -33,18 +32,8 @@ public class ConstTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record record) {
-        return constTerm;
-    }
-
-    @Override
     public RDFNode generateRDFTerm(Entity entity) {
         return constTerm;
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
-        return generateRDFTerm(record);
     }
 
     @Override

@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
@@ -40,27 +39,8 @@ public class ColumnTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record record) {
-        String value = record.getPropertyValue(columnName);
-        return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
-    }
-
-    @Override
     public RDFNode generateRDFTerm(Entity entity) {
         String value = entity.getPropertyValue(columnName);
-        return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
-        String alt = StringUtils.EMPTY;
-        for (JoinCondition join : joins) {
-            if (join.getParent().equals(columnName)) {
-                alt = join.getChild();
-            }
-        }
-
-        String value = record.getPropertyValue(alt);
         return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
     }
 

@@ -7,7 +7,6 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.Property;
@@ -34,12 +33,6 @@ public class PredicateMap implements RelationMap, EntityChild {
      */
     protected PredicateMap(TermMap termMap) {
         this.termMap = checkNotNull(termMap, "Term map must not be null.");
-    }
-
-    @Override
-    public Property generateRelationTerm(Record record) {
-        Resource term = termMap.generateRDFTerm(record).asResource();
-        return ResourceFactory.createProperty(term.getURI());
     }
 
     @Override

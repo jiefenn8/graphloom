@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.Literal;
@@ -35,7 +34,6 @@ public class SubjectMapTest {
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
 
     private SubjectMap subjectMap;
-    @Mock private Record mockRecord;
     @Mock private Entity mockEntity;
     @Mock private TermMap mockTermMap;
 
@@ -49,31 +47,12 @@ public class SubjectMapTest {
     //generateEntityTerm
 
     @Test
-    public void GivenNoRecord_WhenGenerateEntityTerm_ThenPassException() {
-        when(mockTermMap.generateRDFTerm((Record) isNull())).thenThrow(new NullPointerException("Record is null."));
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Record is null.");
-        subjectMap = new SubjectMap(mockTermMap);
-        subjectMap.generateEntityTerm((Record) null);
-    }
-
-    @Test
     public void GivenNoEntity_WhenGenerateEntityTerm_ThenPassException() {
-        when(mockTermMap.generateRDFTerm((Entity) isNull())).thenThrow(new NullPointerException("Record is null."));
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
         exceptionRule.expect(NullPointerException.class);
         exceptionRule.expectMessage("Record is null.");
         subjectMap = new SubjectMap(mockTermMap);
-        subjectMap.generateEntityTerm((Entity) null);
-    }
-
-    @Test
-    public void GivenRecord_WhenGenerateEntityTerm_ThenReturnResource() {
-        Resource mockResource = mock(Resource.class);
-        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockResource);
-        when(mockResource.asResource()).thenReturn(mockResource);
-        subjectMap = new SubjectMap(mockTermMap);
-        Resource result = subjectMap.generateEntityTerm(mockRecord);
-        assertThat(result, is(notNullValue()));
+        subjectMap.generateEntityTerm(null);
     }
 
     @Test
@@ -84,18 +63,6 @@ public class SubjectMapTest {
         subjectMap = new SubjectMap(mockTermMap);
         Resource result = subjectMap.generateEntityTerm(mockEntity);
         assertThat(result, is(notNullValue()));
-    }
-
-    @Test
-    public void GivenRecord_WhenGenerateEntityTermIsLiteral_ThenThrowException() {
-        exceptionRule.expect(MapperException.class);
-        exceptionRule.expectMessage("SubjectMap can only return IRI or BlankNode.");
-        Literal mockLiteral = mock(Literal.class);
-        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockLiteral);
-        when(mockLiteral.isLiteral()).thenReturn(true);
-
-        subjectMap = new SubjectMap(mockTermMap);
-        subjectMap.generateEntityTerm(mockRecord);
     }
 
     @Test

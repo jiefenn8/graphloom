@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 
-import com.github.jiefenn8.graphloom.api.MutableRecord;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.google.common.collect.ImmutableList;
@@ -97,17 +96,6 @@ public class TriplesMapTest {
     }
 
     //Test delegate method are called.
-
-    @Test
-    public void WhenGenerateEntity_ThenVerifyCall() {
-        triplesMap = new TriplesMap
-                .Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap)
-                .build();
-
-        triplesMap.generateEntityTerm(mock(MutableRecord.class));
-
-        verify(mockSubjectMap, times(1)).generateEntityTerm(any(MutableRecord.class));
-    }
 
     @Test
     public void WhenGenerateEntity_ThenVerifyEntityCall() {

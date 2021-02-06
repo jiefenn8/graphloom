@@ -7,14 +7,12 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.base.Preconditions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -55,11 +53,6 @@ public class LogicalTable implements SourceMap, EntityChild {
     }
 
     @Override
-    public EntityRecord getEntityRecord(int batchId) {
-        return inputSource.getEntityRecord(entityReference, batchId);
-    }
-
-    @Override
     public EntityReference getEntityReference() {
         return entityReference;
     }
@@ -68,18 +61,6 @@ public class LogicalTable implements SourceMap, EntityChild {
     public SourceMap loadInputSource(InputSource inputSource) {
         this.inputSource = inputSource;
         return this;
-    }
-
-    @Override
-    public void forEachEntityRecord(Consumer<Record> action) {
-        Preconditions.checkNotNull(action);
-        int totalBatch = inputSource.calculateNumOfBatches(entityReference);
-        for (int batchId = 0; batchId < totalBatch; batchId++) {
-            EntityRecord entityRecord = getEntityRecord(batchId);
-            for (Record record : entityRecord) {
-                action.accept(record);
-            }
-        }
     }
 
     @Override

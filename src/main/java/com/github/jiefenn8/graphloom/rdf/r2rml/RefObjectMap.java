@@ -8,7 +8,6 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
-import com.github.jiefenn8.graphloom.api.Record;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.google.common.collect.ImmutableSet;
@@ -85,15 +84,6 @@ public class RefObjectMap implements NodeMap, EntityChild {
     @Override
     public EntityMap getEntityMap() {
         return parent;
-    }
-
-    @Override
-    public RDFNode generateNodeTerm(Record record) {
-        RDFNode term = parentTriplesMap.generateEntityTerm(joinConditions, record);
-        if (term.isLiteral()) {
-            throw new MapperException("RefObjectMap should only return IRI.");
-        }
-        return term.asResource();
     }
 
     @Override
