@@ -32,6 +32,7 @@ public interface SourceMap {
      *
      * @param action the action to perform on each record
      */
+    @Deprecated
     void forEachEntityRecord(Consumer<Record> action);
 
     /**
@@ -40,6 +41,7 @@ public interface SourceMap {
      *
      * @return the collection of records for an entity
      */
+    @Deprecated
     EntityRecord getEntityRecord(int batchId);
 
     /**

@@ -12,6 +12,7 @@ import java.util.Set;
  * This interface defines the base method to manage a collection of
  * properties with their values as Strings.
  */
+@Deprecated
 public interface Record {
 
     /**

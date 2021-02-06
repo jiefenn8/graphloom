@@ -29,6 +29,7 @@ public interface InputSource {
      * @return the collection of records as EntityRecord. Else return empty
      * entity map if there is no more records to return
      */
+    @Deprecated
     EntityRecord getEntityRecord(EntityReference sourceConfig, int batchId);
 
     /**
@@ -37,6 +38,7 @@ public interface InputSource {
      * @param sourceConfig the config containing the query for this entity
      * @return the number of batches possible
      */
+    @Deprecated
     int calculateNumOfBatches(EntityReference sourceConfig);
 
     /**

@@ -9,6 +9,7 @@ package com.github.jiefenn8.graphloom.api;
  * This interface defines the base methods to manage a collection that contains
  * multiple record with the same properties.
  */
+@Deprecated
 public interface EntityRecord extends Iterable<Record> {
 
     /**
