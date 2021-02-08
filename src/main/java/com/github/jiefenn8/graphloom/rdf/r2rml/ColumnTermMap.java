@@ -15,7 +15,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This interface defines the base methods that manages the mapping of any
- * source record to their respective rdf term through the use of a column
+ * source entity to their respective rdf term through the use of a column
  * to locate the term value.
  */
 public class ColumnTermMap implements TermMap {

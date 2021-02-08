@@ -29,7 +29,7 @@ public interface EntityReference {
 
     /**
      * Returns a definition that defines how to iterate through each
-     * record of Entity result.
+     * entity in result.
      *
      * @return the value containing the iteration definition
      */

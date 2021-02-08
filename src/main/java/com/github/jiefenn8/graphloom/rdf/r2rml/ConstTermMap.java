@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This interface defines the base methods that manages the mapping of any
- * source record to their respective rdf term through the use of a constant
+ * source entity to their respective rdf term through the use of a constant
  * term.
  */
 public class ConstTermMap implements TermMap {

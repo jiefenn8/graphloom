@@ -18,7 +18,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 
 /**
  * This interface defines the base methods that manages the mapping of any
- * source record to their respective rdf term through the use of template.
+ * source entity to their respective rdf term through the use of template.
  */
 public class TemplateTermMap implements TermMap {
 
