@@ -48,9 +48,9 @@ public class SubjectMapTest {
 
     @Test
     public void GivenNoEntity_WhenGenerateEntityTerm_ThenPassException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
         exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Record is null.");
+        exceptionRule.expectMessage("Entity is null.");
         subjectMap = new SubjectMap(mockTermMap);
         subjectMap.generateEntityTerm(null);
     }

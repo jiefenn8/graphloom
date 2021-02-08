@@ -46,9 +46,9 @@ public class PredicateMapTest {
 
     @Test
     public void GivenNoEntity_WhenGenerateRelationTerm_ThenThrowException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
         exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Record is null.");
+        exceptionRule.expectMessage("Entity is null.");
         predicateMap = new PredicateMap(mockTermMap);
         predicateMap.generateRelationTerm(null);
     }

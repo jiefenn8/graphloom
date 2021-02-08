@@ -43,7 +43,7 @@ public class TemplateTermMap implements TermMap {
 
     @Override
     public RDFNode generateRDFTerm(Entity entity) {
-        checkNotNull(entity, "Record is null.");
+        checkNotNull(entity, "Entity is null.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
             throw new MapperException("Template given cannot be matched. Must have: {name}.");
@@ -55,7 +55,7 @@ public class TemplateTermMap implements TermMap {
 
     @Override
     public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
-        checkNotNull(entity, "Record is null.");
+        checkNotNull(entity, "Entity is null.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
             throw new MapperException("Template given cannot be matched. Must have: {name}.");
