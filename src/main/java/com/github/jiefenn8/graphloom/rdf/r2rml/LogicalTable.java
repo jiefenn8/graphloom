@@ -58,12 +58,6 @@ public class LogicalTable implements SourceMap, EntityChild {
     }
 
     @Override
-    public SourceMap loadInputSource(InputSource inputSource) {
-        this.inputSource = inputSource;
-        return this;
-    }
-
-    @Override
     public EntityMap getEntityMap() {
         return parent;
     }

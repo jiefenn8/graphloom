@@ -54,11 +54,6 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public SourceMap applySource(InputSource inputSource) {
-        return logicalTable.loadInputSource(inputSource);
-    }
-
-    @Override
     public SourceMap getSourceMap() {
         return logicalTable;
     }

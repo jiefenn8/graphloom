@@ -34,14 +34,6 @@ public class LogicalTableTest {
 
     private LogicalTable logicalTable;
     @Mock private EntityReference mockEntityReference;
-    @Mock private InputSource mockInputSource;
-
-    @Test
-    public void GivenInputSource_WhenLoadInputSource_ThenReturnSourceMap() {
-        logicalTable = new LogicalTable.Builder(mockEntityReference).build();
-        SourceMap result = logicalTable.loadInputSource(mockInputSource);
-        assertThat(result, is(notNullValue()));
-    }
 
     @Test
     public void GivenNullEntityReference_WhenBuildInstance_ThenThrowException() {

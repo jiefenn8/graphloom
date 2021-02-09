@@ -14,15 +14,6 @@ import java.util.Set;
 public interface EntityMap extends PropertyMap {
 
     /**
-     * Returns the source map after applying input source with the entity
-     * map in preparation for the retrieval calls of entity record.
-     *
-     * @param inputSource the source to apply to mapping configs
-     * @return the source map ready to be queried and iterated on
-     */
-    SourceMap applySource(InputSource inputSource);
-
-    /**
      * Returns the source map that has the information and data required to
      * map into graph.
      *
