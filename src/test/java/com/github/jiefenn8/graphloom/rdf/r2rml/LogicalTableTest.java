@@ -6,8 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityReference;
-import com.github.jiefenn8.graphloom.api.InputSource;
-import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Rule;
