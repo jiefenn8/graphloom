@@ -5,15 +5,15 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.InputSourceConfig;
-import com.github.jiefenn8.graphloom.api.SourceConfig;
+import com.github.jiefenn8.graphloom.api.BaseEntityReference;
+import com.github.jiefenn8.graphloom.api.EntityReference;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * This class extends the base methods of the {@link InputSourceConfig} to manage
+ * This class extends the base methods of the {@link BaseEntityReference} to manage
  * configuration to only handle SQL retrieval through the use of custom SQL query.
  */
-public class R2RMLView extends InputSourceConfig implements SourceConfig {
+public class R2RMLView extends BaseEntityReference implements EntityReference {
 
     /**
      * Constructs a R2RMLView with the specified custom SQL query as the source

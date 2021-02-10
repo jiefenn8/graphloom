@@ -5,8 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.MutableRecord;
-import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.junit.Rule;
@@ -33,7 +32,7 @@ public class PredicateMapTest {
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
 
     private PredicateMap predicateMap;
-    @Mock private MutableRecord mockRecord;
+    @Mock private Entity mockEntity;
     @Mock private TermMap mockTermMap;
 
     @Test
@@ -46,22 +45,22 @@ public class PredicateMapTest {
     //generateRelationTerm
 
     @Test
-    public void GivenNoRecord_WhenGenerateRelationTerm_ThenThrowException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
+    public void GivenNoEntity_WhenGenerateRelationTerm_ThenThrowException() {
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
         exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Record is null.");
+        exceptionRule.expectMessage("Entity is null.");
         predicateMap = new PredicateMap(mockTermMap);
         predicateMap.generateRelationTerm(null);
     }
 
     @Test
-    public void GivenRecord_WhenGenerateRelationTerm_ThenReturnProperty() {
+    public void GivenEntity_WhenGenerateRelationTerm_ThenReturnProperty() {
         Resource mockResource = mock(Resource.class);
-        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockResource);
+        when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockResource);
         when(mockResource.asResource()).thenReturn(mockResource);
         when(mockResource.getURI()).thenReturn("RELATION_TERM");
         predicateMap = new PredicateMap(mockTermMap);
-        Property result = predicateMap.generateRelationTerm(mockRecord);
+        Property result = predicateMap.generateRelationTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }
 }

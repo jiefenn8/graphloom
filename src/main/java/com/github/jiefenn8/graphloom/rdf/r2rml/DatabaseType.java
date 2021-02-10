@@ -5,7 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import static com.github.jiefenn8.graphloom.api.SourceConfig.PayloadType;
+import static com.github.jiefenn8.graphloom.api.EntityReference.PayloadType;
 
 /**
  * This enumeration defines the base database types possible for identifying a

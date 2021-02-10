@@ -5,8 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.MutableRecord;
-import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -34,7 +33,7 @@ public class ObjectMapTest {
     @Rule public ExpectedException exceptionRule = ExpectedException.none();
 
     private ObjectMap objectMap;
-    @Mock private MutableRecord mockRecord;
+    @Mock private Entity mockEntity;
     @Mock private TermMap mockTermMap;
 
     @Test
@@ -47,29 +46,29 @@ public class ObjectMapTest {
     //generateNodeTerm()
 
     @Test
-    public void GivenNoRecord_WhenGenerateNodeTerm_ThenThrowException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Record is null."));
+    public void GivenNoEntity_WhenGenerateNodeTerm_ThenThrowException() {
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
         exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Record is null.");
+        exceptionRule.expectMessage("Entity is null.");
         objectMap = new ObjectMap(mockTermMap);
         objectMap.generateNodeTerm(null);
     }
 
     @Test
-    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnResource() {
+    public void GivenEntity_WhenGenerateNodeTerm_ThenReturnResource() {
         Resource mockResource = mock(Resource.class);
-        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockResource);
+        when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockResource);
         objectMap = new ObjectMap(mockTermMap);
-        RDFNode result = objectMap.generateNodeTerm(mockRecord);
+        RDFNode result = objectMap.generateNodeTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
-    public void GivenRecord_WhenGenerateNodeTerm_ThenReturnLiteral() {
+    public void GivenEntity_WhenGenerateNodeTerm_ThenReturnLiteral() {
         Literal mockLiteral = mock(Literal.class);
-        when(mockTermMap.generateRDFTerm(any(Record.class))).thenReturn(mockLiteral);
+        when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockLiteral);
         objectMap = new ObjectMap(mockTermMap);
-        RDFNode result = objectMap.generateNodeTerm(mockRecord);
+        RDFNode result = objectMap.generateNodeTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }
 }

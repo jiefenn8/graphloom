@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.tuple.Pair;
@@ -42,7 +43,7 @@ public class TriplesMap implements EntityMap {
     }
 
     /**
-     * Returns true if this instance logical table source config is equal to the
+     * Returns true if this instance logical table query config is equal to the
      * given logical table.
      *
      * @param logicalTable logical table to compare
@@ -53,8 +54,8 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public SourceMap applySource(InputSource inputSource) {
-        return logicalTable.loadInputSource(inputSource);
+    public SourceMap getSourceMap() {
+        return logicalTable;
     }
 
     @Override
@@ -78,12 +79,12 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public Resource generateEntityTerm(Record record) {
-        return subjectMap.generateEntityTerm(record);
+    public Resource generateEntityTerm(Entity entity) {
+        return subjectMap.generateEntityTerm(entity);
     }
 
-    public Resource generateEntityTerm(Set<JoinCondition> joins, Record record) {
-        return subjectMap.generateEntityTerm(joins, record);
+    public Resource generateEntityTerm(Set<JoinCondition> joins, Entity entity) {
+        return subjectMap.generateEntityTerm(joins, entity);
     }
 
     @Override

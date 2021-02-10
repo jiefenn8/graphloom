@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Implementation of {@link SourceConfig} interface.
+ * Implementation of {@link EntityReference} interface.
  */
-public class InputSourceConfig implements SourceConfig {
+public class BaseEntityReference implements EntityReference {
 
     private final PayloadType payloadType;
     private final String payload;
@@ -29,7 +29,7 @@ public class InputSourceConfig implements SourceConfig {
      * @param payloadType the type of payload given
      * @param iteratorDef the definition to iterate each row of results
      */
-    protected InputSourceConfig(String payload, PayloadType payloadType, String iteratorDef) {
+    protected BaseEntityReference(String payload, PayloadType payloadType, String iteratorDef) {
         this.payload = Preconditions.checkNotNull(payload, "Payload must not be null.");
         this.payloadType = Preconditions.checkNotNull(payloadType, "Payload type must not be null.");
         this.iteratorDef = Preconditions.checkNotNull(iteratorDef, "Iterator definition must not be null.");
@@ -39,7 +39,7 @@ public class InputSourceConfig implements SourceConfig {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
-        InputSourceConfig that = (InputSourceConfig) obj;
+        BaseEntityReference that = (BaseEntityReference) obj;
         return Objects.equals(payloadType, that.payloadType) &&
                 Objects.equals(payload, that.payload) &&
                 Objects.equals(iteratorDef, that.iteratorDef) &&

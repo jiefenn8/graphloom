@@ -14,13 +14,12 @@ import java.util.Set;
 public interface EntityMap extends PropertyMap {
 
     /**
-     * Returns the source map after applying input source with the entity
-     * map in preparation for the retrieval calls of entity record.
+     * Returns the source map that has the information and data required to
+     * map into graph.
      *
-     * @param inputSource the source to apply to mapping configs
-     * @return the source map ready to be queried and iterated on
+     * @return the source map associated with this entity map
      */
-    SourceMap applySource(InputSource inputSource);
+    SourceMap getSourceMap();
 
     /**
      * Returns the unique id name that identify this entity map.

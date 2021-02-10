@@ -5,16 +5,16 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.InputSourceConfig;
-import com.github.jiefenn8.graphloom.api.SourceConfig;
+import com.github.jiefenn8.graphloom.api.BaseEntityReference;
+import com.github.jiefenn8.graphloom.api.EntityReference;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * This class extends the base methods of the {@link InputSourceConfig} to manage
+ * This class extends the base methods of the {@link BaseEntityReference} to manage
  * configuration to only handle SQL retrieval through the use of base table or
  * view  name.
  */
-public class BaseTableOrView extends InputSourceConfig implements SourceConfig {
+public class BaseTableOrView extends BaseEntityReference implements EntityReference {
 
     /**
      * Constructs a BaseTableOrView with the specified SQL table or view name

@@ -7,14 +7,12 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.*;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.base.Preconditions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,7 +24,7 @@ public class LogicalTable implements SourceMap, EntityChild {
     private static final Logger logger = LogManager.getLogger();
 
     private final TriplesMap parent;
-    private final SourceConfig sourceConfig;
+    private final EntityReference entityReference;
     private InputSource inputSource;
 
     /**
@@ -37,7 +35,7 @@ public class LogicalTable implements SourceMap, EntityChild {
      */
     private LogicalTable(Builder builder) {
         checkNotNull(builder);
-        sourceConfig = builder.sourceConfig;
+        entityReference = builder.entityReference;
         parent = builder.parent;
     }
 
@@ -46,35 +44,17 @@ public class LogicalTable implements SourceMap, EntityChild {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         LogicalTable that = (LogicalTable) obj;
-        return Objects.equals(sourceConfig, that.sourceConfig);
+        return Objects.equals(entityReference, that.entityReference);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sourceConfig);
+        return Objects.hash(entityReference);
     }
 
     @Override
-    public EntityRecord getEntityRecord(int batchId) {
-        return inputSource.getEntityRecord(sourceConfig, batchId);
-    }
-
-    @Override
-    public SourceMap loadInputSource(InputSource inputSource) {
-        this.inputSource = inputSource;
-        return this;
-    }
-
-    @Override
-    public void forEachEntityRecord(Consumer<Record> action) {
-        Preconditions.checkNotNull(action);
-        int totalBatch = inputSource.calculateNumOfBatches(sourceConfig);
-        for (int batchId = 0; batchId < totalBatch; batchId++) {
-            EntityRecord entityRecord = getEntityRecord(batchId);
-            for (Record record : entityRecord) {
-                action.accept(record);
-            }
-        }
+    public EntityReference getEntityReference() {
+        return entityReference;
     }
 
     @Override
@@ -87,27 +67,27 @@ public class LogicalTable implements SourceMap, EntityChild {
      */
     public static class Builder {
 
-        private SourceConfig sourceConfig;
+        private EntityReference entityReference;
         private TriplesMap parent;
 
         /**
          * Constructs a Builder with the specified SourceConfig instance.
          *
-         * @param sourceConfig the source config to set on this logical table
+         * @param entityReference the query config to set on this logical table
          */
-        public Builder(SourceConfig sourceConfig) {
-            this.sourceConfig = checkNotNull(sourceConfig, "Payload must not be null.");
+        public Builder(EntityReference entityReference) {
+            this.entityReference = checkNotNull(entityReference, "Payload must not be null.");
         }
 
         /**
          * Constructs a Builder with the specified LogicalTable containing the
-         * source config instance.
+         * query config instance.
          *
-         * @param logicalTable the logical table with the source config needed
+         * @param logicalTable the logical table with the query config needed
          *                     to set on this logical table
          */
         public Builder(LogicalTable logicalTable) {
-            this.sourceConfig = checkNotNull(logicalTable.sourceConfig, "Payload must not be null.");
+            this.entityReference = checkNotNull(logicalTable.entityReference, "Payload must not be null.");
         }
 
         /**
@@ -122,7 +102,7 @@ public class LogicalTable implements SourceMap, EntityChild {
         }
 
         /**
-         * Builds a source config with a join query consisting of two query,
+         * Builds a query config with a join query consisting of two query,
          * table or mixed that is associated to each other through join
          * conditions.
          *
@@ -137,11 +117,11 @@ public class LogicalTable implements SourceMap, EntityChild {
                 throw new MapperException(message);
             }
 
-            String jointQuery = "SELECT child.* FROM " + prepareQuery(sourceConfig) + " AS child, ";
-            jointQuery += prepareQuery(logicalTable.sourceConfig) + " AS parent";
+            String jointQuery = "SELECT child.* FROM " + prepareQuery(entityReference) + " AS child, ";
+            jointQuery += prepareQuery(logicalTable.entityReference) + " AS parent";
             jointQuery += " WHERE " + buildJoinStatement(joinConditions.iterator());
-            String parentVersion = sourceConfig.getProperty("sqlVersion");
-            this.sourceConfig = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
+            String parentVersion = entityReference.getProperty("sqlVersion");
+            this.entityReference = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
             return this;
         }
 
@@ -163,13 +143,13 @@ public class LogicalTable implements SourceMap, EntityChild {
 
         /**
          * Returns a prepared query using the query/table in the given source
-         * config. If the source config is a r2rml view, wrap the query before
+         * config. If the query config is a r2rml view, wrap the query before
          * returning it.
          *
          * @param sourceConfig the config to containing the query
          * @return the query prepared for further manipulation
          */
-        private String prepareQuery(SourceConfig sourceConfig) {
+        private String prepareQuery(EntityReference sourceConfig) {
             if (sourceConfig instanceof R2RMLView) {
                 return "(" + sourceConfig.getPayload() + ")";
             }

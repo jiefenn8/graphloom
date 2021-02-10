@@ -10,7 +10,7 @@ package com.github.jiefenn8.graphloom.api;
  * payload and its related properties for consumption by the input
  * source.
  */
-public interface SourceConfig {
+public interface EntityReference {
 
     /**
      * Returns the payload type of this class.
@@ -29,14 +29,14 @@ public interface SourceConfig {
 
     /**
      * Returns a definition that defines how to iterate through each
-     * record of Entity result.
+     * entity in result.
      *
      * @return the value containing the iteration definition
      */
     String getIteratorDef();
 
     /**
-     * Returns the value of a property in this source config.
+     * Returns the value of a property in this configuration
      *
      * @param propertyName the given property name to retrieve its value
      * @return the value of the given property otherwise null
@@ -52,7 +52,7 @@ public interface SourceConfig {
 
     /**
      * This interface defines the base methods to manage the type of payload
-     * the source config can be.
+     * the query or reference can be.
      */
     interface PayloadType {
     }

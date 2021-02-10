@@ -5,7 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Set;
@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This interface defines the base methods that manages the mapping of any
- * source record to their respective rdf term through the use of a constant
+ * source entity to their respective rdf term through the use of a constant
  * term.
  */
 public class ConstTermMap implements TermMap {
@@ -32,12 +32,12 @@ public class ConstTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record record) {
+    public RDFNode generateRDFTerm(Entity entity) {
         return constTerm;
     }
 
     @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
-        return generateRDFTerm(record);
+    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
+        return generateRDFTerm(entity);
     }
 }

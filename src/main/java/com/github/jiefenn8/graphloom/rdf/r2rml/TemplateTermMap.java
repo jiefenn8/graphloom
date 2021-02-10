@@ -5,7 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.Record;
+import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -18,7 +18,7 @@ import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotN
 
 /**
  * This interface defines the base methods that manages the mapping of any
- * source record to their respective rdf term through the use of template.
+ * source entity to their respective rdf term through the use of template.
  */
 public class TemplateTermMap implements TermMap {
 
@@ -42,20 +42,20 @@ public class TemplateTermMap implements TermMap {
     }
 
     @Override
-    public RDFNode generateRDFTerm(Record record) {
-        checkNotNull(record, "Record is null.");
+    public RDFNode generateRDFTerm(Entity entity) {
+        checkNotNull(entity, "Entity is null.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
             throw new MapperException("Template given cannot be matched. Must have: {name}.");
         }
 
-        String value = record.getPropertyValue(matcher.group(1));
+        String value = entity.getPropertyValue(matcher.group(1));
         return value == null ? null : createRDFTerm(template, matcher, value);
     }
 
     @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Record record) {
-        checkNotNull(record, "Record is null.");
+    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
+        checkNotNull(entity, "Entity is null.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
             throw new MapperException("Template given cannot be matched. Must have: {name}.");
@@ -69,10 +69,10 @@ public class TemplateTermMap implements TermMap {
             }
         }
 
-        String value = record.getPropertyValue(alt);
+        String value = entity.getPropertyValue(alt);
         return value == null ? null : createRDFTerm(template, matcher, value);
     }
-    
+
     private RDFNode createRDFTerm(@NonNull String template, @NonNull Matcher matcher, @NonNull String value) {
         String term = template.replace(matcher.group(0), value);
         return RDFTermHelper.asRDFTerm(term, termType);

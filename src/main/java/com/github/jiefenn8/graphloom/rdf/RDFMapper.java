@@ -38,7 +38,6 @@ public class RDFMapper implements GraphMapper {
 
         Model outputGraph = ModelFactory.createDefaultModel();
         outputGraph.setNsPrefixes(configMaps.getNamespaceMap());
-
         return outputGraph.add(mapSource(inputSource, configMaps.getEntityMaps()));
     }
 
@@ -48,12 +47,11 @@ public class RDFMapper implements GraphMapper {
      *
      * @param source      the source to map over to RDF triples
      * @param triplesMaps the set of mapping configs
-     * @return
+     * @return the model containing all the generated terms
      */
     private Model mapSource(InputSource source, Set<EntityMap> triplesMaps) {
         Model outputGraph = ModelFactory.createDefaultModel();
         triplesMaps.forEach((e) -> outputGraph.add(mapEntity(e, source)));
-
         return outputGraph;
     }
 
@@ -67,17 +65,18 @@ public class RDFMapper implements GraphMapper {
      */
     private Model mapEntity(EntityMap triplesMap, InputSource source) {
         Model entityGraph = ModelFactory.createDefaultModel();
-        triplesMap.applySource(source).forEachEntityRecord((r) -> {
-            Resource subject = triplesMap.generateEntityTerm(r);
+        SourceMap sourceMap = triplesMap.getSourceMap();
+        sourceMap.forEachEntity(source, (e) -> {
+            Resource subject = triplesMap.generateEntityTerm(e);
             triplesMap.listEntityClasses()
                     .forEach((c) -> entityGraph.add(subject, RDF.type, c));
 
             triplesMap.listRelationMaps().forEach((k) -> {
                 NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
                 if (!(nodeMap instanceof RefObjectMap)) {
-                    RDFNode node = nodeMap.generateNodeTerm(r);
+                    RDFNode node = nodeMap.generateNodeTerm(e);
                     if (node != null) {
-                        entityGraph.add(subject, k.generateRelationTerm(r), node);
+                        entityGraph.add(subject, k.generateRelationTerm(e), node);
                     }
                 }
             });
@@ -86,24 +85,23 @@ public class RDFMapper implements GraphMapper {
         triplesMap.listRelationMaps().forEach((k) -> {
             NodeMap nodeMap = triplesMap.getNodeMapWithRelation(k);
             if (nodeMap instanceof RefObjectMap) {
-                RefObjectMap refObjectMap = (RefObjectMap) nodeMap;
-                EntityMap refTriplesMap = refObjectMap.getParentTriplesMap();
-                LogicalTable refLogicalTable = (LogicalTable) refTriplesMap.applySource(null);
-                LogicalTable rootLogicalTable = (LogicalTable) triplesMap.applySource(null);
+                RefObjectMap rdfObjMap = (RefObjectMap) nodeMap;
+                EntityMap refTriplesMap = rdfObjMap.getParentTriplesMap();
+                LogicalTable refLogicalTable = (LogicalTable) refTriplesMap.getSourceMap();
+                LogicalTable rootLogicalTable = (LogicalTable) triplesMap.getSourceMap();
                 LogicalTable jointLogicalTable = new LogicalTable.Builder(rootLogicalTable)
-                        .withJointQuery(refLogicalTable, refObjectMap.listJoinConditions())
+                        .withJointQuery(refLogicalTable, rdfObjMap.listJoinConditions())
                         .build();
 
-                jointLogicalTable.loadInputSource(source).forEachEntityRecord((r) -> {
-                    Resource subject = triplesMap.generateEntityTerm(r);
-                    RDFNode node = refObjectMap.generateNodeTerm(r);
+                jointLogicalTable.forEachEntity(source, (e) -> {
+                    Resource subject = triplesMap.generateEntityTerm(e);
+                    RDFNode node = rdfObjMap.generateNodeTerm(e);
                     if (node != null) {
-                        entityGraph.add(subject, k.generateRelationTerm(r), node);
+                        entityGraph.add(subject, k.generateRelationTerm(e), node);
                     }
                 });
             }
         });
-
         return entityGraph;
     }
 }
