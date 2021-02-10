@@ -26,7 +26,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit test class for {@SubjectMap}.
+ * Unit test class for {@link SubjectMap}.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SubjectMapTest {

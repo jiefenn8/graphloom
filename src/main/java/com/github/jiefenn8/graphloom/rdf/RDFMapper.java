@@ -47,7 +47,7 @@ public class RDFMapper implements GraphMapper {
      *
      * @param source      the source to map over to RDF triples
      * @param triplesMaps the set of mapping configs
-     * @return
+     * @return the model containing all the generated terms
      */
     private Model mapSource(InputSource source, Set<EntityMap> triplesMaps) {
         Model outputGraph = ModelFactory.createDefaultModel();
