@@ -9,17 +9,15 @@ import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.junit.Rule;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,35 +28,44 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectMapTest {
 
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
-
     private ObjectMap objectMap;
     @Mock private Entity mockEntity;
     @Mock private TermMap mockTermMap;
 
+    @Before
+    public void setUp() {
+        objectMap = new ObjectMap(mockTermMap);
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
+    }
+
     @Test
     public void GivenNoTermMap_WhenCreateInstance_ThenThrowException() {
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Term map must not be null.");
-        objectMap = new ObjectMap(null);
+        String expected = "Term map must not be null.";
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> new ObjectMap(null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     //generateNodeTerm()
 
     @Test
     public void GivenNoEntity_WhenGenerateNodeTerm_ThenThrowException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Entity is null.");
-        objectMap = new ObjectMap(mockTermMap);
-        objectMap.generateNodeTerm(null);
+        String expected = "Entity is null.";
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> objectMap.generateNodeTerm(null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
     public void GivenEntity_WhenGenerateNodeTerm_ThenReturnResource() {
         Resource mockResource = mock(Resource.class);
-        when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockResource);
-        objectMap = new ObjectMap(mockTermMap);
+        when(mockTermMap.generateRDFTerm(mockEntity)).thenReturn(mockResource);
         RDFNode result = objectMap.generateNodeTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }
@@ -66,8 +73,7 @@ public class ObjectMapTest {
     @Test
     public void GivenEntity_WhenGenerateNodeTerm_ThenReturnLiteral() {
         Literal mockLiteral = mock(Literal.class);
-        when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockLiteral);
-        objectMap = new ObjectMap(mockTermMap);
+        when(mockTermMap.generateRDFTerm(mockEntity)).thenReturn(mockLiteral);
         RDFNode result = objectMap.generateNodeTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }

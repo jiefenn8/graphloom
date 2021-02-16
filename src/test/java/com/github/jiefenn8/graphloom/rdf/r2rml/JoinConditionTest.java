@@ -5,40 +5,38 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import org.junit.Rule;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
+@RunWith(JUnitParamsRunner.class)
 public class JoinConditionTest {
-
-    @Rule public ExpectedException expectedException = ExpectedException.none();
 
     private JoinCondition joinCondition;
 
-    @Test
-    public void GivenNorParentAndChild_WhenCreateInstance_ThenThrowException() {
-        expectedException.expect(NullPointerException.class);
-
-        new JoinCondition(null, null);
+    public List<String[]> invalidJoinConditionParams() {
+        return List.of(
+                new String[]{null, null},
+                new String[]{"PARENT", null},
+                new String[]{null, "CHILD"}
+        );
     }
 
     @Test
-    public void GivenNoParentWithChild_WhenCreateInstance_ThenThrowException() {
-        expectedException.expect(NullPointerException.class);
-
-        new JoinCondition(null, "CHILD");
-    }
-
-    @Test
-    public void GivenNoChildWithParent_WhenCreateInstance_ThenThrowException() {
-        expectedException.expect(NullPointerException.class);
-
-        new JoinCondition("PARENT", null);
+    @Parameters(method = "invalidJoinConditionParams")
+    public void GivenInvalidCtorParams_WhenCreateInstance_ThenThrowException(String parent, String child) {
+        Assert.assertThrows(
+                NullPointerException.class,
+                () -> new JoinCondition(parent, child)
+        );
     }
 
     @Test
@@ -83,5 +81,4 @@ public class JoinConditionTest {
         int result = joinCondition.hashCode();
         assertThat(result, is(equalTo(expected)));
     }
-
 }

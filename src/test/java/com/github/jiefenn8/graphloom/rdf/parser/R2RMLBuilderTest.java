@@ -9,10 +9,9 @@ import com.github.jiefenn8.graphloom.exceptions.ParserException;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -33,7 +32,6 @@ public class R2RMLBuilderTest {
 
     private static final String VALID_FILENAME = "r2rml_file.ttl";
     private static final String INVALID_FILENAME = "invalid_r2rml_file.ttl";
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
     @Mock private R2RMLParser mockR2rmlParser;
     private R2RMLBuilder r2rmlBuilder;
     @Mock private Resource mockResource;
@@ -153,11 +151,14 @@ public class R2RMLBuilderTest {
     public void GivenRefObjectMapWithOwnParentReference_WhenParse_ThenThrowException() {
         when(mockR2rmlParser.isRefObjectMap(any())).thenReturn(true);
         when(mockR2rmlParser.getParentTriplesMap(mockResource)).thenReturn(mockResource);
-        String expected = String.format("RefObjectMap must not reference own parent %s.", mockResource);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage(expected);
+        String expected = "RefObjectMap must not reference own parent " + mockResource + ".";
 
-        r2rmlBuilder.parse(VALID_FILENAME);
+        Throwable throwable = Assert.assertThrows(
+                ParserException.class,
+                () -> r2rmlBuilder.parse(VALID_FILENAME)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
@@ -172,10 +173,14 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(Set.of(mockStatement2));
         when(mockR2rmlParser.getObjectMap(mockResource2)).thenReturn(mockStatement2);
         when(mockR2rmlParser.getParentTriplesMap(mockResource2)).thenReturn(mockResource);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage("Potential circular dependency found for mockResource.");
+        String expected = "Potential circular dependency found for " + mockResource + ".";
 
-        r2rmlBuilder.parse(VALID_FILENAME);
+        Throwable throwable = Assert.assertThrows(
+                ParserException.class,
+                () -> r2rmlBuilder.parse(VALID_FILENAME)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
@@ -187,38 +192,52 @@ public class R2RMLBuilderTest {
         when(mockR2rmlParser.listPredicateObjectMaps(mockResource2)).thenReturn(Set.of());
         when(mockR2rmlParser.getLogicalTable(mockResource2)).thenReturn(mockResource2);
         when(mockR2rmlParser.getTableName(mockResource2)).thenReturn("DIFF_TABLE_NAME");
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage("Triples Maps queries do not match. Must provide join condition.");
+        String expected = "Triples Maps queries do not match. Must provide join condition.";
 
-        r2rmlBuilder.parse(VALID_FILENAME);
+        Throwable throwable = Assert.assertThrows(
+                ParserException.class,
+                () -> r2rmlBuilder.parse(VALID_FILENAME)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
     public void GivenLogicalTableWithNoSourceConfig_WhenParse_ThenThrowException() {
         when(mockR2rmlParser.isBaseTableOrView(any())).thenReturn(false);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage("No BaseTableOrView or R2RMLView property found.");
+        String expected = "No BaseTableOrView or R2RMLView property found.";
 
-        r2rmlBuilder.parse(VALID_FILENAME);
+        Throwable throwable = Assert.assertThrows(
+                ParserException.class,
+                () -> r2rmlBuilder.parse(VALID_FILENAME)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
     public void GivenTermMapWithNo_WhenParse_ThenThrowException() {
         when(mockR2rmlParser.isConstant(any())).thenReturn(false);
-        String expected = String.format("%s is not a TermMap.", mockStatement);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage(expected);
+        String expected = mockStatement + " is not a TermMap.";
 
-        r2rmlBuilder.parse(VALID_FILENAME);
+        Throwable throwable = Assert.assertThrows(
+                ParserException.class,
+                () -> r2rmlBuilder.parse(VALID_FILENAME)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
     public void GivenInvalidFile_WhenParse_ThenThrowException() {
         when(mockR2rmlParser.parse(any(), any())).thenReturn(false);
-        String expected = String.format("Failed to read file %s.", INVALID_FILENAME);
-        exceptionRule.expect(ParserException.class);
-        exceptionRule.expectMessage(expected);
+        String expected = "Failed to read file " + INVALID_FILENAME + ".";
 
-        r2rmlBuilder.parse(INVALID_FILENAME);
+        Throwable throwable = Assert.assertThrows(
+                ParserException.class,
+                () -> r2rmlBuilder.parse(INVALID_FILENAME)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 }

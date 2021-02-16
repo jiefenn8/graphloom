@@ -8,16 +8,15 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
-import org.junit.Rule;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -29,28 +28,38 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PredicateMapTest {
 
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
-
     private PredicateMap predicateMap;
     @Mock private Entity mockEntity;
     @Mock private TermMap mockTermMap;
 
+    @Before
+    public void setUp() {
+        predicateMap = new PredicateMap(mockTermMap);
+    }
+
     @Test
     public void GivenNoTermMap_WhenCreateInstance_ThenThrowException() {
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Term map must not be null.");
-        predicateMap = new PredicateMap(null);
+        String expected = "Term map must not be null.";
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> new PredicateMap(null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     //generateRelationTerm
 
     @Test
     public void GivenNoEntity_WhenGenerateRelationTerm_ThenThrowException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Entity is null.");
-        predicateMap = new PredicateMap(mockTermMap);
-        predicateMap.generateRelationTerm(null);
+        String expected = "Entity is null.";
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException(expected));
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> predicateMap.generateRelationTerm(null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
@@ -59,7 +68,6 @@ public class PredicateMapTest {
         when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockResource);
         when(mockResource.asResource()).thenReturn(mockResource);
         when(mockResource.getURI()).thenReturn("RELATION_TERM");
-        predicateMap = new PredicateMap(mockTermMap);
         Property result = predicateMap.generateRelationTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }

@@ -17,12 +17,10 @@ import java.util.Set;
  */
 public class FakeEntityResult implements EntityResult {
 
-    private final Set<Entity> records;
-    Iterator<Entity> iter;
+    private final Iterator<Entity> iter;
 
     public FakeEntityResult(Set<Entity> records) {
-        this.records = records;
-        this.iter = this.records.iterator();
+        this.iter = records.iterator();
     }
 
     @Override

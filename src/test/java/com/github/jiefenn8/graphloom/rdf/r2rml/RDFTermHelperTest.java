@@ -9,14 +9,14 @@ import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.jena.rdf.model.RDFNode;
-import org.junit.Rule;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 
 import static com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -27,7 +27,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class RDFTermHelperTest {
 
     private final String value = "TERM_VALUE";
-    @Rule public ExpectedException expectedException = ExpectedException.none();
 
     public List<TermType> termTypeParameters() {
         return List.of(TermType.IRI, TermType.LITERAL);
@@ -35,22 +34,30 @@ public class RDFTermHelperTest {
 
     @Test
     @Parameters(method = "termTypeParameters")
-    public void GivenNoValue_WhenCreateRDFTerm_ThenThrowException(TermType t) {
-        expectedException.expect(NullPointerException.class);
-        RDFTermHelper.asRDFTerm(null, t);
+    public void GivenNoValue_WhenCreateRDFTerm_ThenThrowException(TermType type) {
+        Assert.assertThrows(
+                NullPointerException.class,
+                () -> RDFTermHelper.asRDFTerm(null, type)
+        );
     }
 
     @Test
     public void GivenUndefinedTermType_WhenCreateRDFTerm_ThenThrowException() {
-        expectedException.expect(MapperException.class);
-        expectedException.expectMessage("Term type is UNDEFINED.");
-        RDFTermHelper.asRDFTerm(value, TermType.UNDEFINED);
+        String expected = "Term type is UNDEFINED.";
+        Throwable throwable = Assert.assertThrows(
+                MapperException.class,
+                () -> RDFTermHelper.asRDFTerm(value, TermType.UNDEFINED)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
     public void GivenNoTermType_WhenCreateRDFTerm_ThenThrowException() {
-        expectedException.expect(NullPointerException.class);
-        RDFTermHelper.asRDFTerm(value, null);
+        Assert.assertThrows(
+                NullPointerException.class,
+                () -> RDFTermHelper.asRDFTerm(value, null)
+        );
     }
 
     @Test

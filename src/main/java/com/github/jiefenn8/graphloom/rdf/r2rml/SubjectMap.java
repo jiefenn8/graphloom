@@ -41,6 +41,7 @@ public class SubjectMap implements PropertyMap, EntityChild {
      * @param resource the class to associate with entity
      */
     public void addEntityClass(Resource resource) {
+        Objects.requireNonNull(resource);
         classes.add(resource);
     }
 
