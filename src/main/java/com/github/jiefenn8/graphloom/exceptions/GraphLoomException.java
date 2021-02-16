@@ -5,13 +5,15 @@
 
 package com.github.jiefenn8.graphloom.exceptions;
 
+import java.io.Serial;
+
 /**
  * Superclass of exceptions arising from GraphLoom related code, extending
  * from {@link RuntimeException}.
  */
 public class GraphLoomException extends RuntimeException {
 
-    private static final long serialVersionUID = 8393174563699723669L;
+    @Serial private static final long serialVersionUID = 8393174563699723669L;
 
     /**
      * Constructs a GraphLoom exception with the specified detail message.

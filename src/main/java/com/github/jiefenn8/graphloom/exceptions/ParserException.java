@@ -5,12 +5,14 @@
 
 package com.github.jiefenn8.graphloom.exceptions;
 
+import java.io.Serial;
+
 /**
  * Superclass of exceptions arising from GraphLoom.Parser code.
  */
 public class ParserException extends GraphLoomException {
 
-    private static final long serialVersionUID = 2244226488195283431L;
+    @Serial private static final long serialVersionUID = 2244226488195283431L;
 
     /**
      * Constructs a parser exception with the specified detail message.

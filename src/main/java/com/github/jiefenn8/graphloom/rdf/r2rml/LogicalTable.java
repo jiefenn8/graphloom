@@ -5,7 +5,10 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.*;
+import com.github.jiefenn8.graphloom.api.EntityChild;
+import com.github.jiefenn8.graphloom.api.EntityMap;
+import com.github.jiefenn8.graphloom.api.EntityReference;
+import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +26,6 @@ public class LogicalTable implements SourceMap, EntityChild {
 
     private final TriplesMap parent;
     private final EntityReference entityReference;
-    private InputSource inputSource;
 
     /**
      * Constructs a LogicalTable with the specified Builder containing the

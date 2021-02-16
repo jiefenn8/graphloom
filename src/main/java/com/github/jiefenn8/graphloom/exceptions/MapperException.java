@@ -5,13 +5,15 @@
 
 package com.github.jiefenn8.graphloom.exceptions;
 
+import java.io.Serial;
+
 /**
  * Superclass of exceptions arising from GraphLoom.Mapper related code
  * extending from {@link GraphLoomException}.
  */
 public class MapperException extends GraphLoomException {
 
-    private static final long serialVersionUID = -7684939575195771431L;
+    @Serial private static final long serialVersionUID = -7684939575195771431L;
 
     /**
      * Constructs a mapper exception with the specified detail message.

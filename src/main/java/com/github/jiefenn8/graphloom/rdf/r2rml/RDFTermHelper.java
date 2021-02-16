@@ -28,15 +28,11 @@ public class RDFTermHelper {
      */
     public static RDFNode asRDFTerm(String value, TermType type) {
         Objects.requireNonNull(value);
-        switch (Objects.requireNonNull(type)) {
-            case IRI:
-                return ResourceFactory.createResource(value);
-            case BLANK:
-                return ResourceFactory.createResource();
-            case LITERAL:
-                return ResourceFactory.createStringLiteral(value);
-            default:
-                throw new MapperException("Term type is UNDEFINED.");
-        }
+        return switch (Objects.requireNonNull(type)) {
+            case IRI -> ResourceFactory.createResource(value);
+            case BLANK -> ResourceFactory.createResource();
+            case LITERAL -> ResourceFactory.createStringLiteral(value);
+            default -> throw new MapperException("Term type is UNDEFINED.");
+        };
     }
 }
