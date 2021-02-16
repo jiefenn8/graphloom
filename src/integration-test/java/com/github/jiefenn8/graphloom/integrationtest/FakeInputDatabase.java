@@ -36,9 +36,8 @@ public class FakeInputDatabase implements InputSource {
     private EntityResult getDEPTEntityResults() {
         Map<String, String> record = Map.of(
                 "DEPTNO", "10",
-                "ENAME", "SMITH",
-                "JOB", "CLERK",
-                "DEPTNO", "10"
+                "DNAME", "APPSERVER",
+                "LOC", "NEW YORK"
         );
         Entity fakeEntity = new FakeEntity(record);
         return new FakeEntityResult(Set.of(fakeEntity));
