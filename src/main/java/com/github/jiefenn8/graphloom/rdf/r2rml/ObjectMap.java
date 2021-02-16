@@ -11,7 +11,7 @@ import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.RDFNode;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * Implementation of R2RML ObjectMap with {@link NodeMap} interface.
@@ -29,7 +29,7 @@ public class ObjectMap implements NodeMap, EntityChild {
      * @param termMap the term map that this instance will behave as
      */
     protected ObjectMap(TermMap termMap) {
-        this.termMap = checkNotNull(termMap, "Term map must not be null.");
+        this.termMap = Objects.requireNonNull(termMap, "Term map must not be null.");
     }
 
     /**

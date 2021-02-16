@@ -8,13 +8,11 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This interface defines the base methods that manages the mapping of any
@@ -34,8 +32,8 @@ public class TemplateTermMap implements TermMap {
      * @param termType the term type to map the value into
      */
     protected TemplateTermMap(String template, TermType termType) {
-        this.template = checkNotNull(template, "Template string must not be null.");
-        checkNotNull(termType, "Term type must not be null.");
+        this.template = Objects.requireNonNull(template, "Template string must not be null.");
+        Objects.requireNonNull(termType, "Term type must not be null.");
         if (termType != TermType.UNDEFINED) {
             this.termType = termType;
         }
@@ -43,7 +41,7 @@ public class TemplateTermMap implements TermMap {
 
     @Override
     public RDFNode generateRDFTerm(Entity entity) {
-        checkNotNull(entity, "Entity is null.");
+        Objects.requireNonNull(entity, "Entity is null.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
             throw new MapperException("Template given cannot be matched. Must have: {name}.");
@@ -55,7 +53,7 @@ public class TemplateTermMap implements TermMap {
 
     @Override
     public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
-        checkNotNull(entity, "Entity is null.");
+        Objects.requireNonNull(entity, "Entity is null.");
         Matcher matcher = pattern.matcher(template);
         if (!matcher.find()) {
             throw new MapperException("Template given cannot be matched. Must have: {name}.");
@@ -73,7 +71,7 @@ public class TemplateTermMap implements TermMap {
         return value == null ? null : createRDFTerm(template, matcher, value);
     }
 
-    private RDFNode createRDFTerm(@NonNull String template, @NonNull Matcher matcher, @NonNull String value) {
+    private RDFNode createRDFTerm(String template, Matcher matcher, String value) {
         String term = template.replace(matcher.group(0), value);
         return RDFTermHelper.asRDFTerm(term, termType);
     }

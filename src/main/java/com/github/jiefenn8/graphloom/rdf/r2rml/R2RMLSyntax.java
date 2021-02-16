@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.ResourceFactory;
 
@@ -39,7 +38,7 @@ public class R2RMLSyntax {
     public static final Property joinCondition = ResourceFactory.createProperty(URI, "joinCondition");
     public static final Property parent = ResourceFactory.createProperty(URI, "parent");
     public static final Property child = ResourceFactory.createProperty(URI, "child");
-    private static final List<Property> CONSTANT_SHORTCUTS = ImmutableList.of(subject, predicate, object);
+    private static final List<Property> CONSTANT_SHORTCUTS = List.of(subject, predicate, object);
 
     /**
      * Returns the uri that is used for the definition of the R2RML

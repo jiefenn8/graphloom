@@ -10,13 +10,11 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableSet;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML RefObjectMap with {@link NodeMap} interface.
@@ -36,9 +34,9 @@ public class RefObjectMap implements NodeMap, EntityChild {
      * @param builder the ref object map builder to build from
      */
     private RefObjectMap(Builder builder) {
-        checkNotNull(builder);
+        Objects.requireNonNull(builder);
         parentTriplesMap = builder.parentTriplesMap;
-        joinConditions = ImmutableSet.copyOf(builder.joinConditions);
+        joinConditions = Set.copyOf(builder.joinConditions);
         parent = builder.parent;
     }
 

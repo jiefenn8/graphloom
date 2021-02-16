@@ -7,12 +7,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.ConfigMaps;
 import com.github.jiefenn8.graphloom.api.EntityMap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 import java.util.*;
-
-import static org.apache.jena.ext.com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Implementation of R2RML with ConfigMaps interface.
@@ -31,9 +27,9 @@ public class R2RMLMap implements ConfigMaps {
      * @param builder the class builder with the parameters
      */
     protected R2RMLMap(Builder builder) {
-        checkNotNull(builder);
-        nsPrefixMap = ImmutableMap.copyOf(builder.nsPrefixMap);
-        triplesMaps = ImmutableSet.copyOf(builder.triplesMaps);
+        Objects.requireNonNull(builder);
+        nsPrefixMap = Map.copyOf(builder.nsPrefixMap);
+        triplesMaps = Set.copyOf(builder.triplesMaps);
     }
 
     @Override

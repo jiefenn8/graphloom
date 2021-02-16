@@ -14,9 +14,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This class defines the base methods that manages the parsing
@@ -51,7 +51,7 @@ public class R2RMLParser {
      * @param fileManager the manager to handle the file
      */
     protected R2RMLParser(FileManager fileManager) {
-        this.fileManager = checkNotNull(fileManager);
+        this.fileManager = Objects.requireNonNull(fileManager);
     }
 
     /**

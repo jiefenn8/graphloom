@@ -7,18 +7,17 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableSet;
-import org.junit.Rule;
+import org.junit.Assert;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Objects;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,16 +27,18 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LogicalTableTest {
 
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
-
     private LogicalTable logicalTable;
     @Mock private EntityReference mockEntityReference;
 
     @Test
-    public void GivenNullEntityReference_WhenBuildInstance_ThenThrowException() {
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Payload must not be null.");
-        logicalTable = new LogicalTable.Builder((EntityReference) null).build();
+    public void GivenNullEntityReference_WhenCreateCtor_ThenThrowException() {
+        String expected = "Payload must not be null.";
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> new LogicalTable.Builder((EntityReference) null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
@@ -64,8 +65,8 @@ public class LogicalTableTest {
 
     @Test
     public void GivenTriplesMap_WhenBuildWithTriplesMap_ThenReturnBuilder() {
-        LogicalTable.Builder result = new LogicalTable.Builder(mock(EntityReference.class))
-                .withTriplesMap(mock(TriplesMap.class));
+        LogicalTable.Builder result = new LogicalTable.Builder(mock(EntityReference.class));
+        result.withTriplesMap(mock(TriplesMap.class));
         assertThat(result, is(notNullValue()));
     }
 
@@ -78,25 +79,34 @@ public class LogicalTableTest {
         when(mockJoinCondition.getParent()).thenReturn("PARENT");
         when(mockEntityReference.getPayload()).thenReturn("PAYLOAD");
 
-        LogicalTable.Builder result = new LogicalTable.Builder(mockEntityReference)
-                .withJointQuery(logicalTable, ImmutableSet.of(mockJoinCondition));
+        LogicalTable.Builder result = new LogicalTable.Builder(mockEntityReference);
+        result.withJointQuery(logicalTable, Set.of(mockJoinCondition));
         assertThat(result, is(notNullValue()));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void GivenLogicalTableAndNoJoinConditions_WhenBuildWithJointSQLQuery_ThenThrowException() {
-        exceptionRule.expect(NullPointerException.class);
-
-        new LogicalTable.Builder(mock(EntityReference.class))
-                .withJointQuery(mock(LogicalTable.class), null);
+        Assert.assertThrows(
+                NullPointerException.class,
+                () -> {
+                    LogicalTable.Builder builder = new LogicalTable.Builder(mock(EntityReference.class));
+                    builder.withJointQuery(mock(LogicalTable.class), null);
+                }
+        );
     }
 
     @Test
     public void GivenLogicalTableAndEmptyJoinConditions_WhenBuildWithJointSQLQuery_ThenReturnBuilder() {
-        exceptionRule.expect(MapperException.class);
-        exceptionRule.expectMessage("Expected JoinConditions with joint query creation.");
-
-        new LogicalTable.Builder(mock(EntityReference.class))
-                .withJointQuery(mock(LogicalTable.class), ImmutableSet.of());
+        String expected = "Expected JoinConditions with joint query creation.";
+        Throwable throwable = Assert.assertThrows(
+                MapperException.class,
+                () -> {
+                    LogicalTable.Builder builder = new LogicalTable.Builder(mock(EntityReference.class));
+                    builder.withJointQuery(mock(LogicalTable.class), Set.of());
+                }
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 }

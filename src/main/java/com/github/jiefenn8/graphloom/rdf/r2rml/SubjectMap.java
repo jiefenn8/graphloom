@@ -13,12 +13,7 @@ import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.*;
 
 /**
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
@@ -37,7 +32,7 @@ public class SubjectMap implements PropertyMap, EntityChild {
      * @param termMap the term map that this instance will behave as
      */
     protected SubjectMap(TermMap termMap) {
-        this.termMap = checkNotNull(termMap, "Must provide a TermMap.");
+        this.termMap = Objects.requireNonNull(termMap, "Must provide a TermMap.");
     }
 
     /**
@@ -46,6 +41,7 @@ public class SubjectMap implements PropertyMap, EntityChild {
      * @param resource the class to associate with entity
      */
     public void addEntityClass(Resource resource) {
+        Objects.requireNonNull(resource);
         classes.add(resource);
     }
 

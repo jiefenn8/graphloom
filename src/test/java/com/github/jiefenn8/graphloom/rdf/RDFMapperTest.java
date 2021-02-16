@@ -8,19 +8,20 @@ package com.github.jiefenn8.graphloom.rdf;
 import com.github.jiefenn8.graphloom.api.ConfigMaps;
 import com.github.jiefenn8.graphloom.api.InputSource;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import org.apache.jena.rdf.model.Model;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import java.util.Map;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,46 +31,43 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class RDFMapperTest {
 
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
     @Mock private ConfigMaps mockConfigMaps;
     private RDFMapper rdfMapper;
 
     @Before
     public void setUp() {
-        //SUT instance creation
         rdfMapper = new RDFMapper();
 
-        //Default mock behaviour setup
-        when(mockConfigMaps.getNamespaceMap()).thenReturn(ImmutableMap.of());
-        when(mockConfigMaps.getEntityMaps()).thenReturn(ImmutableSet.of());
+        when(mockConfigMaps.getNamespaceMap()).thenReturn(Map.of());
+        when(mockConfigMaps.getEntityMaps()).thenReturn(Set.of());
     }
 
     @Test
     public void WhenEmptyConfigGiven_ThenReturnEmptyGraph() {
-        //Act, Assert
         Model model = rdfMapper.mapToGraph(mock(InputSource.class), mockConfigMaps);
         boolean result = model.isEmpty();
-
         assertThat(result, is(true));
     }
 
     @Test
     public void WhenNoInputSourceGiven_ThenThrowException() {
-        String expected = "Cannot retrieve source data from null input source";
-        exceptionRule.expect(MapperException.class);
-        exceptionRule.expectMessage(expected);
-
-        //Act, Assert
-        rdfMapper.mapToGraph(null, mockConfigMaps);
+        String expected = "Cannot retrieve source data from null input source.";
+        Throwable throwable = Assert.assertThrows(
+                MapperException.class,
+                () -> rdfMapper.mapToGraph(null, mockConfigMaps)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
     public void WhenNoConfigMapsGiven_ThenThrowException() {
         String expected = "Cannot map source from null config maps.";
-        exceptionRule.expect(MapperException.class);
-        exceptionRule.expectMessage(expected);
-
-        //Act, Assert
-        rdfMapper.mapToGraph(mock(InputSource.class), null);
+        Throwable throwable = Assert.assertThrows(
+                MapperException.class,
+                () -> rdfMapper.mapToGraph(mock(InputSource.class), null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 }

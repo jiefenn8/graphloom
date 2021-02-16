@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
-import com.google.common.collect.ImmutableList;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.jena.rdf.model.RDFNode;
@@ -20,9 +19,9 @@ import org.mockito.junit.MockitoRule;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -43,10 +42,11 @@ public class TermMapTest {
     }
 
     public List<TermMap> termMapParameters() {
-        return ImmutableList.of(
+        return List.of(
                 new ConstTermMap(mock(RDFNode.class)),
                 new ColumnTermMap("COLUMN_NAME", TermMap.TermType.UNDEFINED),
-                new TemplateTermMap("{COLUMN_NAME}", TermMap.TermType.UNDEFINED));
+                new TemplateTermMap("{COLUMN_NAME}", TermMap.TermType.UNDEFINED)
+        );
     }
 
     @Test

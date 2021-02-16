@@ -10,16 +10,15 @@ import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.junit.Rule;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -31,28 +30,38 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SubjectMapTest {
 
-    @Rule public ExpectedException exceptionRule = ExpectedException.none();
-
     private SubjectMap subjectMap;
     @Mock private Entity mockEntity;
     @Mock private TermMap mockTermMap;
 
+    @Before
+    public void setUp() {
+        subjectMap = new SubjectMap(mockTermMap);
+    }
+
     @Test
     public void GivenNoTermMap_WhenCreateInstance_ThenThrowException() {
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Must provide a TermMap.");
-        subjectMap = new SubjectMap(null);
+        String expected = "Must provide a TermMap.";
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> new SubjectMap(null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     //generateEntityTerm
 
     @Test
     public void GivenNoEntity_WhenGenerateEntityTerm_ThenPassException() {
-        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException("Entity is null."));
-        exceptionRule.expect(NullPointerException.class);
-        exceptionRule.expectMessage("Entity is null.");
-        subjectMap = new SubjectMap(mockTermMap);
-        subjectMap.generateEntityTerm(null);
+        String expected = "Entity is null.";
+        when(mockTermMap.generateRDFTerm(isNull())).thenThrow(new NullPointerException(expected));
+        Throwable throwable = Assert.assertThrows(
+                NullPointerException.class,
+                () -> subjectMap.generateEntityTerm(null)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test
@@ -60,28 +69,33 @@ public class SubjectMapTest {
         Resource mockResource = mock(Resource.class);
         when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockResource);
         when(mockResource.asResource()).thenReturn(mockResource);
-        subjectMap = new SubjectMap(mockTermMap);
+
         Resource result = subjectMap.generateEntityTerm(mockEntity);
         assertThat(result, is(notNullValue()));
     }
 
     @Test
     public void GivenEntity_WhenGenerateEntityTermIsLiteral_ThenThrowException() {
-        exceptionRule.expect(MapperException.class);
-        exceptionRule.expectMessage("SubjectMap can only return IRI or BlankNode.");
         Literal mockLiteral = mock(Literal.class);
         when(mockTermMap.generateRDFTerm(any(Entity.class))).thenReturn(mockLiteral);
         when(mockLiteral.isLiteral()).thenReturn(true);
-
-        subjectMap = new SubjectMap(mockTermMap);
-        subjectMap.generateEntityTerm(mockEntity);
+        String expected = "SubjectMap can only return IRI or BlankNode.";
+        Throwable throwable = Assert.assertThrows(
+                MapperException.class,
+                () -> subjectMap.generateEntityTerm(mockEntity)
+        );
+        String msg = throwable.getMessage();
+        assertThat(msg, is(equalTo(expected)));
     }
 
     //addClass
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void GivenNoResource_WhenAddClass_ThenThrowException() {
-        subjectMap.addEntityClass(null);
+        Assert.assertThrows(
+                NullPointerException.class,
+                () -> subjectMap.addEntityClass(null)
+        );
     }
 
     //addEntityClass
@@ -90,7 +104,6 @@ public class SubjectMapTest {
     @Test
     public void WhenClassGiven_ThenReturnNonEmptyList() {
         Resource expected = ResourceFactory.createResource("resource");
-        subjectMap = new SubjectMap(mockTermMap);
         subjectMap.addEntityClass(expected);
         boolean result = subjectMap.listEntityClasses().isEmpty();
         assertThat(result, is(false));
@@ -98,7 +111,6 @@ public class SubjectMapTest {
 
     @Test
     public void WhenNoClassGiven_ThenReturnEmptyList() {
-        subjectMap = new SubjectMap(mockTermMap);
         boolean result = subjectMap.listEntityClasses().isEmpty();
         assertThat(result, is(true));
     }

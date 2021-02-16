@@ -10,7 +10,7 @@ import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * This class defines the base methods in managing common RDF related
@@ -27,16 +27,12 @@ public class RDFTermHelper {
      * @return the generated term value to the type specified
      */
     public static RDFNode asRDFTerm(String value, TermType type) {
-        checkNotNull(value);
-        switch (checkNotNull(type)) {
-            case IRI:
-                return ResourceFactory.createResource(value);
-            case BLANK:
-                return ResourceFactory.createResource();
-            case LITERAL:
-                return ResourceFactory.createStringLiteral(value);
-            default:
-                throw new MapperException("Term type is UNDEFINED.");
-        }
+        Objects.requireNonNull(value);
+        return switch (Objects.requireNonNull(type)) {
+            case IRI -> ResourceFactory.createResource(value);
+            case BLANK -> ResourceFactory.createResource();
+            case LITERAL -> ResourceFactory.createStringLiteral(value);
+            default -> throw new MapperException("Term type is UNDEFINED.");
+        };
     }
 }

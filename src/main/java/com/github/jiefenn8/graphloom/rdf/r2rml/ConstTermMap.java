@@ -8,9 +8,8 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import org.apache.jena.rdf.model.RDFNode;
 
+import java.util.Objects;
 import java.util.Set;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This interface defines the base methods that manages the mapping of any
@@ -28,7 +27,7 @@ public class ConstTermMap implements TermMap {
      * @param node the constant value to use as term
      */
     protected ConstTermMap(RDFNode node) {
-        constTerm = checkNotNull(node, "Constant term must not be null.");
+        constTerm = Objects.requireNonNull(node, "Constant term must not be null.");
     }
 
     @Override
