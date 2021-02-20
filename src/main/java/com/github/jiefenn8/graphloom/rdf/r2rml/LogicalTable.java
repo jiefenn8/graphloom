@@ -10,8 +10,6 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -22,7 +20,6 @@ import java.util.Set;
  */
 public class LogicalTable implements SourceMap, EntityChild {
 
-    private static final Logger logger = LogManager.getLogger();
 
     private final TriplesMap parent;
     private final EntityReference entityReference;
@@ -113,7 +110,6 @@ public class LogicalTable implements SourceMap, EntityChild {
         public Builder withJointQuery(LogicalTable logicalTable, Set<JoinCondition> joinConditions) {
             if (joinConditions.isEmpty()) {
                 String message = "Expected JoinConditions with joint query creation.";
-                logger.fatal(message);
                 throw new MapperException(message);
             }
 
