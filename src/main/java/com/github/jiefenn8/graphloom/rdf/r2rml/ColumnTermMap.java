@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
 
@@ -54,5 +55,10 @@ public class ColumnTermMap implements TermMap {
 
         String value = entity.getPropertyValue(alt);
         return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

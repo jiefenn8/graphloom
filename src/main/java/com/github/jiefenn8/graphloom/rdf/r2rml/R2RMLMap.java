@@ -7,6 +7,10 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.ConfigMaps;
 import com.github.jiefenn8.graphloom.api.EntityMap;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -47,8 +51,16 @@ public class R2RMLMap implements ConfigMaps {
         return triplesMaps.iterator();
     }
 
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
     public static class Builder {
 
+        private final static Logger LOGGER = LoggerFactory.getLogger(Builder.class);
         private static final String RR_PREFIX = "rr";
         private final Map<String, String> nsPrefixMap = new HashMap<>();
         private final Set<TriplesMap> triplesMaps = new HashSet<>();
@@ -84,7 +96,10 @@ public class R2RMLMap implements ConfigMaps {
          */
         public R2RMLMap build() {
             nsPrefixMap.putIfAbsent(RR_PREFIX, R2RMLSyntax.getURI());
-            return new R2RMLMap(this);
+            LOGGER.debug("Building R2RMLMap from parameters.");
+            R2RMLMap r2rmlMap = new R2RMLMap(this);
+            LOGGER.debug("{}", r2rmlMap);
+            return r2rmlMap;
         }
     }
 }

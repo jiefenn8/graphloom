@@ -5,6 +5,8 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+import com.google.gson.Gson;
+
 import java.util.Objects;
 
 /**
@@ -60,5 +62,10 @@ public class JoinCondition {
     @Override
     public int hashCode() {
         return Objects.hash(parent, child);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

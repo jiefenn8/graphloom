@@ -5,6 +5,8 @@
 
 package com.github.jiefenn8.graphloom.api;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -76,6 +78,11 @@ public class BaseEntityReference implements EntityReference {
     public String setProperty(String property, String value) {
         Objects.requireNonNull(property);
         return properties.put(property, value);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 
     @Override

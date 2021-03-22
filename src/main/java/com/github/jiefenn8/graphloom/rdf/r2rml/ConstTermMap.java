@@ -6,6 +6,8 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;
@@ -38,5 +40,12 @@ public class ConstTermMap implements TermMap {
     @Override
     public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
         return generateRDFTerm(entity);
+    }
+
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
     }
 }

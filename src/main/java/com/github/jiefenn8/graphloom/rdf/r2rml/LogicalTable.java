@@ -10,17 +10,23 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
 public class LogicalTable implements SourceMap, EntityChild {
 
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogicalTable.class);
+    private final UUID uuid;
     private final TriplesMap parent;
     private final EntityReference entityReference;
 
@@ -34,6 +40,7 @@ public class LogicalTable implements SourceMap, EntityChild {
         Objects.requireNonNull(builder);
         entityReference = builder.entityReference;
         parent = builder.parent;
+        uuid = builder.uuid;
     }
 
     @Override
@@ -59,11 +66,24 @@ public class LogicalTable implements SourceMap, EntityChild {
         return parent;
     }
 
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
+    @Override
+    public String getUniqueId() {
+        return uuid.toString();
+    }
+
     /**
      * Builder class for LogicalTable.
      */
     public static class Builder {
 
+        private UUID uuid;
         private EntityReference entityReference;
         private TriplesMap parent;
 
@@ -109,8 +129,7 @@ public class LogicalTable implements SourceMap, EntityChild {
          */
         public Builder withJointQuery(LogicalTable logicalTable, Set<JoinCondition> joinConditions) {
             if (joinConditions.isEmpty()) {
-                String message = "Expected JoinConditions with joint query creation.";
-                throw new MapperException(message);
+                throw new MapperException("Expected JoinConditions with joint query creation.");
             }
 
             String jointQuery = "SELECT child.* FROM " + prepareQuery(entityReference) + " AS child, ";
@@ -159,8 +178,11 @@ public class LogicalTable implements SourceMap, EntityChild {
          * @return instance of logical table created with the info in this builder
          */
         public LogicalTable build() {
-            return new LogicalTable(this);
+            uuid = UUID.randomUUID();
+            LOGGER.debug("Building logical table from parameters. ID:{}", uuid);
+            LogicalTable logicalTable = new LogicalTable(this);
+            LOGGER.debug("{}", logicalTable);
+            return logicalTable;
         }
     }
-
 }

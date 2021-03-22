@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.api;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.github.jiefenn8.graphloom.util.UniqueId;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -14,7 +15,7 @@ import java.util.function.Consumer;
  * This interface defines the base methods that provides the information
  * needed to locate and retrieve the desired data from the data-source.
  */
-public interface SourceMap {
+public interface SourceMap extends UniqueId {
 
     /**
      * Returns the {@link EntityReference} associated with this instance. Every

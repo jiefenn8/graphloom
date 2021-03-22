@@ -10,6 +10,8 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.PropertyMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 
@@ -21,6 +23,7 @@ import java.util.*;
  */
 public class SubjectMap implements PropertyMap, EntityChild {
 
+    private final UUID uuid = UUID.randomUUID();
     private final TermMap termMap;
     private final List<Resource> classes = new ArrayList<>();
     private EntityMap parent;
@@ -81,5 +84,17 @@ public class SubjectMap implements PropertyMap, EntityChild {
     @Override
     public EntityMap getEntityMap() {
         return parent;
+    }
+
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
+    @Override
+    public String getUniqueId() {
+        return uuid.toString();
     }
 }

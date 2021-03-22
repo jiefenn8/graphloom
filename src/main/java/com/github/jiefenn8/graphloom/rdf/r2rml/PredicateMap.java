@@ -9,11 +9,14 @@ import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
@@ -21,6 +24,7 @@ import java.util.Objects;
  */
 public class PredicateMap implements RelationMap, EntityChild {
 
+    private final UUID uuid = UUID.randomUUID();
     private final TermMap termMap;
     private EntityMap parent;
 
@@ -52,7 +56,19 @@ public class PredicateMap implements RelationMap, EntityChild {
     }
 
     @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
+    @Override
     public EntityMap getEntityMap() {
         return parent;
+    }
+
+    @Override
+    public String getUniqueId() {
+        return uuid.toString();
     }
 }

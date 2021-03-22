@@ -10,11 +10,16 @@ import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
 import org.apache.jena.rdf.model.RDFNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Implementation of R2RML RefObjectMap with {@link NodeMap} interface.
@@ -23,6 +28,7 @@ import java.util.Set;
  */
 public class RefObjectMap implements NodeMap, EntityChild {
 
+    private final UUID uuid;
     private final TriplesMap parent;
     private final TriplesMap parentTriplesMap;
     private final Set<JoinCondition> joinConditions;
@@ -35,6 +41,7 @@ public class RefObjectMap implements NodeMap, EntityChild {
      */
     private RefObjectMap(Builder builder) {
         Objects.requireNonNull(builder);
+        uuid = builder.uuid;
         parentTriplesMap = builder.parentTriplesMap;
         joinConditions = Set.copyOf(builder.joinConditions);
         parent = builder.parent;
@@ -93,14 +100,28 @@ public class RefObjectMap implements NodeMap, EntityChild {
         return term.asResource();
     }
 
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
+    @Override
+    public String getUniqueId() {
+        return uuid.toString();
+    }
+
     /**
      * Builder class for RefObjectMap.
      */
     public static class Builder {
 
+        private static final Logger LOGGER = LoggerFactory.getLogger(Builder.class);
         private final TriplesMap parentTriplesMap;
         private final Set<JoinCondition> joinConditions = new HashSet<>();
         private TriplesMap parent;
+        private UUID uuid;
 
         /**
          * Constructs a RefObjectMap Builder with the specified triples map
@@ -135,7 +156,10 @@ public class RefObjectMap implements NodeMap, EntityChild {
          * @return this builder for fluent method chaining
          */
         public Builder addJoinCondition(String parent, String child) {
-            joinConditions.add(new JoinCondition(parent, child));
+            LOGGER.debug("Creating JoinCondition.");
+            JoinCondition joinCondition = new JoinCondition(parent, child);
+            LOGGER.debug("{}", joinCondition);
+            joinConditions.add(joinCondition);
             return this;
         }
 
@@ -146,7 +170,11 @@ public class RefObjectMap implements NodeMap, EntityChild {
          * @return the ref object map created with this builder parameters
          */
         public RefObjectMap build() {
-            return new RefObjectMap(this);
+            uuid = UUID.randomUUID();
+            LOGGER.debug("Building RefObjectMap from parameters. UUID:{}", uuid);
+            RefObjectMap refObjectMap = new RefObjectMap(this);
+            LOGGER.debug("{}", refObjectMap);
+            return refObjectMap;
         }
     }
 }

@@ -9,9 +9,12 @@ import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Implementation of R2RML ObjectMap with {@link NodeMap} interface.
@@ -19,6 +22,7 @@ import java.util.Objects;
  */
 public class ObjectMap implements NodeMap, EntityChild {
 
+    private final UUID uuid = UUID.randomUUID();
     private final TermMap termMap;
     private EntityMap parent;
 
@@ -51,5 +55,17 @@ public class ObjectMap implements NodeMap, EntityChild {
     @Override
     public RDFNode generateNodeTerm(Entity entity) {
         return termMap.generateRDFTerm(entity);
+    }
+
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
+    @Override
+    public String getUniqueId() {
+        return uuid.toString();
     }
 }

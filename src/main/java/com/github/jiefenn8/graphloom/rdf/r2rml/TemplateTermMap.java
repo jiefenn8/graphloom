@@ -7,6 +7,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
+import com.google.gson.Gson;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;
@@ -74,5 +75,10 @@ public class TemplateTermMap implements TermMap {
     private RDFNode createRDFTerm(String template, Matcher matcher, String value) {
         String term = template.replace(matcher.group(0), value);
         return RDFTermHelper.asRDFTerm(term, termType);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
