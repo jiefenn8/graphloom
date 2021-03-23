@@ -6,13 +6,14 @@
 package com.github.jiefenn8.graphloom.api;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.github.jiefenn8.graphloom.util.UniqueId;
 import org.apache.jena.rdf.model.Property;
 
 /**
  * This interface defines the base methods that manages the mapping
  * of relation to their graph relation term.
  */
-public interface RelationMap {
+public interface RelationMap extends UniqueId {
 
     /**
      * Generates a relation term with this map using the given entity to

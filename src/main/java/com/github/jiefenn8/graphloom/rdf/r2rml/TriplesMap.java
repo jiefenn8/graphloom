@@ -11,8 +11,12 @@ import com.github.jiefenn8.graphloom.api.RelationMap;
 import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
+import com.github.jiefenn8.graphloom.util.GsonHelper;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -92,11 +96,24 @@ public class TriplesMap implements EntityMap {
         return subjectMap.listEntityClasses();
     }
 
+    @Override
+    public String toString() {
+        return GsonHelper.loadTypeAdapters(new GsonBuilder())
+                .create()
+                .toJson(this);
+    }
+
+    @Override
+    public String getUniqueId() {
+        return idName;
+    }
+
     /**
      * Builder class for TriplesMap.
      */
     public static class Builder {
 
+        private static final Logger LOGGER = LoggerFactory.getLogger(Builder.class);
         private final String idName;
         private final LogicalTable logicalTable;
         private final SubjectMap subjectMap;
@@ -141,7 +158,10 @@ public class TriplesMap implements EntityMap {
          * @return instance of triples map created with the info in this builder
          */
         public TriplesMap build() {
-            return new TriplesMap(this);
+            LOGGER.debug("Building TriplesMap from parameters. ID:{}", idName);
+            TriplesMap triplesMap = new TriplesMap(this);
+            LOGGER.debug("{}", triplesMap);
+            return triplesMap;
         }
     }
 }

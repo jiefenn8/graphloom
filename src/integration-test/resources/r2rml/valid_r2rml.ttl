@@ -10,5 +10,9 @@
     rr:predicateObjectMap [
         rr:predicate ex:name;
         rr:objectMap [ rr:column "ENAME" ];
+    ];
+    rr:predicateObjectMap [
+        rr:predicate ex:job;
+        rr:objectMap [ rr:column "JOB" ];
     ].
 

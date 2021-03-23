@@ -5,13 +5,15 @@
 
 package com.github.jiefenn8.graphloom.api;
 
+import com.github.jiefenn8.graphloom.util.UniqueId;
+
 import java.util.Set;
 
 /**
  * This interface defines the base methods that manages the mapping
  * of data to their graph terms sharing the same entity.
  */
-public interface EntityMap extends PropertyMap {
+public interface EntityMap extends PropertyMap, UniqueId {
 
     /**
      * Returns the source map that has the information and data required to

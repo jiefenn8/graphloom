@@ -7,6 +7,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.BaseEntityReference;
 import com.github.jiefenn8.graphloom.api.EntityReference;
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -24,5 +25,10 @@ public class BaseTableOrView extends BaseEntityReference implements EntityRefere
      */
     protected BaseTableOrView(String payload) {
         super(payload, DatabaseType.TABLE_NAME, StringUtils.EMPTY);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

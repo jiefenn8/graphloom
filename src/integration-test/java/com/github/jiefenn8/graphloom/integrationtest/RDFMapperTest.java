@@ -42,7 +42,7 @@ public class RDFMapperTest {
         //Expect 2 Triples from given inputs.
         Model graph = rdfMapper.mapToGraph(fakeInputDatabase, mapperConfig);
         long result = graph.size();
-        assertThat(result, is(equalTo(2L)));
+        assertThat(result, is(equalTo(3L)));
     }
 
     @Test

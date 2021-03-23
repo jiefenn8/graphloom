@@ -6,6 +6,7 @@
 package com.github.jiefenn8.graphloom.api;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
+import com.github.jiefenn8.graphloom.util.UniqueId;
 import org.apache.jena.rdf.model.Resource;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * This interface defines the base methods that manages the mapping
  * of entity properties to their graph entity terms.
  */
-public interface PropertyMap {
+public interface PropertyMap extends UniqueId {
 
     /**
      * Generates an entity term with this map using the given entity to

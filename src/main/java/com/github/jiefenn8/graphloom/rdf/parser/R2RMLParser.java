@@ -10,8 +10,6 @@ import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLSyntax;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.FileManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +28,6 @@ import java.util.Set;
  */
 public class R2RMLParser {
 
-    private static final Logger logger = LogManager.getLogger();
 
     private final FileManager fileManager;
     private String filenameOrUri = StringUtils.EMPTY;
@@ -68,8 +65,6 @@ public class R2RMLParser {
      */
     protected boolean parse(String filenameOrUri, String baseUri) {
         if (!r2rmlGraph.isClosed() && !this.filenameOrUri.isEmpty()) {
-            logger.warn("Loaded file {} on parser; skipping.", this.filenameOrUri);
-            logger.debug("File loaded on parser, use close() to close file to reuse parser.");
             return false;
         }
 
@@ -86,7 +81,6 @@ public class R2RMLParser {
      */
     protected boolean close() {
         r2rmlGraph.close();
-        logger.info("Closing current R2RML file {}.", filenameOrUri);
         return r2rmlGraph.isClosed();
     }
 
