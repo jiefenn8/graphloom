@@ -87,10 +87,6 @@ public class TriplesMap implements EntityMap {
         return subjectMap.generateEntityTerm(entity);
     }
 
-    public Resource generateEntityTerm(Set<JoinCondition> joins, Entity entity) {
-        return subjectMap.generateEntityTerm(joins, entity);
-    }
-
     @Override
     public List<Resource> listEntityClasses() {
         return subjectMap.listEntityClasses();

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -78,6 +79,7 @@ public class RDFMapper implements GraphMapper {
         LOGGER.info("Generating triples with '{}'.", triplesMapId);
         Model entityGraph = ModelFactory.createDefaultModel();
         SourceMap sourceMap = triplesMap.getSourceMap();
+        List<RelationMap> relationMaps = new ArrayList<>();
         sourceMap.forEachEntity(source, (e) -> {
             Resource subject = triplesMap.generateEntityTerm(e);
             List<Resource> classes = triplesMap.listEntityClasses();
@@ -94,7 +96,9 @@ public class RDFMapper implements GraphMapper {
             int propertyCount = 0;
             for (RelationMap relationMap : entityProperties) {
                 NodeMap nodeMap = triplesMap.getNodeMapWithRelation(relationMap);
-                if (!(nodeMap instanceof RefObjectMap)) {
+                if (nodeMap instanceof RefObjectMap) {
+                    relationMaps.add(relationMap);
+                } else {
                     RDFNode node = nodeMap.generateNodeTerm(e);
                     if (node != null) {
                         entityGraph.add(subject, relationMap.generateRelationTerm(e), node);
@@ -106,29 +110,19 @@ public class RDFMapper implements GraphMapper {
         });
 
         int entityRefCount = 0;
-        for (RelationMap relationMap : triplesMap.listRelationMaps()) {
-            NodeMap nodeMap = triplesMap.getNodeMapWithRelation(relationMap);
-            if (nodeMap instanceof RefObjectMap) {
-                RefObjectMap rdfObjMap = (RefObjectMap) nodeMap;
-                EntityMap refTriplesMap = rdfObjMap.getParentTriplesMap();
-                LogicalTable refLogicalTable = (LogicalTable) refTriplesMap.getSourceMap();
-                LogicalTable rootLogicalTable = (LogicalTable) triplesMap.getSourceMap();
-                LogicalTable jointLogicalTable = new LogicalTable.Builder(rootLogicalTable)
-                        .withJointQuery(refLogicalTable, rdfObjMap.listJoinConditions())
-                        .build();
-
-                jointLogicalTable.forEachEntity(source, (e) -> {
+        for (RelationMap relationMap : relationMaps) {
+            RefObjectMap refObjectMap = (RefObjectMap) triplesMap.getNodeMapWithRelation(relationMap);
+            LogicalTable jointLogicalTable = ((LogicalTable) sourceMap).asJointLogicalTable(refObjectMap);
+            jointLogicalTable.forEachEntity(source, (e) -> {
+                RDFNode node = refObjectMap.generateNodeTerm(e);
+                if (node != null) {
                     Resource subject = triplesMap.generateEntityTerm(e);
-                    RDFNode node = rdfObjMap.generateNodeTerm(e);
-                    if (node != null) {
-                        entityGraph.add(subject, relationMap.generateRelationTerm(e), node);
-                    }
-                });
-            }
+                    entityGraph.add(subject, relationMap.generateRelationTerm(e), node);
+                }
+            });
             entityRefCount++;
         }
         LOGGER.info("{} entity reference property triples generated.", entityRefCount);
-
         LOGGER.info("Completed generating {} triples for '{}'.", entityGraph.size(), triplesMapId);
         MDC.clear();
         return entityGraph;

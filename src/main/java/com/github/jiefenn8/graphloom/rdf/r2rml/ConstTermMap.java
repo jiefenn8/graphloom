@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * This interface defines the base methods that manages the mapping of any
@@ -35,11 +34,6 @@ public class ConstTermMap implements TermMap {
     @Override
     public RDFNode generateRDFTerm(Entity entity) {
         return constTerm;
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
-        return generateRDFTerm(entity);
     }
 
     @Override

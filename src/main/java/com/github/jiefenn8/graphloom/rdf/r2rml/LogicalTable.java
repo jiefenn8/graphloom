@@ -43,6 +43,13 @@ public class LogicalTable implements SourceMap, EntityChild {
         uuid = builder.uuid;
     }
 
+    public LogicalTable asJointLogicalTable(RefObjectMap refObjectMap) {
+        LogicalTable logicalTable = (LogicalTable) refObjectMap.getParentTriplesMap().getSourceMap();
+        return new LogicalTable.Builder(this)
+                .withJointQuery(logicalTable, refObjectMap.listJoinConditions())
+                .build();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -134,27 +141,28 @@ public class LogicalTable implements SourceMap, EntityChild {
 
             String jointQuery = "SELECT child.* FROM " + prepareQuery(entityReference) + " AS child, ";
             jointQuery += prepareQuery(logicalTable.entityReference) + " AS parent";
-            jointQuery += " WHERE " + buildJoinStatement(joinConditions.iterator());
+            jointQuery += " WHERE " + buildJoinsRecursively(joinConditions.iterator());
+
             String parentVersion = entityReference.getProperty("sqlVersion");
             this.entityReference = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
             return this;
         }
 
         /**
-         * Returns the ending query segment containing all the join conditions
-         * recursively built from the given iterator of a join condition collection.
+         * Recursively build all join conditions and return result as String.
          *
-         * @param iterator of the join condition collection
-         * @return the ending segment containing SQL built join conditions
+         * @param iterator to retrieve each join conditions
+         * @return string of all join conditions
          */
-        private String buildJoinStatement(Iterator<JoinCondition> iterator) {
+        private String buildJoinsRecursively(Iterator<JoinCondition> iterator) {
             JoinCondition join = iterator.next();
-            String joinStatement = "child." + join.getChild() + "=parent." + join.getParent();
+            String joins = join.getJoinString();
             if (iterator.hasNext()) {
-                joinStatement = joinStatement.concat(" AND " + buildJoinStatement(iterator));
+                joins = joins + "AND" + buildJoinsRecursively(iterator);
             }
-            return joinStatement;
+            return joins;
         }
+
 
         /**
          * Returns a prepared query using the query/table in the given source
@@ -165,6 +173,7 @@ public class LogicalTable implements SourceMap, EntityChild {
          * @return the query prepared for further manipulation
          */
         private String prepareQuery(EntityReference sourceConfig) {
+            //if r2rmlview then subquery it
             if (sourceConfig instanceof R2RMLView) {
                 return "(" + sourceConfig.getPayload() + ")";
             }

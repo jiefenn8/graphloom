@@ -75,8 +75,6 @@ public class LogicalTableTest {
         EntityReference mockEntityReference = mock(EntityReference.class);
         JoinCondition mockJoinCondition = mock(JoinCondition.class);
         LogicalTable logicalTable = new LogicalTable.Builder(mockEntityReference).build();
-        when(mockJoinCondition.getChild()).thenReturn("CHILD");
-        when(mockJoinCondition.getParent()).thenReturn("PARENT");
         when(mockEntityReference.getPayload()).thenReturn("PAYLOAD");
 
         LogicalTable.Builder result = new LogicalTable.Builder(mockEntityReference);

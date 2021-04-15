@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,26 +48,6 @@ public class TemplateTermMap implements TermMap {
         }
 
         String value = entity.getPropertyValue(matcher.group(1));
-        return value == null ? null : createRDFTerm(template, matcher, value);
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
-        Objects.requireNonNull(entity, "Entity is null.");
-        Matcher matcher = pattern.matcher(template);
-        if (!matcher.find()) {
-            throw new MapperException("Template given cannot be matched. Must have: {name}.");
-        }
-
-        String alt = "";
-        for (JoinCondition join : joins) {
-            String parent = join.getParent();
-            if (parent.equals(matcher.group(1))) {
-                alt = join.getChild();
-            }
-        }
-
-        String value = entity.getPropertyValue(alt);
         return value == null ? null : createRDFTerm(template, matcher, value);
     }
 

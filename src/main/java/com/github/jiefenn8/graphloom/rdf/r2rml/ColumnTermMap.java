@@ -7,11 +7,9 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.google.gson.Gson;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * This interface defines the base methods that manages the mapping of any
@@ -41,19 +39,6 @@ public class ColumnTermMap implements TermMap {
     @Override
     public RDFNode generateRDFTerm(Entity entity) {
         String value = entity.getPropertyValue(columnName);
-        return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
-    }
-
-    @Override
-    public RDFNode generateRDFTerm(Set<JoinCondition> joins, Entity entity) {
-        String alt = StringUtils.EMPTY;
-        for (JoinCondition join : joins) {
-            if (join.getParent().equals(columnName)) {
-                alt = join.getChild();
-            }
-        }
-
-        String value = entity.getPropertyValue(alt);
         return value == null ? null : RDFTermHelper.asRDFTerm(value, termType);
     }
 

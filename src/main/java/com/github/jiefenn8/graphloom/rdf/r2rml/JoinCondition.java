@@ -5,6 +5,7 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
+
 import com.google.gson.Gson;
 
 import java.util.Objects;
@@ -27,7 +28,6 @@ public class JoinCondition {
      * @param child  the child column to join to parent
      */
     protected JoinCondition(String parent, String child) {
-
         this.parent = Objects.requireNonNull(parent);
         this.child = Objects.requireNonNull(child);
     }
@@ -67,5 +67,9 @@ public class JoinCondition {
     @Override
     public String toString() {
         return new Gson().toJson(this);
+    }
+
+    public String getJoinString() {
+        return "child." + child + "=parent." + parent;
     }
 }

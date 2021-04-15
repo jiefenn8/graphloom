@@ -46,7 +46,7 @@ public class R2RMLBuilderTest {
 
     @Test
     public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap() {
-        R2RMLMap result = r2rmlBuilder.parse("r2rml/valid_refObjectMap_withJoin.ttl");
+        R2RMLMap result = r2rmlBuilder.parse("r2rml/refobjectmap/refobjectmap_via_join.ttl");
         assertThat(result, is(notNullValue()));
     }
 }

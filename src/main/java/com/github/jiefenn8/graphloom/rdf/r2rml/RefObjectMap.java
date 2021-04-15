@@ -93,7 +93,7 @@ public class RefObjectMap implements NodeMap, EntityChild {
 
     @Override
     public RDFNode generateNodeTerm(Entity entity) {
-        RDFNode term = parentTriplesMap.generateEntityTerm(joinConditions, entity);
+        RDFNode term = parentTriplesMap.generateEntityTerm(entity);
         if (term.isLiteral()) {
             throw new MapperException("RefObjectMap should only return IRI.");
         }
@@ -151,7 +151,7 @@ public class RefObjectMap implements NodeMap, EntityChild {
          * this triples map (that accessed this ref object map) by the given
          * columns that exists in their table.
          *
-         * @param parent the column in the parent triples maps's logical table
+         * @param parent the column in the parent triples maps' logical table
          * @param child  the column in this triples map's logical table
          * @return this builder for fluent method chaining
          */

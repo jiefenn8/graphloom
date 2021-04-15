@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.BaseEntityReference;
-import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  * This class extends the base methods of the {@link BaseEntityReference} to manage
  * configuration to only handle SQL retrieval through the use of custom SQL query.
  */
-public class R2RMLView extends BaseEntityReference implements EntityReference {
+public class R2RMLView extends BaseEntityReference {
 
     /**
      * Constructs a R2RMLView with the specified custom SQL query as the source

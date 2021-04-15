@@ -57,14 +57,6 @@ public class SubjectMap implements PropertyMap, EntityChild {
         return term.asResource();
     }
 
-    public Resource generateEntityTerm(Set<JoinCondition> joins, Entity entity) {
-        RDFNode term = termMap.generateRDFTerm(joins, entity);
-        if (term.isLiteral()) {
-            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
-        }
-        return term.asResource();
-    }
-
     /**
      * Adds association to an triples map that this subject map belongs to.
      *
