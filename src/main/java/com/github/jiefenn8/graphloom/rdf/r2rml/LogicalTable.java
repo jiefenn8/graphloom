@@ -5,8 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityChild;
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.EntityReference;
 import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
@@ -23,11 +21,10 @@ import java.util.UUID;
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
-public class LogicalTable implements SourceMap, EntityChild {
+public class LogicalTable implements SourceMap {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogicalTable.class);
     private final UUID uuid;
-    private final TriplesMap parent;
     private final EntityReference entityReference;
 
     /**
@@ -39,7 +36,6 @@ public class LogicalTable implements SourceMap, EntityChild {
     private LogicalTable(Builder builder) {
         Objects.requireNonNull(builder);
         entityReference = builder.entityReference;
-        parent = builder.parent;
         uuid = builder.uuid;
     }
 
@@ -69,11 +65,6 @@ public class LogicalTable implements SourceMap, EntityChild {
     }
 
     @Override
-    public EntityMap getEntityMap() {
-        return parent;
-    }
-
-    @Override
     public String toString() {
         return GsonHelper.loadTypeAdapters(new GsonBuilder())
                 .create()
@@ -92,7 +83,6 @@ public class LogicalTable implements SourceMap, EntityChild {
 
         private UUID uuid;
         private EntityReference entityReference;
-        private TriplesMap parent;
 
         /**
          * Constructs a Builder with the specified SourceConfig instance.
@@ -114,16 +104,6 @@ public class LogicalTable implements SourceMap, EntityChild {
             this.entityReference = Objects.requireNonNull(logicalTable.entityReference, "Payload must not be null.");
         }
 
-        /**
-         * Adds association to an triples map that this logical table belongs to.
-         *
-         * @param triplesMap the triples map to associate with
-         * @return this builder for fluent method chaining
-         */
-        protected Builder withTriplesMap(TriplesMap triplesMap) {
-            parent = triplesMap;
-            return this;
-        }
 
         /**
          * Builds a query config with a join query consisting of two query,

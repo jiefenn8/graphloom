@@ -5,8 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityChild;
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
@@ -26,10 +24,9 @@ import java.util.UUID;
  * This class is an immutable class and require the use of its {@link Builder}
  * class to populate and create an instance.
  */
-public class RefObjectMap implements NodeMap, EntityChild {
+public class RefObjectMap implements NodeMap {
 
     private final UUID uuid;
-    private final TriplesMap parent;
     private final TriplesMap parentTriplesMap;
     private final Set<JoinCondition> joinConditions;
 
@@ -44,7 +41,6 @@ public class RefObjectMap implements NodeMap, EntityChild {
         uuid = builder.uuid;
         parentTriplesMap = builder.parentTriplesMap;
         joinConditions = Set.copyOf(builder.joinConditions);
-        parent = builder.parent;
     }
 
     /**
@@ -87,11 +83,6 @@ public class RefObjectMap implements NodeMap, EntityChild {
     }
 
     @Override
-    public EntityMap getEntityMap() {
-        return parent;
-    }
-
-    @Override
     public RDFNode generateNodeTerm(Entity entity) {
         RDFNode term = parentTriplesMap.generateEntityTerm(entity);
         if (term.isLiteral()) {
@@ -120,7 +111,6 @@ public class RefObjectMap implements NodeMap, EntityChild {
         private static final Logger LOGGER = LoggerFactory.getLogger(Builder.class);
         private final TriplesMap parentTriplesMap;
         private final Set<JoinCondition> joinConditions = new HashSet<>();
-        private TriplesMap parent;
         private UUID uuid;
 
         /**
@@ -131,18 +121,6 @@ public class RefObjectMap implements NodeMap, EntityChild {
          */
         public Builder(TriplesMap parentTriplesMap) {
             this.parentTriplesMap = parentTriplesMap;
-        }
-
-        /**
-         * Adds association to an triples map that this ref object map
-         * belongs to.
-         *
-         * @param triplesMap the triples map to associate with
-         * @return this builder for fluent method chaining
-         */
-        public Builder withTriplesMap(TriplesMap triplesMap) {
-            parent = triplesMap;
-            return this;
         }
 
         /**

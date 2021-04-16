@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.PropertyMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
@@ -21,12 +20,11 @@ import java.util.*;
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
  * This term map will return either a rr:IRI or rr:BlankNode for its main term.
  */
-public class SubjectMap implements PropertyMap, EntityChild {
+public class SubjectMap implements PropertyMap {
 
     private final UUID uuid = UUID.randomUUID();
     private final TermMap termMap;
     private final List<Resource> classes = new ArrayList<>();
-    private EntityMap parent;
 
     /**
      * Constructs a SubjectMap with the specified term map that is either
@@ -57,25 +55,9 @@ public class SubjectMap implements PropertyMap, EntityChild {
         return term.asResource();
     }
 
-    /**
-     * Adds association to an triples map that this subject map belongs to.
-     *
-     * @param entityMap the triples map to associate with
-     * @return this builder for fluent method chaining
-     */
-    protected SubjectMap withParentMap(EntityMap entityMap) {
-        parent = entityMap;
-        return this;
-    }
-
     @Override
     public List<Resource> listEntityClasses() {
         return Collections.unmodifiableList(classes);
-    }
-
-    @Override
-    public EntityMap getEntityMap() {
-        return parent;
     }
 
     @Override

@@ -42,7 +42,7 @@ public class TriplesMap implements EntityMap {
         Objects.requireNonNull(builder);
         idName = builder.idName;
         logicalTable = builder.logicalTable;
-        subjectMap = builder.subjectMap.withParentMap(this);
+        subjectMap = builder.subjectMap;
         predicateObjectMaps = Map.copyOf(builder.predicateObjectMaps);
     }
 

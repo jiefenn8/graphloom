@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityChild;
 import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.RelationMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
@@ -22,7 +21,7 @@ import java.util.UUID;
  * Implementation of R2RML PredicateMap with {@link RelationMap} interface.
  * This term map will return either a rr:IRI for its main term.
  */
-public class PredicateMap implements RelationMap, EntityChild {
+public class PredicateMap implements RelationMap {
 
     private final UUID uuid = UUID.randomUUID();
     private final TermMap termMap;
@@ -44,27 +43,11 @@ public class PredicateMap implements RelationMap, EntityChild {
         return ResourceFactory.createProperty(term.getURI());
     }
 
-    /**
-     * Adds association to an triples map that this predicate map belongs to.
-     *
-     * @param entityMap the triples map to associate with
-     * @return this builder for fluent method chaining
-     */
-    protected PredicateMap withParentMap(EntityMap entityMap) {
-        parent = entityMap;
-        return this;
-    }
-
     @Override
     public String toString() {
         return GsonHelper.loadTypeAdapters(new GsonBuilder())
                 .create()
                 .toJson(this);
-    }
-
-    @Override
-    public EntityMap getEntityMap() {
-        return parent;
     }
 
     @Override

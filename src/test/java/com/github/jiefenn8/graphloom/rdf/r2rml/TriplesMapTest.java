@@ -37,7 +37,6 @@ public class TriplesMapTest {
     @Before
     public void setUp() {
         triplesMap = new TriplesMap.Builder(StringUtils.EMPTY, mockLogicalTable, mockSubjectMap).build();
-        when(mockSubjectMap.withParentMap(any())).thenReturn(mockSubjectMap);
     }
 
     @Test

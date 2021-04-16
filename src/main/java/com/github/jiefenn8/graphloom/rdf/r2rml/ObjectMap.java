@@ -5,8 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityChild;
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.util.GsonHelper;
@@ -20,11 +18,10 @@ import java.util.UUID;
  * Implementation of R2RML ObjectMap with {@link NodeMap} interface.
  * This term map will return either a rr:IRI, rr:BlankNode or rr:Literal for its main term.
  */
-public class ObjectMap implements NodeMap, EntityChild {
+public class ObjectMap implements NodeMap {
 
     private final UUID uuid = UUID.randomUUID();
     private final TermMap termMap;
-    private EntityMap parent;
 
     /**
      * Constructs an ObjectMap with the specified term map that is either
@@ -34,22 +31,6 @@ public class ObjectMap implements NodeMap, EntityChild {
      */
     protected ObjectMap(TermMap termMap) {
         this.termMap = Objects.requireNonNull(termMap, "Term map must not be null.");
-    }
-
-    /**
-     * Adds association to an triples map that this object map belongs to.
-     *
-     * @param entityMap the triples map to associate with
-     * @return this builder for fluent method chaining
-     */
-    protected ObjectMap withParentMap(EntityMap entityMap) {
-        parent = entityMap;
-        return this;
-    }
-
-    @Override
-    public EntityMap getEntityMap() {
-        return parent;
     }
 
     @Override

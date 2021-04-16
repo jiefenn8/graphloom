@@ -64,13 +64,6 @@ public class LogicalTableTest {
     }
 
     @Test
-    public void GivenTriplesMap_WhenBuildWithTriplesMap_ThenReturnBuilder() {
-        LogicalTable.Builder result = new LogicalTable.Builder(mock(EntityReference.class));
-        result.withTriplesMap(mock(TriplesMap.class));
-        assertThat(result, is(notNullValue()));
-    }
-
-    @Test
     public void GivenLogicalTableAndJoinConditions_WhenBuildWithJointSQLQuery_ThenReturnBuilder() {
         EntityReference mockEntityReference = mock(EntityReference.class);
         JoinCondition mockJoinCondition = mock(JoinCondition.class);
