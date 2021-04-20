@@ -10,6 +10,8 @@ import com.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -29,7 +31,7 @@ public class RDFTermHelper {
     public static RDFNode asRDFTerm(String value, TermType type) {
         Objects.requireNonNull(value);
         return switch (Objects.requireNonNull(type)) {
-            case IRI -> ResourceFactory.createResource(value);
+            case IRI -> ResourceFactory.createResource(URLEncoder.encode(value, StandardCharsets.UTF_8));
             case BLANK -> ResourceFactory.createResource();
             case LITERAL -> ResourceFactory.createStringLiteral(value);
             default -> throw new MapperException("Term type is UNDEFINED.");
