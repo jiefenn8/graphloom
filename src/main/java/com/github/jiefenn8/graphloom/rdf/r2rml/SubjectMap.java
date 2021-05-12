@@ -5,7 +5,6 @@
 
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
-import com.github.jiefenn8.graphloom.api.EntityMap;
 import com.github.jiefenn8.graphloom.api.PropertyMap;
 import com.github.jiefenn8.graphloom.api.inputsource.Entity;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
@@ -20,44 +19,31 @@ import java.util.*;
  * Implementation of R2RML SubjectMap with {@link PropertyMap} interface.
  * This term map will return either a rr:IRI or rr:BlankNode for its main term.
  */
-public class SubjectMap implements PropertyMap {
+public class SubjectMap extends AbstractTermMap implements PropertyMap {
 
     private final UUID uuid = UUID.randomUUID();
-    private final TermMap termMap;
-    private final List<Resource> classes = new ArrayList<>();
+    private final Set<Resource> classes;
 
     /**
-     * Constructs a SubjectMap with the specified term map that is either
-     * a constant, template or a column typ.
+     * Constructs a SubjectMap with the specified TermMap Builder containing the
+     * data to initialise an immutable instance.
      *
-     * @param termMap the term map that this instance will behave as
+     * @param builder the TermMap Builder to builder instance from
      */
-    protected SubjectMap(TermMap termMap) {
-        this.termMap = Objects.requireNonNull(termMap, "Must provide a TermMap.");
-    }
-
-    /**
-     * Adds class type to the entity associated with this subject map.
-     *
-     * @param resource the class to associate with entity
-     */
-    public void addEntityClass(Resource resource) {
-        Objects.requireNonNull(resource);
-        classes.add(resource);
+    private SubjectMap(Builder builder) {
+        super(builder);
+        this.classes = Set.copyOf(builder.classes);
     }
 
     @Override
     public Resource generateEntityTerm(Entity entity) {
-        RDFNode term = termMap.generateRDFTerm(entity);
-        if (term.isLiteral()) {
-            throw new MapperException("SubjectMap can only return IRI or BlankNode.");
-        }
-        return term.asResource();
+        RDFNode rdfTerm = generateRDFTerm(entity);
+        return rdfTerm == null ? null : rdfTerm.asResource();
     }
 
     @Override
     public List<Resource> listEntityClasses() {
-        return Collections.unmodifiableList(classes);
+        return new ArrayList<>(classes);
     }
 
     @Override
@@ -71,4 +57,49 @@ public class SubjectMap implements PropertyMap {
     public String getUniqueId() {
         return uuid.toString();
     }
+
+    /**
+     * Builder class for SubjectMap.
+     */
+    public static class Builder extends AbstractBuilder {
+
+        private final Set<Resource> classes = new HashSet<>();
+
+        /**
+         * Constructs a Builder with the specified base value and valued type.
+         *
+         * @param baseValue  the value for this TermMap to use
+         * @param valuedType the type
+         */
+        public Builder(RDFNode baseValue, ValuedType valuedType) {
+            super(baseValue, valuedType);
+        }
+
+        @Override
+        public Builder termType(TermType type) {
+            if (type.equals(TermType.LITERAL)) {
+                throw new MapperException("SubjectMap can only generate IRI or BlankNode.");
+            }
+            this.termType = type;
+            return this;
+        }
+
+        /**
+         * Associates a collection of classes with this to the RDF term that
+         * this TermMap will generate.
+         *
+         * @param classes Set containing unique classes
+         * @return this Builder for method chaining
+         */
+        public Builder addEntityClasses(Set<Resource> classes) {
+            this.classes.addAll(classes);
+            return this;
+        }
+
+        @Override
+        public SubjectMap build() {
+            return new SubjectMap(this);
+        }
+    }
+
 }

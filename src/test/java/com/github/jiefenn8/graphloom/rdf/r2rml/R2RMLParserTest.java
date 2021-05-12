@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
-import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLSyntax;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.commons.lang3.StringUtils;

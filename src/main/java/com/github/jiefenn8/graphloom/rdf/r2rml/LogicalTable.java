@@ -10,6 +10,7 @@ import com.github.jiefenn8.graphloom.api.SourceMap;
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.github.jiefenn8.graphloom.util.GsonHelper;
 import com.google.gson.GsonBuilder;
+import org.apache.jena.rdf.model.RDFNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +105,6 @@ public class LogicalTable implements SourceMap {
             this.entityReference = Objects.requireNonNull(logicalTable.entityReference, "Payload must not be null.");
         }
 
-
         /**
          * Builds a query config with a join query consisting of two query,
          * table or mixed that is associated to each other through join
@@ -142,7 +142,6 @@ public class LogicalTable implements SourceMap {
             }
             return joins;
         }
-
 
         /**
          * Returns a prepared query using the query/table in the given source

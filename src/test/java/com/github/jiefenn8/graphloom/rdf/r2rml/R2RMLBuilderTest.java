@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
-import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.junit.Assert;

@@ -7,7 +7,7 @@ package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.api.NodeMap;
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
-import com.github.jiefenn8.graphloom.rdf.r2rml.*;
+import com.github.jiefenn8.graphloom.rdf.r2rml.AbstractTermMap.ValuedType;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.jena.rdf.model.RDFNode;
@@ -160,14 +160,49 @@ public class R2RMLBuilder {
      * @return instance of SubjectMap with mapped values
      */
     private SubjectMap buildSubjectMap(Statement triple) {
-        SubjectMap subjectMap = buildTermMap(triple,
-                R2RMLFactory::createSubjectMap,
-                TermType.IRI);
+        ValuedType valuedType = getTermMapValuedType(triple);
+        return new SubjectMap.Builder(getTermMapValue(triple, valuedType), valuedType)
+                .termType(TermType.IRI)
+                .addEntityClasses(r2rmlParser.listEntityClasses(triple.getResource()))
+                .build();
+    }
 
-        r2rmlParser.listEntityClasses(triple.getResource())
-                .forEach(subjectMap::addEntityClass);
+    /**
+     * Returns the RDFNode of a TermMap statement with it specified ValuedType.
+     *
+     * @param triple the statement containing a TermMap to extract value
+     * @param valuedType the type the TermMap and value is
+     * @return the node of the TermMap value
+     */
+    private RDFNode getTermMapValue(Statement triple, ValuedType valuedType) {
+        return switch (valuedType) {
+            case CONSTANT -> r2rmlParser.getConstantValue(triple);
+            case TEMPLATE -> r2rmlParser.getTemplateNode(triple);
+            case COLUMN -> r2rmlParser.getColumnNode(triple);
+        };
+    }
 
-        return subjectMap;
+    /**
+     * Returns the ValuedType for this TermMap located in this statement.
+     *
+     * @param triple the statement containing a TermMap to identify
+     * @return ValuedType of the TermMap located in statement
+     */
+    private ValuedType getTermMapValuedType(Statement triple) {
+        if (r2rmlParser.isConstant(triple)) {
+            return ValuedType.CONSTANT;
+        }
+
+        Resource resource = triple.getResource();
+        if (r2rmlParser.isTemplate(resource)) {
+            return ValuedType.TEMPLATE;
+        }
+
+        if (r2rmlParser.isColumn(resource)) {
+            return ValuedType.COLUMN;
+        }
+
+        throw new ParserException("%s is not a TermMap.", triple);
     }
 
     /**
@@ -175,8 +210,7 @@ public class R2RMLBuilder {
      * containing the predicate object map property to build both
      * predicate map and object map to return as a pair.
      *
-     * @param triple the statement with the predicate object map
-     *               property
+     * @param triple the statement with the predicate object map property
      * @return pair of both PredicateMap and ObjectMap built
      */
     private Pair<PredicateMap, NodeMap> buildPredicateObjectMap(Statement triple) {
@@ -216,6 +250,7 @@ public class R2RMLBuilder {
         ObjectMap objectMap = buildTermMap(objectMapTriple, R2RMLFactory::createObjectMap, TermType.LITERAL);
         return new ImmutablePair<>(predicateMap, objectMap);
     }
+
 
     /**
      * Builds and returns a TermMap with the properties and

@@ -6,7 +6,6 @@
 package com.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.github.jiefenn8.graphloom.exceptions.ParserException;
-import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLSyntax;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.FileManager;
@@ -382,6 +381,18 @@ public class R2RMLParser {
                 .getString();
     }
 
+    /**
+     * Returns the Literal (object) value of the template property
+     * (predicate) in the given template valued term map resource
+     * (subject).
+     *
+     * @param triple the statement containing the TermMap with the template node
+     * @return node associated with the template property
+     */
+    protected RDFNode getTemplateNode(Statement triple) {
+        return getPropertyResourceValue(triple.getResource(), R2RMLSyntax.template);
+    }
+
     //Column TermMap related parsing
 
     /**
@@ -407,6 +418,17 @@ public class R2RMLParser {
         return getPropertyResourceValue(subject, R2RMLSyntax.column)
                 .asLiteral()
                 .getString();
+    }
+
+    /**
+     * Returns the Literal (object) value of the column property
+     * (predicate) in the given column valued term map.
+     *
+     * @param triple the statement containing the TermMap with the column node
+     * @return node associated with the column property
+     */
+    protected RDFNode getColumnNode(Statement triple) {
+        return getPropertyResourceValue(triple.getResource(), R2RMLSyntax.column);
     }
 
     //Helper methods 2.0

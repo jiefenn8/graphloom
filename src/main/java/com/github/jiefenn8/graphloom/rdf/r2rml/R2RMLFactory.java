@@ -68,19 +68,6 @@ public class R2RMLFactory {
         return new PredicateMap(termMap);
     }
 
-    //SubjectMap
-
-    /**
-     * Constructs a SubjectMap with the specified term map that is either
-     * a constant, template or a column type.
-     *
-     * @param termMap the term map to use for this map config
-     * @return instance of subject map with a given term map
-     */
-    public static SubjectMap createSubjectMap(TermMap termMap) {
-        return new SubjectMap(termMap);
-    }
-
     //ObjectMap
 
     /**
