@@ -7,7 +7,7 @@ package com.github.jiefenn8.graphloom.integrationtest;
 
 import com.github.jiefenn8.graphloom.exceptions.MapperException;
 import com.github.jiefenn8.graphloom.rdf.RDFMapper;
-import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
+import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.rdf.model.Model;
 import org.junit.Assert;

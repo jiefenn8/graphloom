@@ -5,7 +5,7 @@
 
 package com.github.jiefenn8.graphloom.integrationtest;
 
-import com.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
+import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLBuilder;
 import com.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.shared.NotFoundException;
 import org.junit.Assert;
