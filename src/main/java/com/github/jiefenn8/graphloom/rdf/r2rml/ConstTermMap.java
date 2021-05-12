@@ -17,6 +17,7 @@ import java.util.Objects;
  * source entity to their respective rdf term through the use of a constant
  * term.
  */
+@Deprecated
 public class ConstTermMap implements TermMap {
 
     private final RDFNode constTerm;

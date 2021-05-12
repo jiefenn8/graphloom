@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
  * This interface defines the base methods that manages the mapping of any
  * source entity to their respective rdf term through the use of template.
  */
+@Deprecated
 public class TemplateTermMap implements TermMap {
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)}");

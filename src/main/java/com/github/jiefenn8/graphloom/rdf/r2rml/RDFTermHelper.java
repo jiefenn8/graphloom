@@ -18,6 +18,7 @@ import java.util.Objects;
  * This class defines the base methods in managing common RDF related
  * operations.
  */
+@Deprecated
 public class RDFTermHelper {
 
     /**

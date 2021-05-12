@@ -375,6 +375,7 @@ public class R2RMLParser {
      * @param subject the term map resource
      * @return string associated with the template property
      */
+    @Deprecated
     protected String getTemplateValue(Resource subject) {
         return getPropertyResourceValue(subject, R2RMLSyntax.template)
                 .asLiteral()
@@ -401,6 +402,7 @@ public class R2RMLParser {
      * @param subject the resource representing a term map
      * @return string associated with the column property
      */
+    @Deprecated
     protected String getColumnName(Resource subject) {
         return getPropertyResourceValue(subject, R2RMLSyntax.column)
                 .asLiteral()

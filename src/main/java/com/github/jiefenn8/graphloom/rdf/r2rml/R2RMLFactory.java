@@ -12,6 +12,7 @@ import org.apache.jena.rdf.model.RDFNode;
  * This class defines the base methods that manages the setup and creation of
  * R2RML related classes.
  */
+@Deprecated
 public class R2RMLFactory {
 
     //LogicalTable

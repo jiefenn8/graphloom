@@ -16,6 +16,7 @@ import java.util.Objects;
  * source entity to their respective rdf term through the use of a column
  * to locate the term value.
  */
+@Deprecated
 public class ColumnTermMap implements TermMap {
 
     private final String columnName;
