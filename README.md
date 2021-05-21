@@ -4,7 +4,11 @@ A Java implementation of a RDB to Semantic Graph mapping library.
 
 [![Build Status](https://travis-ci.org/jiefenn8/graphloom.svg?branch=master)](https://travis-ci.org/jiefenn8/graphloom)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
 
-[ ![Download](https://api.bintray.com/packages/jiefenn8/graphloom/graphloom/images/download.svg) ](https://bintray.com/jiefenn8/graphloom/graphloom/_latestVersion)
+```
+21/05/2021
+Download is currently unavailable as we migrate our artifact repository home from Bintray to JFrog Platform. 
+Repository build information below are no longer valid and will be updated once we finish our migration.
+```
 
 ## Description
 
