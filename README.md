@@ -6,7 +6,7 @@ A Java implementation of a RDB to Semantic Graph mapping library.
 
 ```
 21/05/2021
-Download is currently unavailable as we migrate our artifact repository home from Bintray to JFrog Platform. 
+Download is currently unavailable as we migrate our artifact repository home from Bintray/JCenter to the next one. 
 Repository build information below are no longer valid and will be updated once we finish our migration.
 ```
 
