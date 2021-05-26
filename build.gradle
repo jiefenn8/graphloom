@@ -47,6 +47,27 @@ sourceSets {
     }
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier.set('sources')
+}
+
+javadoc {
+    // without the -quiet option, the build fails
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+
+    archiveClassifier.set('javadoc')
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
 task integrationTest(type: Test){
     description = 'Runs integration tests.'
     group = 'verification'
