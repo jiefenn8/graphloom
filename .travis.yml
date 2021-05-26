@@ -9,12 +9,4 @@ after_success:
  - bash <(curl -s https://codecov.io/bash) -c -F unittests
  - ./gradlew integrationTest && bash <(curl -s https://codecov.io/bash) -c -F integration 
  
-deploy:
-  provider: script
-  dry_run: false
-  skip_cleanup: true 
-  script: ./gradlew bintrayUpload 
-  on: 
-    tags: true 
-    branch: master
     
