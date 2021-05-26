@@ -69,6 +69,11 @@ public class JoinCondition {
         return new Gson().toJson(this);
     }
 
+    /**
+     * Returns the string version of a SQL Join for both child and parent.
+     *
+     * @return string of the joined child and parent
+     */
     public String getJoinString() {
         return "child." + child + "=parent." + parent;
     }

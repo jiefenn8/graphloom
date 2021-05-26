@@ -40,6 +40,14 @@ public class LogicalTable implements SourceMap {
         uuid = builder.uuid;
     }
 
+    /**
+     * Retrieves the LogicalTable from the parent TriplesMap found in the given
+     * RefObjectMap. Returns a LogicalTable a Joint SQL query that is the
+     * combination of this instance and the given LogicalTable.
+     *
+     * @param refObjectMap the reference containing the parent TriplesMap
+     * @return the LogicalTable of two Joint SQL tables
+     */
     public LogicalTable asJointLogicalTable(RefObjectMap refObjectMap) {
         LogicalTable logicalTable = (LogicalTable) refObjectMap.getParentTriplesMap().getSourceMap();
         return new LogicalTable.Builder(this)

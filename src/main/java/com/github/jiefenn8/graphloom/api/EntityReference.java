@@ -47,6 +47,10 @@ public interface EntityReference {
      * Default types of payload.
      */
     enum DefaultType implements PayloadType {
+
+        /**
+         * UNDEFINED type. Only use for testing.
+         */
         UNDEFINED
     }
 
