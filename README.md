@@ -20,7 +20,7 @@ To get started on using GraphLoom on your project, ensure you have met all prere
 
 ### Prerequisites
 
-GraphLoom target compatibility is Java 8. Your Java SDK must have compatibility for Java 8 for this library to work properly. To obtain Java SDK, go to either [OpenJDK](https://openjdk.java.net/) or [OracleJDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) depending on your own project license requirement.
+GraphLoom target compatibility is currently Java 15 (17 for LTS soon). Your Java SDK must have compatibility for Java 15 for this library to work properly. To obtain Java SDK, go to either [OpenJDK](https://openjdk.java.net/) or [OracleJDK](https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html) depending on your own project license requirement.
  
 ### Adding GraphLoom to your build
 
