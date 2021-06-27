@@ -19,6 +19,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'jacoco'
+    id 'signing'
 }
 
 group = 'com.github.jiefenn8.graphloom'
@@ -34,6 +35,13 @@ repositories {
     mavenCentral()
 }
 
+//Integration test sources
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+}
+
 sourceSets {
     integrationTest {
         java{
@@ -45,48 +53,7 @@ sourceSets {
     }
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier.set('sources')
-}
-
-javadoc {
-    // without the -quiet option, the build fails
-    options.addStringOption('Xdoclint:none', '-quiet')
-}
-
-task javadocJar(type: Jar) {
-    from javadoc
-
-    archiveClassifier.set('javadoc')
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-task integrationTest(type: Test){
-    description = 'Runs integration tests.'
-    group = 'verification'
-
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
-}
-
-task integTestReport(type :JacocoReport){
-    sourceSets sourceSets.main
-    executionData integrationTest
-    reports {
-        xml.enabled true
-        html.enabled false
-    }
-}
-
-configurations {
-    integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom runtimeOnly
-}
+//Idea plugin
 
 idea {
     module {
@@ -94,6 +61,61 @@ idea {
         testSourceDirs += project.sourceSets.integrationTest.resources.srcDirs
     }
 }
+
+//JavaDoc and Sources Jars
+
+javadoc {
+    // without the -quiet option, the build fails
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+//Testing
+
+test.finalizedBy jacocoTestReport
+
+task integrationTest(type: Test){
+    mustRunAfter test
+    group = 'verification'
+    description = 'Runs all integration tests.'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+check.dependsOn integrationTest
+
+//Reporting
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
+
+task integrationTestReport(type :JacocoReport){
+    dependsOn integrationTest
+    group = 'verification'
+    description = 'Generates code coverage report for the integration test task.'
+    sourceSets sourceSets.main
+    executionData integrationTest
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
+
+integrationTest.finalizedBy integrationTestReport
+
+//Dependencies
 
 dependencies {
     //Test
@@ -114,12 +136,57 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled false
+//Publishing
+
+publishing {
+    publications {
+        graphloom(MavenPublication) {
+            from components.java
+            groupId = project.group
+            artifactId = project.archivesBaseName
+            version = project.version
+            pom {
+                name = "GraphLoom Core"
+                description = project.description
+                url = "https://github.com/jiefenn8/graphloom"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "jiefenn8"
+                        name = "Javen Liu"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git//github.com:jiefenn8/graphloom.git"
+                    developerConnection = "scm:git:ssh://github.com:jiefenn8/graphloom.git"
+                    url = "https://github.com/jiefenn8/graphloom"
+                }
+            }
+
+        }
+    }
+    repositories {
+        maven {
+            def snapshotRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            def stagingRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            url = version.contains('SNAPSHOT') ? snapshotRepoUrl : stagingRepoUrl
+            credentials {
+                username = System.getenv("OSSRH_USERNAME")
+                password = System.getenv("OSSRH_PASSWORD")
+            }
+        }
     }
 }
 
-check.dependsOn jacocoTestReport
-integrationTest.finalizedBy integTestReport
+signing {
+    def signingKeyId = System.getenv("GPG_KEY_ID")
+    def signingKey = System.getenv("GPG_KEYSTORE")
+    def signingPassword = System.getenv("GPG_PASSWORD")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign publishing.publications.graphloom
+}
