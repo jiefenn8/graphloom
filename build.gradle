@@ -184,5 +184,9 @@ publishing {
 }
 
 signing {
+    def signingKeyId = System.getenv("GPG_KEY_ID")
+    def signingKey = System.getenv("GPG_KEYSTORE")
+    def signingPassword = System.getenv("GPG_PASSWORD")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
     sign publishing.publications.graphloom
 }

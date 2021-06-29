@@ -62,10 +62,10 @@ jobs:
       run: chmod +x gradlew
     - name: Decode GPG secret to file
       run: |
-        mkdir -p ~/.gnupg/
-        echo "${{secrets.GPG_KEYSTORE}}" | base64 --decode > ~/.gnupg/secring.gpg
+        echo "${{secrets.GPG_KEYSTORE}}" > ~/.gradle/secring.gpg.b64
+        base64 -d ~/.gradle/secring.gpg.b64 > ~/.gradle/secring.gpg
     - name: Build and upload to OSSRH
-      run: ./gradlew publish -Psigning.keyId=${{secrets.GPG_KEY_ID}} -Psigning.password=${{secrets.GPG_PASSWORD}} -Psigning.secretKeyRingFile=$(echo ~/.gnupg/secring.gpg)
+      run: ./gradlew publish -Psigning.keyId=${{secrets.GPG_KEY_ID}} -Psigning.password=${{secrets.GPG_PASSWORD}} -Psigning.secretKeyRingFile=$(echo ~/.gradle/secring.gpg)
       env:
         OSSRH_USERNAME: ${{secrets.OSSRH_USERNAME}}
         OSSRH_PASSWORD: ${{secrets.OSSRH_PASSWORD}}
