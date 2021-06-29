@@ -22,7 +22,7 @@ plugins {
     id 'signing'
 }
 
-group = 'com.github.jiefenn8.graphloom'
+group = 'io.github.jiefenn8.graphloom'
 description = 'GraphLoom semantic graph mapping library core API and implementation.'
 archivesBaseName = 'graphloom-core'
 
