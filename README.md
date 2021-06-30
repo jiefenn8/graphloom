@@ -2,12 +2,14 @@
 
 A Java implementation of a RDB to Semantic Graph mapping library. 
 
-[![Build Status](https://travis-ci.org/jiefenn8/graphloom.svg?branch=master)](https://travis-ci.org/jiefenn8/graphloom)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
+[![CI](https://github.com/jiefenn8/graphloom/workflows/CI/badge.svg)](https://github.com/jiefenn8/graphloom/actions?query=workflow%3ACI)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
+
+[![Release](https://img.shields.io/github/v/release/jiefenn8/graphloom)](https://github.com/jiefenn8/graphloom/releases/latest)[![Maven Central](https://img.shields.io/maven-central/v/io.github.jiefenn8/graphloom/graphloom-core.svg)](https://search.maven.org/artifact/io.github.jiefenn8/graphloom/graphloom-core/)[![javadoc](https://javadoc.io/badge2/io.github.jiefenn8.graphloom/graphloom-core/javadoc.svg)](https://javadoc.io/doc/io.jiefenn8.graphloom/graphloom-core) 
 
 ```
-21/05/2021
-Download is currently unavailable as we migrate our artifact repository home from Bintray/JCenter to the next one. 
-Repository build information below are no longer valid and will be updated once we finish our migration.
+30/06/2021
+Due to the closure of Bintray, our artifact repository has now been migrated to Maven Central. 
+This also means that any releases before this statement date will be unavailable to download. 
 ```
 
 ## Description
@@ -26,42 +28,19 @@ GraphLoom target compatibility is currently Java 15 (17 for LTS soon). Your Java
 
 #### Maven
 
-Repository:
-```
-<repository>
-    <snapshots>
-        <enabled>false</enabled>
-    </snapshots>
-    <id>bintray-jiefenn8-graphloom</id>
-    <name>bintray</name>
-    <url>https://dl.bintray.com/jiefenn8/graphloom</url>
-</repository>
-```
-
-Dependency:
 ```
 <dependency>
-  <groupId>com.github.jiefenn8.graphloom</groupId>
+  <groupId>io.github.jiefenn8.graphloom</groupId>
   <artifactId>graphloom-core</artifactId>
-  <version>0.4.5</version>
+  <version>0.5.1</version>
 </dependency>
 ```
 
 #### Gradle
 
-Repository:
-```
-repositories {
-    maven {
-        url  "https://dl.bintray.com/jiefenn8/graphloom" 
-    }
-}
-```
-
-Dependency:
 ```
 dependencies {
-  implementation 'com.github.jiefenn8.graphloom:graphloom-core:0.4.5'
+  implementation 'io.github.jiefenn8.graphloom:graphloom-core:0.5.1'
 }
 ```
 
