@@ -4,7 +4,7 @@ A Java implementation of a RDB to Semantic Graph mapping library.
 
 [![CI](https://github.com/jiefenn8/graphloom/workflows/CI/badge.svg)](https://github.com/jiefenn8/graphloom/actions?query=workflow%3ACI)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
 
-[![Release](https://img.shields.io/github/v/release/jiefenn8/graphloom)](https://github.com/jiefenn8/graphloom/releases/latest)[![Maven Central](https://img.shields.io/maven-central/v/io.github.jiefenn8/graphloom/graphloom-core.svg)](https://search.maven.org/artifact/io.github.jiefenn8/graphloom/graphloom-core/)[![javadoc](https://javadoc.io/badge2/io.github.jiefenn8.graphloom/graphloom-core/javadoc.svg)](https://javadoc.io/doc/io.jiefenn8.graphloom/graphloom-core) 
+[![Release](https://img.shields.io/github/v/release/jiefenn8/graphloom)](https://github.com/jiefenn8/graphloom/releases/latest)[![Maven Central](https://img.shields.io/maven-central/v/io.github.jiefenn8.graphloom/graphloom-core?color=blue)](https://search.maven.org/artifact/io.github.jiefenn8.graphloom/graphloom-core)[![javadoc](https://javadoc.io/badge2/io.github.jiefenn8.graphloom/graphloom-core/javadoc.svg)](https://javadoc.io/doc/io.github.jiefenn8.graphloom/graphloom-core) 
 
 ```
 30/06/2021
