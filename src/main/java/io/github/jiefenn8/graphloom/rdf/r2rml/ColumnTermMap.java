@@ -7,7 +7,6 @@ package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.Gson;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.RDFNode;
 
 import java.util.Objects;

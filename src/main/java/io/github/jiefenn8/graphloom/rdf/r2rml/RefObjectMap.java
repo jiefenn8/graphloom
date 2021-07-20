@@ -6,7 +6,6 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.GsonBuilder;
-import io.github.jiefenn8.graphloom.api.EntityMap;
 import io.github.jiefenn8.graphloom.api.NodeMap;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
