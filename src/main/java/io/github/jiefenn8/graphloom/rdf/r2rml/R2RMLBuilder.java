@@ -214,12 +214,14 @@ public class R2RMLBuilder {
      */
     private Pair<PredicateMap, NodeMap> buildPredicateObjectMap(Statement triple) {
         Resource parentTriplesMap = triple.getSubject();
-        Resource predicateObjectMapResource = triple.getResource();
+        Resource predicateObjectMapRes = triple.getResource();
 
-        Statement predicateMapTriple = r2rmlParser.getPredicateMap(predicateObjectMapResource);
-        PredicateMap predicateMap = buildTermMap(predicateMapTriple, R2RMLFactory::createPredicateMap, TermType.IRI);
+        Statement predicateMapTriple = r2rmlParser.getPredicateMap(predicateObjectMapRes);
+        ValuedType pmValuedType = getTermMapValuedType(predicateMapTriple);
+        RDFNode predicateMapBase = getTermMapValue(predicateMapTriple, pmValuedType);
+        PredicateMap predicateMap = new PredicateMap.Builder(predicateMapBase, pmValuedType).build();
 
-        Statement objectMapTriple = r2rmlParser.getObjectMap(predicateObjectMapResource);
+        Statement objectMapTriple = r2rmlParser.getObjectMap(predicateObjectMapRes);
         Resource objectMapResource = objectMapTriple.getResource();
         if (r2rmlParser.isRefObjectMap(objectMapResource)) {
             Resource refTriplesMapResource = r2rmlParser.getParentTriplesMap(objectMapResource);
@@ -242,14 +244,12 @@ public class R2RMLBuilder {
                     refObjectMapBuilder.addJoinCondition(parent, child);
                 }
             }
-
             return new ImmutablePair<>(predicateMap, refObjectMapBuilder.build());
         }
 
-        ValuedType valuedType = getTermMapValuedType(objectMapTriple);
-        ObjectMap objectMap = new ObjectMap.Builder(getTermMapValue(objectMapTriple, valuedType), valuedType)
-                .build();
-
+        ValuedType objectMapValuedType = getTermMapValuedType(objectMapTriple);
+        RDFNode objectMapBase = getTermMapValue(objectMapTriple, objectMapValuedType);
+        ObjectMap objectMap = new ObjectMap.Builder(objectMapBase, objectMapValuedType).build();
         return new ImmutablePair<>(predicateMap, objectMap);
     }
 

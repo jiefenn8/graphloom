@@ -55,19 +55,6 @@ public class R2RMLFactory {
         return r2rmlView;
     }
 
-    //PredicateMap
-
-    /**
-     * Constructs a PredicateMap with the specified term map that is either
-     * a constant, template or a column type.
-     *
-     * @param termMap the term map to use for this map config
-     * @return instance of predicate map with a given term map
-     */
-    public static PredicateMap createPredicateMap(TermMap termMap) {
-        return new PredicateMap(termMap);
-    }
-
     //TermMap
 
     /**
