@@ -71,7 +71,7 @@ public abstract class AbstractTermMap implements TermMap {
      * - Multiple column names should be separate from each other.
      *
      * @param entity the entity source containing the data for generation
-     * @return the value generated from template and source as RDF term
+     * @return the term generated, otherwise null if no value cannot be found
      */
     private RDFNode createTemplateTerm(Entity entity) {
         String template = baseValue.asLiteral().getString();
@@ -109,15 +109,24 @@ public abstract class AbstractTermMap implements TermMap {
      * @param type  the term type to map the value into
      * @return the generated term value to the type specified
      */
-    private RDFNode asRDFTerm(String term, TermType type) {
+    protected RDFNode asRDFTerm(String term, TermType type) {
         Objects.requireNonNull(term);
         return switch (type) {
             case IRI -> ResourceFactory.createResource(term);
             case BLANK -> ResourceFactory.createResource();
-            case LITERAL -> ResourceFactory.createStringLiteral(value);
-            default -> throw new MapperException("Term type is UNDEFINED.");
+            case LITERAL -> ResourceFactory.createStringLiteral(term);
+            default -> handleDefaultGeneration(term);
         };
     }
+
+    /**
+     * Returns the term created from the given value with the default
+     * generation rule defined.
+     *
+     * @param term the String value of the term to turn into RDF
+     * @return the generated term value with the default generation defined
+     */
+    protected abstract RDFNode handleDefaultGeneration(String term);
 
     /**
      * ENUM to manage different valued TermMaps.

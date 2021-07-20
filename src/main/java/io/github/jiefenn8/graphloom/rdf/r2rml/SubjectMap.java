@@ -59,6 +59,11 @@ public class SubjectMap extends AbstractTermMap implements PropertyMap {
         return uuid.toString();
     }
 
+    @Override
+    protected RDFNode handleDefaultGeneration(String term) {
+        return asRDFTerm(term, TermType.IRI);
+    }
+
     /**
      * Builder class for SubjectMap.
      */
