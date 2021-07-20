@@ -163,7 +163,6 @@ public class R2RMLBuilder {
         ValuedType valuedType = getTermMapValuedType(triple);
         return new SubjectMap.Builder(getTermMapValue(triple, valuedType), valuedType)
                 .addEntityClasses(r2rmlParser.listEntityClasses(triple.getResource()))
-                .termType(TermType.IRI)
                 .build();
     }
 
