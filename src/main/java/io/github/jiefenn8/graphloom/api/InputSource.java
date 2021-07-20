@@ -5,6 +5,7 @@
 
 package io.github.jiefenn8.graphloom.api;
 
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.api.inputsource.EntityResult;
 
 import java.util.function.Consumer;

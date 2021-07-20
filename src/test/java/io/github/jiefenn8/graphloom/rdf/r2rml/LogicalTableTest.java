@@ -5,7 +5,7 @@
 
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
-import io.github.jiefenn8.graphloom.api.EntityReference;
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.junit.Assert;
 import org.junit.Test;

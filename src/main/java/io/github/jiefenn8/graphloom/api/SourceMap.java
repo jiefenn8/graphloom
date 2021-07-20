@@ -6,6 +6,7 @@
 package io.github.jiefenn8.graphloom.api;
 
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.util.UniqueId;
 
 import java.util.Objects;

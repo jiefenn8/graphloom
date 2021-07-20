@@ -3,7 +3,7 @@
  * This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package io.github.jiefenn8.graphloom.api;
+package io.github.jiefenn8.graphloom.api.inputsource;
 
 /**
  * This interface defines the base methods to manage the handling of

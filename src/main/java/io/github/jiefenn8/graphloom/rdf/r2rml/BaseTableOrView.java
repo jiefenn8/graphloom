@@ -6,7 +6,7 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.Gson;
-import io.github.jiefenn8.graphloom.api.BaseEntityReference;
+import io.github.jiefenn8.graphloom.api.inputsource.BaseEntityReference;
 import org.apache.commons.lang3.StringUtils;
 
 /**
