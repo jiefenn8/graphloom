@@ -7,6 +7,10 @@ package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.jena.datatypes.RDFDatatype;
+import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
 
@@ -23,9 +27,11 @@ import java.util.regex.Pattern;
 public abstract class AbstractTermMap implements TermMap {
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)}");
+    protected final ValuedType valuedType;
+    protected final String lang;
+    protected final RDFDatatype dataType;
     private final RDFNode baseValue;
     private final TermType termType;
-    private final ValuedType valuedType;
 
     /**
      * Constructs a TermMap with the specified TermMap Builder containing the
@@ -33,10 +39,12 @@ public abstract class AbstractTermMap implements TermMap {
      *
      * @param builder the TermMap Builder to build instance from
      */
-    public AbstractTermMap(AbstractBuilder builder) {
+    public AbstractTermMap(AbstractBuilder<?> builder) {
         this.baseValue = builder.baseValue;
         this.termType = builder.termType;
         this.valuedType = builder.valuedType;
+        this.lang = builder.lang;
+        this.dataType = builder.dataType;
     }
 
     @Override
@@ -106,7 +114,7 @@ public abstract class AbstractTermMap implements TermMap {
      * specified to be mapped to.
      *
      * @param term the String value of the term to turn into RDF
-     * @param type  the term type to map the value into
+     * @param type the term type to map the value into
      * @return the generated term value to the type specified
      */
     protected RDFNode asRDFTerm(String term, TermType type) {
@@ -114,9 +122,19 @@ public abstract class AbstractTermMap implements TermMap {
         return switch (type) {
             case IRI -> ResourceFactory.createResource(term);
             case BLANK -> ResourceFactory.createResource();
-            case LITERAL -> ResourceFactory.createStringLiteral(term);
+            case LITERAL -> generateSpecificLiteral(term);
             default -> handleDefaultGeneration(term);
         };
+    }
+
+    private Literal generateSpecificLiteral(String term) {
+        if (!lang.isEmpty()) {
+            return ResourceFactory.createLangLiteral(term, lang);
+        }
+        if (dataType != null) {
+            return ResourceFactory.createTypedLiteral(term, dataType);
+        }
+        return ResourceFactory.createStringLiteral(term);
     }
 
     /**
@@ -137,12 +155,18 @@ public abstract class AbstractTermMap implements TermMap {
 
     /**
      * Abstract class for TermMap builder.
+     * <p>
+     * It is recommended to defined your extended functionality to this class
+     * and then call them before calling the abstract methods below; With the
+     * exception of overrides.
      */
-    public abstract static class AbstractBuilder {
+    public abstract static class AbstractBuilder<T extends AbstractTermMap> {
 
         private final RDFNode baseValue;
         private final ValuedType valuedType;
-        protected TermType termType;
+        private TermType termType;
+        private String lang = StringUtils.EMPTY;
+        private RDFDatatype dataType;
 
         /**
          * Constructs an instance of AbstractBuilder with specified base value
@@ -162,10 +186,35 @@ public abstract class AbstractTermMap implements TermMap {
          * Set the RDF type the TermMap should return after generating a
          * RDF term.
          *
-         * @param type the term type to return term output as
+         * @param termType the term type to return term output as
          * @return this builder for method chaining
          */
-        public abstract AbstractBuilder termType(TermType type);
+        public AbstractBuilder<T> termType(TermType termType) {
+            this.termType = termType;
+            return this;
+        }
+
+        /**
+         * Set the RDF term language tag for this TermMap.
+         *
+         * @param lang the term language tag that this term will be generated as
+         * @return this builder for method chaining
+         */
+        public AbstractBuilder<T> language(String lang) {
+            this.lang = lang;
+            return this;
+        }
+
+        /**
+         * Set the RDF term datatype fpr this TermMap.
+         *
+         * @param dataType the datatype that this term will be generated as
+         * @return this builder for method chaining
+         */
+        public AbstractBuilder<T> dataType(String dataType) {
+            this.dataType = NodeFactory.getType(dataType);
+            return this;
+        }
 
         /**
          * Returns an instance of TermMap with the specified data given to
@@ -173,6 +222,6 @@ public abstract class AbstractTermMap implements TermMap {
          *
          * @return TermMap instance with populated fields from builder
          */
-        public abstract AbstractTermMap build();
+        public abstract T build();
     }
 }

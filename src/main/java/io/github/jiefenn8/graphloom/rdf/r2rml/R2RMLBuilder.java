@@ -162,15 +162,15 @@ public class R2RMLBuilder {
     private SubjectMap buildSubjectMap(Statement triple) {
         ValuedType valuedType = getTermMapValuedType(triple);
         return new SubjectMap.Builder(getTermMapValue(triple, valuedType), valuedType)
-                .termType(TermType.IRI)
                 .addEntityClasses(r2rmlParser.listEntityClasses(triple.getResource()))
+                .termType(TermType.IRI)
                 .build();
     }
 
     /**
      * Returns the RDFNode of a TermMap statement with it specified ValuedType.
      *
-     * @param triple the statement containing a TermMap to extract value
+     * @param triple     the statement containing a TermMap to extract value
      * @param valuedType the type the TermMap and value is
      * @return the node of the TermMap value
      */

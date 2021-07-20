@@ -67,7 +67,7 @@ public class SubjectMap extends AbstractTermMap implements PropertyMap {
     /**
      * Builder class for SubjectMap.
      */
-    public static class Builder extends AbstractBuilder {
+    public static class Builder extends AbstractBuilder<SubjectMap> {
 
         private final Set<Resource> classes = new HashSet<>();
 
@@ -79,15 +79,6 @@ public class SubjectMap extends AbstractTermMap implements PropertyMap {
          */
         public Builder(RDFNode baseValue, ValuedType valuedType) {
             super(baseValue, valuedType);
-        }
-
-        @Override
-        public Builder termType(TermType type) {
-            if (type.equals(TermType.LITERAL)) {
-                throw new MapperException("SubjectMap can only generate IRI or BlankNode.");
-            }
-            this.termType = type;
-            return this;
         }
 
         /**
