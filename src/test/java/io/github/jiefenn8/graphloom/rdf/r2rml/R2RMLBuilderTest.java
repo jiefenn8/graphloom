@@ -76,7 +76,6 @@ public class R2RMLBuilderTest {
     public void GivenTemplateTermMap_WhenParse_ThenReturnR2RMLMap() {
         when(mockR2rmlParser.isConstant(any())).thenReturn(false);
         when(mockR2rmlParser.isTemplate(any())).thenReturn(true);
-        when(mockR2rmlParser.getTemplateValue(any(Resource.class))).thenReturn("{TEMPLATE}");
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));
@@ -86,7 +85,6 @@ public class R2RMLBuilderTest {
     public void GivenColumnTermMap_WhenParse_ThenReturnR2RMLMap() {
         when(mockR2rmlParser.isConstant(any())).thenReturn(false);
         when(mockR2rmlParser.isColumn(any())).thenReturn(true);
-        when(mockR2rmlParser.getColumnName(any(Resource.class))).thenReturn("COLUMN_NAME");
 
         R2RMLMap result = r2rmlBuilder.parse(VALID_FILENAME);
         assertThat(result, is(notNullValue()));

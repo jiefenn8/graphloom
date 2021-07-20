@@ -9,18 +9,15 @@ import io.github.jiefenn8.graphloom.api.inputsource.Entity;
 import io.github.jiefenn8.graphloom.rdf.r2rml.SubjectMap.Builder;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import junitparams.converters.Param;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 
 import java.util.List;
@@ -59,7 +56,7 @@ public class SubjectMapTest {
 
     @Test
     @Parameters(method = "termMapValues")
-    public void Generate_term_with_no_type(ValuedType valuedType, RDFNode base, RDFNode expected){
+    public void Generate_term_with_no_type(ValuedType valuedType, RDFNode base, RDFNode expected) {
         when(mockEntity.getPropertyValue(eq("REFERENCE"))).thenReturn("VALUE");
         Builder builder = new Builder(base, valuedType);
         subjectMap = builder.build();

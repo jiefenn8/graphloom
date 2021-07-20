@@ -17,9 +17,6 @@ import org.apache.jena.rdf.model.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-
-import static io.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
 
 /**
  * This class defines the base methods that manages the building
@@ -251,80 +248,5 @@ public class R2RMLBuilder {
         RDFNode objectMapBase = getTermMapValue(objectMapTriple, objectMapValuedType);
         ObjectMap objectMap = new ObjectMap.Builder(objectMapBase, objectMapValuedType).build();
         return new ImmutablePair<>(predicateMap, objectMap);
-    }
-
-
-    /**
-     * Builds and returns a TermMap with the properties and
-     * values defined in the given term map resource located in
-     * the given statement; or throws a {@code ParserException}
-     * if the statement is not a TermMap.
-     *
-     * @param triple   the statement containing the term map
-     *                 resource to map over
-     * @param action   the function to create and populate the
-     *                 related R2RMLMap term map
-     * @param termType the default term type of this term map
-     * @param <R>      the type of TermMap returned
-     * @return instance of TermMap with mapped values
-     * @throws ParserException if statement is not a term map
-     */
-    private <R> R buildTermMap(Statement triple, Function<TermMap, ? extends R> action, TermType termType) {
-        if (r2rmlParser.isConstant(triple)) {
-            return action.apply(buildConstantTermMap(triple));
-        }
-
-        Resource resource = triple.getResource();
-        if (r2rmlParser.isTemplate(resource)) {
-            return action.apply(buildTemplateTermMap(resource, termType));
-        }
-
-        if (r2rmlParser.isColumn(resource)) {
-            return action.apply(buildColumnTermMap(resource, termType));
-        }
-
-        throw new ParserException("%s is not a TermMap.", triple);
-    }
-
-    /**
-     * Builds and returns a TermMap with the properties and
-     * values defined in the given term map that is a constant
-     * valued term map.
-     *
-     * @param triple the statement containing the term map
-     *               resource to map over
-     * @return instance of TermMap with mapped values
-     */
-    private TermMap buildConstantTermMap(Statement triple) {
-        RDFNode constantValue = r2rmlParser.getConstantValue(triple);
-        return R2RMLFactory.createConstantTermMap(constantValue);
-    }
-
-    /**
-     * Builds and returns a TermMap with the properties and values
-     * defined in the given term map that is a template valued
-     * term map.
-     *
-     * @param subject  the resource with the term map to map over
-     * @param termType the default term type of this term map
-     * @return instance of TermMap with mapped values
-     */
-    private TermMap buildTemplateTermMap(Resource subject, TermType termType) {
-        String templateString = r2rmlParser.getTemplateValue(subject);
-        return R2RMLFactory.createTemplateTermMap(templateString, termType);
-    }
-
-    /**
-     * Builds and returns a TermMap with the properties and values
-     * defined in the given term map that is a column valued
-     * term map.
-     *
-     * @param subject  the resource with the term map to map over
-     * @param termType the default term type of this term map
-     * @return instance of TermMap with mapped values
-     */
-    private TermMap buildColumnTermMap(Resource subject, TermType termType) {
-        String columnName = r2rmlParser.getColumnName(subject);
-        return R2RMLFactory.createColumnTermMap(columnName, termType);
     }
 }

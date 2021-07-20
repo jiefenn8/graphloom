@@ -5,17 +5,11 @@
 
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
-import io.github.jiefenn8.graphloom.rdf.r2rml.TermMap.TermType;
-import org.apache.jena.rdf.model.RDFNode;
-
 /**
  * This class defines the base methods that manages the setup and creation of
  * R2RML related classes.
  */
-@Deprecated
 public class R2RMLFactory {
-
-    //LogicalTable
 
     /**
      * Constructs a LogicalTable with a base table/view with the specified
@@ -53,42 +47,5 @@ public class R2RMLFactory {
         R2RMLView r2rmlView = new R2RMLView(source);
         r2rmlView.setProperty("sqlVersion", version);
         return r2rmlView;
-    }
-
-    //TermMap
-
-    /**
-     * Constructs a ConstTermMap with the specified rdf constant term to
-     * use for rdf term generation.
-     *
-     * @param constant the term to use as constant term
-     * @return instance of constant term map with given constant
-     */
-    public static ConstTermMap createConstantTermMap(RDFNode constant) {
-        return new ConstTermMap(constant);
-    }
-
-    /**
-     * Constructs a TemplateTermMap with the specified template string and
-     * term type for rdf term generation.
-     *
-     * @param template the template string to generate term from
-     * @param termType the term type to return the generated term as
-     * @return instance of template term map with the given parameters
-     */
-    public static TemplateTermMap createTemplateTermMap(String template, TermType termType) {
-        return new TemplateTermMap(template, termType);
-    }
-
-    /**
-     * Constructs a ColumnTermMap with specified column name and term type
-     * for rdf term generation.
-     *
-     * @param column   the column name to find the term value
-     * @param termType the term type to return the generated term as
-     * @return instance of column term map with the given parameters
-     */
-    public static ColumnTermMap createColumnTermMap(String column, TermType termType) {
-        return new ColumnTermMap(column, termType);
     }
 }

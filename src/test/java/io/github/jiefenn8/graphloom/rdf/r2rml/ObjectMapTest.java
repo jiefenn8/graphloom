@@ -25,7 +25,8 @@ import org.mockito.junit.MockitoRule;
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -55,7 +56,7 @@ public class ObjectMapTest {
 
     @Test
     @Parameters(method = "termMapValues")
-    public void Generate_term_with_no_type(ValuedType valuedType, RDFNode base, RDFNode expected){
+    public void Generate_term_with_no_type(ValuedType valuedType, RDFNode base, RDFNode expected) {
         when(mockEntity.getPropertyValue(eq("REFERENCE"))).thenReturn("VALUE");
         Builder builder = new Builder(base, valuedType);
         objectMap = builder.build();
@@ -76,7 +77,7 @@ public class ObjectMapTest {
 
     @Test
     @Parameters(method = "termMapValuesWithLanguage")
-    public void Generate_literal_with_language_tag(ValuedType valuedType, RDFNode base, RDFNode expected){
+    public void Generate_literal_with_language_tag(ValuedType valuedType, RDFNode base, RDFNode expected) {
         when(mockEntity.getPropertyValue(eq("REFERENCE"))).thenReturn("VALUE");
         Builder builder = new Builder(base, valuedType);
         objectMap = builder.language("en-us").build();
@@ -101,7 +102,7 @@ public class ObjectMapTest {
 
     @Test
     @Parameters(method = "termMapValuesWithDataType")
-    public void Generate_literal_with_datatype(ValuedType valuedType, RDFNode base, String dataType, RDFNode expected){
+    public void Generate_literal_with_datatype(ValuedType valuedType, RDFNode base, String dataType, RDFNode expected) {
         when(mockEntity.getPropertyValue(eq("REFERENCE"))).thenReturn("1234");
         Builder builder = new Builder(base, valuedType);
         objectMap = builder.dataType(dataType).build();

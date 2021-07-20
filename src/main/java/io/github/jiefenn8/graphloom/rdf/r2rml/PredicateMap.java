@@ -6,7 +6,6 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.GsonBuilder;
-import io.github.jiefenn8.graphloom.api.EntityMap;
 import io.github.jiefenn8.graphloom.api.RelationMap;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
 import io.github.jiefenn8.graphloom.util.GsonHelper;
@@ -15,7 +14,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -28,7 +26,7 @@ public class PredicateMap extends AbstractTermMap implements RelationMap {
 
     /**
      * Constructs an PredicateMap with the specified TermMap Builder containing the
-     *      * data to initialise an immutable instance.
+     * * data to initialise an immutable instance.
      *
      * @param builder the TermMap Builder to builder instance from
      */
