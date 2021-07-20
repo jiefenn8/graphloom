@@ -81,6 +81,7 @@ public abstract class AbstractTermMap implements TermMap {
         }
         String value = entity.getPropertyValue(matcher.group(1));
         if (value != null) {
+            value = URLEncoder.encode(value, StandardCharsets.UTF_8);
             String term = template.replace(matcher.group(0), value);
             return asRDFTerm(term, termType);
         }
@@ -104,14 +105,14 @@ public abstract class AbstractTermMap implements TermMap {
      * Returns the term created from the given value and term type
      * specified to be mapped to.
      *
-     * @param value the String value of term to turn into RDF
+     * @param term the String value of the term to turn into RDF
      * @param type  the term type to map the value into
      * @return the generated term value to the type specified
      */
-    public RDFNode asRDFTerm(String value, TermType type) {
-        Objects.requireNonNull(value);
+    private RDFNode asRDFTerm(String term, TermType type) {
+        Objects.requireNonNull(term);
         return switch (type) {
-            case IRI -> ResourceFactory.createResource(URLEncoder.encode(value, StandardCharsets.UTF_8));
+            case IRI -> ResourceFactory.createResource(term);
             case BLANK -> ResourceFactory.createResource();
             case LITERAL -> ResourceFactory.createStringLiteral(value);
             default -> throw new MapperException("Term type is UNDEFINED.");
