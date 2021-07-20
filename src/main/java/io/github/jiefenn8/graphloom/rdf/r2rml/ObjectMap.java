@@ -6,37 +6,34 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.GsonBuilder;
-import io.github.jiefenn8.graphloom.api.EntityMap;
 import io.github.jiefenn8.graphloom.api.NodeMap;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
 import io.github.jiefenn8.graphloom.util.GsonHelper;
 import org.apache.jena.rdf.model.RDFNode;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Implementation of R2RML ObjectMap with {@link NodeMap} interface.
  * This term map will return either a rr:IRI, rr:BlankNode or rr:Literal for its main term.
  */
-public class ObjectMap implements NodeMap {
+public class ObjectMap extends AbstractTermMap implements NodeMap {
 
     private final UUID uuid = UUID.randomUUID();
-    private final TermMap termMap;
 
     /**
-     * Constructs an ObjectMap with the specified term map that is either
-     * a constant, template or a column type.
+     * Constructs an ObjectMap with the specified TermMap Builder containing the
+     * data to initialise an immutable instance.
      *
-     * @param termMap the term map that this instance will behave as
+     * @param builder the TermMap Builder to builder instance from
      */
-    protected ObjectMap(TermMap termMap) {
-        this.termMap = Objects.requireNonNull(termMap, "Term map must not be null.");
+    protected ObjectMap(Builder builder) {
+        super(builder);
     }
 
     @Override
     public RDFNode generateNodeTerm(Entity entity) {
-        return termMap.generateRDFTerm(entity);
+        return generateRDFTerm(entity);
     }
 
     @Override
@@ -49,5 +46,25 @@ public class ObjectMap implements NodeMap {
     @Override
     public String getUniqueId() {
         return uuid.toString();
+    }
+
+    @Override
+    protected RDFNode handleDefaultGeneration(String term) {
+        if (valuedType.equals(ValuedType.COLUMN) || !lang.isEmpty() || dataType != null) {
+            return asRDFTerm(term, TermType.LITERAL);
+        }
+        return asRDFTerm(term, TermType.IRI);
+    }
+
+    public static class Builder extends AbstractBuilder<ObjectMap> {
+
+        public Builder(RDFNode baseValue, ValuedType valuedType) {
+            super(baseValue, valuedType);
+        }
+
+        @Override
+        public ObjectMap build() {
+            return new ObjectMap(this);
+        }
     }
 }

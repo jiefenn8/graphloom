@@ -68,19 +68,6 @@ public class R2RMLFactory {
         return new PredicateMap(termMap);
     }
 
-    //ObjectMap
-
-    /**
-     * Constructs an ObjectMap with the specified term map that is either
-     * a constant, template or a column type.
-     *
-     * @param termMap the term map to use for this map config
-     * @return instance of object map with a given term map
-     */
-    public static ObjectMap createObjectMap(TermMap termMap) {
-        return new ObjectMap(termMap);
-    }
-
     //TermMap
 
     /**

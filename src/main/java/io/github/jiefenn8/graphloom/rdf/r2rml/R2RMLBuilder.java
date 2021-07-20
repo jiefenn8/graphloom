@@ -247,7 +247,10 @@ public class R2RMLBuilder {
             return new ImmutablePair<>(predicateMap, refObjectMapBuilder.build());
         }
 
-        ObjectMap objectMap = buildTermMap(objectMapTriple, R2RMLFactory::createObjectMap, TermType.LITERAL);
+        ValuedType valuedType = getTermMapValuedType(objectMapTriple);
+        ObjectMap objectMap = new ObjectMap.Builder(getTermMapValue(objectMapTriple, valuedType), valuedType)
+                .build();
+
         return new ImmutablePair<>(predicateMap, objectMap);
     }
 
