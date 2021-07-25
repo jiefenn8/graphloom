@@ -37,20 +37,19 @@ public class RDFMapperTest {
     @Before
     public void setUp() {
         rdfMapper = new RDFMapper();
-
         when(mockConfigMaps.getNamespaceMap()).thenReturn(Map.of());
         when(mockConfigMaps.getEntityMaps()).thenReturn(Set.of());
     }
 
     @Test
-    public void WhenEmptyConfigGiven_ThenReturnEmptyGraph() {
+    public void Generate_empty_graph_with_empty_config_maps() {
         Model model = rdfMapper.mapToGraph(mock(InputSource.class), mockConfigMaps);
         boolean result = model.isEmpty();
         assertThat(result, is(true));
     }
 
     @Test
-    public void WhenNoInputSourceGiven_ThenThrowException() {
+    public void Mapping_to_graph_with_no_input_source_is_not_possible() {
         String expected = "Cannot retrieve source data from null input source.";
         Throwable throwable = Assert.assertThrows(
                 MapperException.class,
@@ -61,7 +60,7 @@ public class RDFMapperTest {
     }
 
     @Test
-    public void WhenNoConfigMapsGiven_ThenThrowException() {
+    public void Mapping_to_graph_with_no_config_maps_is_not_possible() {
         String expected = "Cannot map source from null config maps.";
         Throwable throwable = Assert.assertThrows(
                 MapperException.class,

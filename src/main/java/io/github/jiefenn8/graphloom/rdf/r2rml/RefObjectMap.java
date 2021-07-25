@@ -44,8 +44,7 @@ public class RefObjectMap implements NodeMap {
     }
 
     /**
-     * Returns the triples map that this ref object map referenced to generate
-     * the object term.
+     * Returns the triples map that this ref object map is associated with.
      *
      * @return the triples map referenced
      */
@@ -79,7 +78,7 @@ public class RefObjectMap implements NodeMap {
      * @return true if queries from both are equal
      */
     protected boolean isQueryEqual(LogicalTable logicalTable) {
-        return this.parentTriplesMap.isQueryEqual(logicalTable);
+        return this.parentTriplesMap.getSourceMap().equals(logicalTable);
     }
 
     @Override
@@ -114,10 +113,10 @@ public class RefObjectMap implements NodeMap {
         private UUID uuid;
 
         /**
-         * Constructs a RefObjectMap Builder with the specified triples map
-         * instance.
+         * Constructs a RefObjectMap Builder with the specified triples map and
+         * join condition to this instance.
          *
-         * @param parentTriplesMap the triples map to reference
+         * @param parentTriplesMap the triples map that this instance refers to
          */
         public Builder(TriplesMap parentTriplesMap) {
             this.parentTriplesMap = parentTriplesMap;
