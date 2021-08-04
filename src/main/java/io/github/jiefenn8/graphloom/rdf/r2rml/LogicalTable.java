@@ -131,7 +131,7 @@ public class LogicalTable implements SourceMap {
             jointQuery += " WHERE " + buildJoinsRecursively(joinConditions.iterator());
 
             String parentVersion = entityReference.getProperty("sqlVersion");
-            this.entityReference = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
+            this.entityReference = new R2RMLView.Builder(jointQuery, parentVersion).build();
             return this;
         }
 

@@ -44,7 +44,7 @@ public interface EntityMap extends UniqueId {
      * Returns a new model with the given entity term and with any generated
      * class terms associated with the entity.
      *
-     * @param term   of the entity that represent this entity map
+     * @param term of the entity that represent this entity map
      * @return the model containing the entity and class terms
      */
     Model generateClassTerms(Resource term);

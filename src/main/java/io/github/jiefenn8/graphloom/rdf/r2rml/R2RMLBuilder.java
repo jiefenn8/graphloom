@@ -6,6 +6,7 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import io.github.jiefenn8.graphloom.api.NodeMap;
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
 import io.github.jiefenn8.graphloom.exceptions.ParserException;
 import io.github.jiefenn8.graphloom.rdf.r2rml.AbstractTermMap.ValuedType;
@@ -128,17 +129,19 @@ public class R2RMLBuilder {
      * @return instance of LogicalTable with mapped values
      */
     private LogicalTable buildLogicalTable(Resource logicalTable) {
+        EntityReference entityReference;
         if (r2rmlParser.isBaseTableOrView(logicalTable)) {
             String tableName = r2rmlParser.getTableName(logicalTable);
-            return R2RMLFactory.createLogicalBaseTableOrView(tableName);
-        }
-        if (r2rmlParser.isR2RMLView(logicalTable)) {
+            entityReference = new BaseTableOrView(tableName);
+        } else if (r2rmlParser.isR2RMLView(logicalTable)) {
             String sqlQuery = r2rmlParser.getSqlQuery(logicalTable);
             String sqlVersion = r2rmlParser.getVersion(logicalTable);
-
-            return R2RMLFactory.createLogicalR2RMLView(sqlQuery, sqlVersion);
+            entityReference = new R2RMLView.Builder(sqlQuery, sqlVersion).build();
+        } else {
+            throw new ParserException("No BaseTableOrView or R2RMLView property found.");
         }
-        throw new ParserException("No BaseTableOrView or R2RMLView property found.");
+
+        return new LogicalTable.Builder(entityReference).build();
     }
 
     /**
