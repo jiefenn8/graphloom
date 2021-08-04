@@ -6,8 +6,6 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.GsonBuilder;
-import io.github.jiefenn8.graphloom.api.EntityChild;
-import io.github.jiefenn8.graphloom.api.EntityMap;
 import io.github.jiefenn8.graphloom.api.NodeMap;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
@@ -26,10 +24,9 @@ import java.util.UUID;
  * This class is an immutable class and require the use of its {@link Builder}
  * class to populate and create an instance.
  */
-public class RefObjectMap implements NodeMap, EntityChild {
+public class RefObjectMap implements NodeMap {
 
     private final UUID uuid;
-    private final TriplesMap parent;
     private final TriplesMap parentTriplesMap;
     private final Set<JoinCondition> joinConditions;
 
@@ -44,12 +41,10 @@ public class RefObjectMap implements NodeMap, EntityChild {
         uuid = builder.uuid;
         parentTriplesMap = builder.parentTriplesMap;
         joinConditions = Set.copyOf(builder.joinConditions);
-        parent = builder.parent;
     }
 
     /**
-     * Returns the triples map that this ref object map referenced to generate
-     * the object term.
+     * Returns the triples map that this ref object map is associated with.
      *
      * @return the triples map referenced
      */
@@ -83,17 +78,12 @@ public class RefObjectMap implements NodeMap, EntityChild {
      * @return true if queries from both are equal
      */
     protected boolean isQueryEqual(LogicalTable logicalTable) {
-        return this.parentTriplesMap.isQueryEqual(logicalTable);
-    }
-
-    @Override
-    public EntityMap getEntityMap() {
-        return parent;
+        return this.parentTriplesMap.getSourceMap().equals(logicalTable);
     }
 
     @Override
     public RDFNode generateNodeTerm(Entity entity) {
-        RDFNode term = parentTriplesMap.generateEntityTerm(joinConditions, entity);
+        RDFNode term = parentTriplesMap.generateEntityTerm(entity);
         if (term.isLiteral()) {
             throw new MapperException("RefObjectMap should only return IRI.");
         }
@@ -120,29 +110,16 @@ public class RefObjectMap implements NodeMap, EntityChild {
         private static final Logger LOGGER = LoggerFactory.getLogger(Builder.class);
         private final TriplesMap parentTriplesMap;
         private final Set<JoinCondition> joinConditions = new HashSet<>();
-        private TriplesMap parent;
         private UUID uuid;
 
         /**
-         * Constructs a RefObjectMap Builder with the specified triples map
-         * instance.
+         * Constructs a RefObjectMap Builder with the specified triples map and
+         * join condition to this instance.
          *
-         * @param parentTriplesMap the triples map to reference
+         * @param parentTriplesMap the triples map that this instance refers to
          */
         public Builder(TriplesMap parentTriplesMap) {
             this.parentTriplesMap = parentTriplesMap;
-        }
-
-        /**
-         * Adds association to an triples map that this ref object map
-         * belongs to.
-         *
-         * @param triplesMap the triples map to associate with
-         * @return this builder for fluent method chaining
-         */
-        public Builder withTriplesMap(TriplesMap triplesMap) {
-            parent = triplesMap;
-            return this;
         }
 
         /**
@@ -151,7 +128,7 @@ public class RefObjectMap implements NodeMap, EntityChild {
          * this triples map (that accessed this ref object map) by the given
          * columns that exists in their table.
          *
-         * @param parent the column in the parent triples maps's logical table
+         * @param parent the column in the parent triples maps' logical table
          * @param child  the column in this triples map's logical table
          * @return this builder for fluent method chaining
          */

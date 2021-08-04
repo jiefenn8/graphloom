@@ -6,8 +6,7 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.Gson;
-import io.github.jiefenn8.graphloom.api.BaseEntityReference;
-import io.github.jiefenn8.graphloom.api.EntityReference;
+import io.github.jiefenn8.graphloom.api.inputsource.BaseEntityReference;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -15,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  * configuration to only handle SQL retrieval through the use of base table or
  * view  name.
  */
-public class BaseTableOrView extends BaseEntityReference implements EntityReference {
+public class BaseTableOrView extends BaseEntityReference {
 
     /**
      * Constructs a BaseTableOrView with the specified SQL table or view name

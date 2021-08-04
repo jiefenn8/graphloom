@@ -38,7 +38,8 @@ public class GsonHelper {
         builder.registerTypeAdapter(PropertyMap.class, uniqueIdJsonSerializer());
         builder.registerTypeAdapter(RelationMap.class, uniqueIdJsonSerializer());
         builder.registerTypeAdapter(NodeMap.class, uniqueIdJsonSerializer());
-        Type pomType = new TypeToken<Map<RelationMap, NodeMap>>() {}.getType();
+        Type pomType = new TypeToken<Map<RelationMap, NodeMap>>() {
+        }.getType();
         builder.registerTypeAdapter(pomType, mapKeyObjectSerializer());
         builder.registerTypeAdapter(SourceMap.class, uniqueIdJsonSerializer());
         builder.registerTypeAdapter(RDFNode.class, rdfNodeJsonSerializer());

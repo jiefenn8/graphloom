@@ -3,10 +3,9 @@
  * This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package io.github.jiefenn8.graphloom.rdf.parser;
+package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import io.github.jiefenn8.graphloom.exceptions.ParserException;
-import io.github.jiefenn8.graphloom.rdf.r2rml.R2RMLSyntax;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.apache.commons.lang3.StringUtils;
@@ -388,38 +387,10 @@ public class R2RMLParserTest {
     }
 
     @Test
-    public void GivenResourceWithNoTemplate_WhenGetTemplateValue_ThenThrowException() {
-        Resource value = model.createResource("RESOURCE");
-        Property property = R2RMLSyntax.template;
-        String expected = property + " property not found in " + value + ".";
-
-        Throwable throwable = Assert.assertThrows(
-                ParserException.class,
-                () -> r2rmlParser.getTemplateValue(value)
-        );
-        String msg = throwable.getMessage();
-        assertThat(msg, is(equalTo(expected)));
-    }
-
-    @Test
     public void GivenResourceIsNotColumn_WhenCheckIsColumn_ThenReturnFalse() {
         Resource value = model.createResource("RESOURCE");
         boolean result = r2rmlParser.isColumn(value);
         assertThat(result, is(false));
-    }
-
-    @Test
-    public void GivenResourceWithNoColumn_WhenGetColumnName_ThenThrowException() {
-        Resource value = model.createResource("RESOURCE");
-        Property property = R2RMLSyntax.column;
-        String expected = property + " property not found in " + value + ".";
-
-        Throwable throwable = Assert.assertThrows(
-                ParserException.class,
-                () -> r2rmlParser.getColumnName(value)
-        );
-        String msg = throwable.getMessage();
-        assertThat(msg, is(equalTo(expected)));
     }
 
     @Test

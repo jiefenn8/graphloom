@@ -5,9 +5,9 @@
 
 package io.github.jiefenn8.graphloom.integrationtest;
 
-import io.github.jiefenn8.graphloom.api.EntityReference;
 import io.github.jiefenn8.graphloom.api.InputSource;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.api.inputsource.EntityResult;
 import io.github.jiefenn8.graphloom.integrationtest.fake.FakeEntity;
 import io.github.jiefenn8.graphloom.integrationtest.fake.FakeEntityResult;

@@ -6,19 +6,21 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.GsonBuilder;
-import io.github.jiefenn8.graphloom.api.EntityMap;
-import io.github.jiefenn8.graphloom.api.NodeMap;
-import io.github.jiefenn8.graphloom.api.RelationMap;
-import io.github.jiefenn8.graphloom.api.SourceMap;
+import io.github.jiefenn8.graphloom.api.*;
 import io.github.jiefenn8.graphloom.api.inputsource.Entity;
-import io.github.jiefenn8.graphloom.exceptions.ParserException;
 import io.github.jiefenn8.graphloom.util.GsonHelper;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Implementation of R2RML TriplesMap with {@link EntityMap} interface.
@@ -30,7 +32,8 @@ public class TriplesMap implements EntityMap {
     private final String idName;
     private final LogicalTable logicalTable;
     private final SubjectMap subjectMap;
-    private final Map<RelationMap, NodeMap> predicateObjectMaps;
+    private final Map<RelationMap, ObjectMap> predicateObjectMaps;
+    private final Map<RelationMap, RefObjectMap> predicateRefObjectMaps;
 
     /**
      * Constructs a TriplesMap with the specified Builder containing the
@@ -42,19 +45,9 @@ public class TriplesMap implements EntityMap {
         Objects.requireNonNull(builder);
         idName = builder.idName;
         logicalTable = builder.logicalTable;
-        subjectMap = builder.subjectMap.withParentMap(this);
+        subjectMap = builder.subjectMap;
         predicateObjectMaps = Map.copyOf(builder.predicateObjectMaps);
-    }
-
-    /**
-     * Returns true if this instance logical table query config is equal to the
-     * given logical table.
-     *
-     * @param logicalTable logical table to compare
-     * @return true if logical table query is equal
-     */
-    protected boolean isQueryEqual(LogicalTable logicalTable) {
-        return this.logicalTable.equals(logicalTable);
+        predicateRefObjectMaps = Map.copyOf(builder.predicateRefObjectMaps);
     }
 
     @Override
@@ -63,37 +56,54 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
+    public Resource generateEntityTerm(Entity entity) {
+        return subjectMap.generateEntityTerm(entity);
+    }
+
+    @Override
+    public Model generateClassTerms(Resource term) {
+        Model model = ModelFactory.createDefaultModel();
+        subjectMap.listEntityClasses().forEach((c) -> {
+            model.add(term, RDF.type, c);
+        });
+        return model;
+    }
+
+    @Override
+    public Model generateNodeTerms(Resource term, Entity entity) {
+        Model model = ModelFactory.createDefaultModel();
+        predicateObjectMaps.forEach((r, n) -> {
+            RDFNode node = n.generateNodeTerm(entity);
+            if (node != null) {
+                model.add(term, r.generateRelationTerm(entity), n.generateNodeTerm(entity));
+            }
+        });
+        return model;
+    }
+
+    @Override
+    public Model generateRefNodeTerms(Resource term, InputSource source) {
+        Model model = ModelFactory.createDefaultModel();
+        predicateRefObjectMaps.forEach((r, n) -> {
+            LogicalTable jointLogicalTable = logicalTable.asJointLogicalTable(n);
+            jointLogicalTable.forEachEntity(source, (e) -> {
+                RDFNode node = n.generateNodeTerm(e);
+                if (node != null) {
+                    model.add(term, r.generateRelationTerm(e), node);
+                }
+            });
+        });
+        return model;
+    }
+
+    @Override
     public String getIdName() {
         return idName;
     }
 
     @Override
-    public Set<RelationMap> listRelationMaps() {
-        return Collections.unmodifiableSet(predicateObjectMaps.keySet());
-    }
-
-    @Override
-    public NodeMap getNodeMapWithRelation(RelationMap relationMap) {
-        return predicateObjectMaps.get(relationMap);
-    }
-
-    @Override
-    public boolean hasRelationNodeMaps() {
+    public boolean hasNodeMapPairs() {
         return !predicateObjectMaps.isEmpty();
-    }
-
-    @Override
-    public Resource generateEntityTerm(Entity entity) {
-        return subjectMap.generateEntityTerm(entity);
-    }
-
-    public Resource generateEntityTerm(Set<JoinCondition> joins, Entity entity) {
-        return subjectMap.generateEntityTerm(joins, entity);
-    }
-
-    @Override
-    public List<Resource> listEntityClasses() {
-        return subjectMap.listEntityClasses();
     }
 
     @Override
@@ -117,7 +127,8 @@ public class TriplesMap implements EntityMap {
         private final String idName;
         private final LogicalTable logicalTable;
         private final SubjectMap subjectMap;
-        private final Map<RelationMap, NodeMap> predicateObjectMaps = new HashMap<>();
+        private final Map<RelationMap, ObjectMap> predicateObjectMaps = new HashMap<>();
+        private final Map<RelationMap, RefObjectMap> predicateRefObjectMaps = new HashMap<>();
 
         /**
          * Constructs a TriplesMap Builder with the specified triples map id,
@@ -143,16 +154,15 @@ public class TriplesMap implements EntityMap {
             NodeMap nodeMap = pom.getValue();
             if (nodeMap instanceof RefObjectMap) {
                 RefObjectMap refObjectMap = (RefObjectMap) nodeMap;
-                if (!refObjectMap.isQueryEqual(logicalTable) && !refObjectMap.hasJoinCondition()) {
-                    throw new ParserException("Triples Maps queries do not match. Must provide join condition.");
-                }
+                predicateRefObjectMaps.put(pom.getKey(), refObjectMap);
+                return this;
             }
-            predicateObjectMaps.put(pom.getKey(), pom.getValue());
+            predicateObjectMaps.put(pom.getKey(), (ObjectMap) pom.getValue());
             return this;
         }
 
         /**
-         * Returns an immutable instance of triples map containing the properties
+         * Returns an immutable instance of triples maps containing the properties
          * given to its builder.
          *
          * @return instance of triples map created with the info in this builder

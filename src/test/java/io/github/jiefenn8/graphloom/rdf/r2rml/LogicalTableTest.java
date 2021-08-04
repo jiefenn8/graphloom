@@ -5,7 +5,7 @@
 
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
-import io.github.jiefenn8.graphloom.api.EntityReference;
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -64,19 +64,10 @@ public class LogicalTableTest {
     }
 
     @Test
-    public void GivenTriplesMap_WhenBuildWithTriplesMap_ThenReturnBuilder() {
-        LogicalTable.Builder result = new LogicalTable.Builder(mock(EntityReference.class));
-        result.withTriplesMap(mock(TriplesMap.class));
-        assertThat(result, is(notNullValue()));
-    }
-
-    @Test
     public void GivenLogicalTableAndJoinConditions_WhenBuildWithJointSQLQuery_ThenReturnBuilder() {
         EntityReference mockEntityReference = mock(EntityReference.class);
         JoinCondition mockJoinCondition = mock(JoinCondition.class);
         LogicalTable logicalTable = new LogicalTable.Builder(mockEntityReference).build();
-        when(mockJoinCondition.getChild()).thenReturn("CHILD");
-        when(mockJoinCondition.getParent()).thenReturn("PARENT");
         when(mockEntityReference.getPayload()).thenReturn("PAYLOAD");
 
         LogicalTable.Builder result = new LogicalTable.Builder(mockEntityReference);

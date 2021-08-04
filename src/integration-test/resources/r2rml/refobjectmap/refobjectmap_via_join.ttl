@@ -18,17 +18,8 @@
             ];
     ].
 
-<#DeptTableView> rr:sqlQuery """
-    SELECT DEPTNO,
-           DNAME,
-           LOC,
-           (SELECT COUNT(*) FROM EMP WHERE EMP.DEPTNO=DEPT.DEPTNO) AS STAFF
-    FROM DEPT;
-    """;
-    rr:sqlVersion rr:SQL2008.
-
 <#TriplesMap2>
-    rr:logicalTable <#DeptTableView>;
+    rr:logicalTable [ rr:tableName "DEPT" ];
     rr:subjectMap [
         rr:template "http://data.example.com/department/{DEPTNO}";
         rr:class ex:Department;

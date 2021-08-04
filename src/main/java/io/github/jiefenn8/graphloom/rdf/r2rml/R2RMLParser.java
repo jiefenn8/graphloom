@@ -3,10 +3,9 @@
  * This software is made available under the terms of Apache License, Version 2.0.
  */
 
-package io.github.jiefenn8.graphloom.rdf.parser;
+package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import io.github.jiefenn8.graphloom.exceptions.ParserException;
-import io.github.jiefenn8.graphloom.rdf.r2rml.R2RMLSyntax;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.FileManager;
@@ -20,7 +19,7 @@ import java.util.Set;
  * This class defines the base methods that manages the parsing
  * of rdf mapping document to iterable r2rml terms.
  * <p>
- * All methods in this parser will likely to cross check with
+ * All methods in this parser will likely to cross-check with
  * this instance r2rml model in most cases to complete its call;
  * If a given resource (subject/object) or statement (triple)
  * origin is from another source and not from this instance,
@@ -98,7 +97,7 @@ public class R2RMLParser {
 
     /**
      * Returns a set of resources (subjects) that contains all
-     * valid triples maps defined in the the model. A triples
+     * valid triples maps defined in the model. A triples
      * map must have a logical table and a subject map property
      * to be considered valid.
      *
@@ -303,7 +302,7 @@ public class R2RMLParser {
     //Constant TermMap related parsing
 
     /**
-     * Returns true if given term map is a constant valued term
+     * Returns true if given term map is a constant value term
      * map by constant shortcut reference or as a constant
      * property (predicate).
      *
@@ -316,7 +315,7 @@ public class R2RMLParser {
 
     /**
      * Returns true if given term map has a constant property
-     * (predicate) meaning that it is a constant valued term map.
+     * (predicate) meaning that it is a constant value term map.
      *
      * @param subject the term map resource
      * @return true if the resource contains a constant property
@@ -327,7 +326,7 @@ public class R2RMLParser {
 
     /**
      * Returns true if given term map is a shortcut term property
-     * (predicate) meaning that it is a constant valued term map.
+     * (predicate) meaning that it is a constant value term map.
      *
      * @param triple the term map statement
      * @return true if the statement is a constant shortcut term
@@ -372,13 +371,11 @@ public class R2RMLParser {
      * (predicate) in the given template valued term map resource
      * (subject).
      *
-     * @param subject the term map resource
-     * @return string associated with the template property
+     * @param triple the statement containing the TermMap with the template node
+     * @return node associated with the template property
      */
-    protected String getTemplateValue(Resource subject) {
-        return getPropertyResourceValue(subject, R2RMLSyntax.template)
-                .asLiteral()
-                .getString();
+    protected RDFNode getTemplateNode(Statement triple) {
+        return getPropertyResourceValue(triple.getResource(), R2RMLSyntax.template);
     }
 
     //Column TermMap related parsing
@@ -398,13 +395,11 @@ public class R2RMLParser {
      * Returns the Literal (object) value of the column property
      * (predicate) in the given column valued term map.
      *
-     * @param subject the resource representing a term map
-     * @return string associated with the column property
+     * @param triple the statement containing the TermMap with the column node
+     * @return node associated with the column property
      */
-    protected String getColumnName(Resource subject) {
-        return getPropertyResourceValue(subject, R2RMLSyntax.column)
-                .asLiteral()
-                .getString();
+    protected RDFNode getColumnNode(Statement triple) {
+        return getPropertyResourceValue(triple.getResource(), R2RMLSyntax.column);
     }
 
     //Helper methods 2.0

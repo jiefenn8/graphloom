@@ -6,10 +6,8 @@
 package io.github.jiefenn8.graphloom.rdf.r2rml;
 
 import com.google.gson.GsonBuilder;
-import io.github.jiefenn8.graphloom.api.EntityChild;
-import io.github.jiefenn8.graphloom.api.EntityMap;
-import io.github.jiefenn8.graphloom.api.EntityReference;
 import io.github.jiefenn8.graphloom.api.SourceMap;
+import io.github.jiefenn8.graphloom.api.inputsource.EntityReference;
 import io.github.jiefenn8.graphloom.exceptions.MapperException;
 import io.github.jiefenn8.graphloom.util.GsonHelper;
 import org.slf4j.Logger;
@@ -23,11 +21,10 @@ import java.util.UUID;
 /**
  * Implementation of R2RML LogicalTable with {@link SourceMap} interface.
  */
-public class LogicalTable implements SourceMap, EntityChild {
+public class LogicalTable implements SourceMap {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogicalTable.class);
     private final UUID uuid;
-    private final TriplesMap parent;
     private final EntityReference entityReference;
 
     /**
@@ -39,8 +36,22 @@ public class LogicalTable implements SourceMap, EntityChild {
     private LogicalTable(Builder builder) {
         Objects.requireNonNull(builder);
         entityReference = builder.entityReference;
-        parent = builder.parent;
         uuid = builder.uuid;
+    }
+
+    /**
+     * Retrieves the LogicalTable from the parent TriplesMap found in the given
+     * RefObjectMap. Returns a LogicalTable a Joint SQL query that is the
+     * combination of this instance and the given LogicalTable.
+     *
+     * @param refObjectMap the reference containing the parent TriplesMap
+     * @return the LogicalTable of two Joint SQL tables
+     */
+    public LogicalTable asJointLogicalTable(RefObjectMap refObjectMap) {
+        LogicalTable logicalTable = (LogicalTable) refObjectMap.getParentTriplesMap().getSourceMap();
+        return new LogicalTable.Builder(this)
+                .withJointQuery(logicalTable, refObjectMap.listJoinConditions())
+                .build();
     }
 
     @Override
@@ -62,11 +73,6 @@ public class LogicalTable implements SourceMap, EntityChild {
     }
 
     @Override
-    public EntityMap getEntityMap() {
-        return parent;
-    }
-
-    @Override
     public String toString() {
         return GsonHelper.loadTypeAdapters(new GsonBuilder())
                 .create()
@@ -85,7 +91,6 @@ public class LogicalTable implements SourceMap, EntityChild {
 
         private UUID uuid;
         private EntityReference entityReference;
-        private TriplesMap parent;
 
         /**
          * Constructs a Builder with the specified SourceConfig instance.
@@ -108,17 +113,6 @@ public class LogicalTable implements SourceMap, EntityChild {
         }
 
         /**
-         * Adds association to an triples map that this logical table belongs to.
-         *
-         * @param triplesMap the triples map to associate with
-         * @return this builder for fluent method chaining
-         */
-        protected Builder withTriplesMap(TriplesMap triplesMap) {
-            parent = triplesMap;
-            return this;
-        }
-
-        /**
          * Builds a query config with a join query consisting of two query,
          * table or mixed that is associated to each other through join
          * conditions.
@@ -134,26 +128,26 @@ public class LogicalTable implements SourceMap, EntityChild {
 
             String jointQuery = "SELECT child.* FROM " + prepareQuery(entityReference) + " AS child, ";
             jointQuery += prepareQuery(logicalTable.entityReference) + " AS parent";
-            jointQuery += " WHERE " + buildJoinStatement(joinConditions.iterator());
+            jointQuery += " WHERE " + buildJoinsRecursively(joinConditions.iterator());
+
             String parentVersion = entityReference.getProperty("sqlVersion");
-            this.entityReference = R2RMLFactory.createR2RMLView(jointQuery, parentVersion);
+            this.entityReference = new R2RMLView.Builder(jointQuery, parentVersion).build();
             return this;
         }
 
         /**
-         * Returns the ending query segment containing all the join conditions
-         * recursively built from the given iterator of a join condition collection.
+         * Recursively build all join conditions and return result as String.
          *
-         * @param iterator of the join condition collection
-         * @return the ending segment containing SQL built join conditions
+         * @param iterator to retrieve each join conditions
+         * @return string of all join conditions
          */
-        private String buildJoinStatement(Iterator<JoinCondition> iterator) {
+        private String buildJoinsRecursively(Iterator<JoinCondition> iterator) {
             JoinCondition join = iterator.next();
-            String joinStatement = "child." + join.getChild() + "=parent." + join.getParent();
+            String joins = join.getJoinString();
             if (iterator.hasNext()) {
-                joinStatement = joinStatement.concat(" AND " + buildJoinStatement(iterator));
+                joins = joins + "AND" + buildJoinsRecursively(iterator);
             }
-            return joinStatement;
+            return joins;
         }
 
         /**
@@ -165,6 +159,7 @@ public class LogicalTable implements SourceMap, EntityChild {
          * @return the query prepared for further manipulation
          */
         private String prepareQuery(EntityReference sourceConfig) {
+            //if r2rmlview then subquery it
             if (sourceConfig instanceof R2RMLView) {
                 return "(" + sourceConfig.getPayload() + ")";
             }

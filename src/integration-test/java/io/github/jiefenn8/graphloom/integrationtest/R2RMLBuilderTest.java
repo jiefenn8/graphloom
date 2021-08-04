@@ -5,7 +5,7 @@
 
 package io.github.jiefenn8.graphloom.integrationtest;
 
-import io.github.jiefenn8.graphloom.rdf.parser.R2RMLBuilder;
+import io.github.jiefenn8.graphloom.rdf.r2rml.R2RMLBuilder;
 import io.github.jiefenn8.graphloom.rdf.r2rml.R2RMLMap;
 import org.apache.jena.shared.NotFoundException;
 import org.junit.Assert;
@@ -46,7 +46,7 @@ public class R2RMLBuilderTest {
 
     @Test
     public void GivenRefObjectMapWithJoin_WhenParse_ThenReturnR2RMLMap() {
-        R2RMLMap result = r2rmlBuilder.parse("r2rml/valid_refObjectMap_withJoin.ttl");
+        R2RMLMap result = r2rmlBuilder.parse("r2rml/refobjectmap/refobjectmap_via_join.ttl");
         assertThat(result, is(notNullValue()));
     }
 }

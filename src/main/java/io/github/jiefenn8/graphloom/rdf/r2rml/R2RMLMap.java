@@ -58,6 +58,9 @@ public class R2RMLMap implements ConfigMaps {
                 .toJson(this);
     }
 
+    /**
+     * Builder class for R2RMLMap.
+     */
     public static class Builder {
 
         private final static Logger LOGGER = LoggerFactory.getLogger(Builder.class);
