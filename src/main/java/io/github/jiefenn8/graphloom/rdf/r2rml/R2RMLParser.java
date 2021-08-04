@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom
+ * Copyright (c) 2019 - GraphLoom contributors (github.com/jiefenn8/graphloom)
  * This software is made available under the terms of Apache License, Version 2.0.
  */
 
