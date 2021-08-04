@@ -1,6 +1,6 @@
 # GraphLoom
 
-A Java implementation of a RDB to Semantic Graph mapping library. 
+A Java implementation of an RDB to Semantic Graph mapping library. 
 
 [![CI](https://github.com/jiefenn8/graphloom/workflows/CI/badge.svg)](https://github.com/jiefenn8/graphloom/actions?query=workflow%3ACI)[![codecov](https://codecov.io/gh/jiefenn8/graphloom/branch/master/graph/badge.svg)](https://codecov.io/gh/jiefenn8/graphloom)[![Apache 2.0 License](https://img.shields.io/badge/license-apache2-green.svg) ](https://github.com/jiefenn8/graphloom/blob/master/LICENSE.md)
 
@@ -32,7 +32,7 @@ GraphLoom target compatibility is currently Java 15 (17 for LTS soon). Your Java
 <dependency>
   <groupId>io.github.jiefenn8.graphloom</groupId>
   <artifactId>graphloom-core</artifactId>
-  <version>0.5.1</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
@@ -40,7 +40,7 @@ GraphLoom target compatibility is currently Java 15 (17 for LTS soon). Your Java
 
 ```
 dependencies {
-  implementation 'io.github.jiefenn8.graphloom:graphloom-core:0.5.1'
+  implementation 'io.github.jiefenn8.graphloom:graphloom-core:0.6.0'
 }
 ```
 
@@ -55,7 +55,7 @@ InputSource inputSource = new YourInputSourceImpl();
 
 //Parse the R2RML file
 R2RMLParser r2rmlParser = new R2RMLParser();
-ConfigMaps r2rmlMap = r2rmlParser.parse("my-rmrl.ttl");
+ConfigMaps r2rmlMap = r2rmlParser.parse("my-r2rml-file.ttl");
 
 //Map data
 RDFMapper rdfMapper = new RDFMapper();
