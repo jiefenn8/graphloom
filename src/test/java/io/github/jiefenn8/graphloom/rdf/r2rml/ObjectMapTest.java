@@ -116,7 +116,7 @@ public class ObjectMapTest {
 
     @Test
     @Parameters(method = "valuedTermValues")
-    public void Generate_unique_id(ValuedType valuedType) throws Exception {
+    public void Generate_unique_id(ValuedType valuedType) {
         Builder builder = new Builder(mock(RDFNode.class), valuedType);
         objectMap = builder.build();
         String result = objectMap.getUniqueId();

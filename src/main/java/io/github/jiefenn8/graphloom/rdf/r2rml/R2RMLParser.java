@@ -371,21 +371,6 @@ public class R2RMLParser {
      * (predicate) in the given template valued term map resource
      * (subject).
      *
-     * @param subject the term map resource
-     * @return string associated with the template property
-     */
-    @Deprecated
-    protected String getTemplateValue(Resource subject) {
-        return getPropertyResourceValue(subject, R2RMLSyntax.template)
-                .asLiteral()
-                .getString();
-    }
-
-    /**
-     * Returns the Literal (object) value of the template property
-     * (predicate) in the given template valued term map resource
-     * (subject).
-     *
      * @param triple the statement containing the TermMap with the template node
      * @return node associated with the template property
      */
@@ -404,20 +389,6 @@ public class R2RMLParser {
      */
     protected boolean isColumn(Resource termMap) {
         return r2rmlGraph.contains(termMap, R2RMLSyntax.column);
-    }
-
-    /**
-     * Returns the Literal (object) value of the column property
-     * (predicate) in the given column valued term map.
-     *
-     * @param subject the resource representing a term map
-     * @return string associated with the column property
-     */
-    @Deprecated
-    protected String getColumnName(Resource subject) {
-        return getPropertyResourceValue(subject, R2RMLSyntax.column)
-                .asLiteral()
-                .getString();
     }
 
     /**

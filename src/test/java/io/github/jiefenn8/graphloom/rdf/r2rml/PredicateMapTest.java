@@ -80,7 +80,7 @@ public class PredicateMapTest {
 
     @Test
     @Parameters(method = "valuedTermValues")
-    public void Generate_unique_id(ValuedType valuedType) throws Exception {
+    public void Generate_unique_id(ValuedType valuedType) {
         Builder builder = new Builder(mock(RDFNode.class), valuedType);
         predicateMap = builder.build();
         String result = predicateMap.getUniqueId();

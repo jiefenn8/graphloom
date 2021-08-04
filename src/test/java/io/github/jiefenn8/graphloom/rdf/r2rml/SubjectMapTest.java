@@ -104,7 +104,7 @@ public class SubjectMapTest {
 
     @Test
     @Parameters(method = "valuedTermValues")
-    public void Generate_unique_id(ValuedType valuedType) throws Exception {
+    public void Generate_unique_id(ValuedType valuedType) {
         Builder builder = new Builder(mock(RDFNode.class), valuedType);
         subjectMap = builder.build();
         String result = subjectMap.getUniqueId();
