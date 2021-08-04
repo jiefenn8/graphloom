@@ -17,11 +17,11 @@ This product may include third party software from the following:
     Copyright (c) 2011-2019 The Apache Software Foundation
     jena.apache.org
     Apache 2.0 License
-    
-### Apache Log4j
 
-    Copyright 1999-2005 The Apache Software Foundation
-    www.logging.apache.org/log4j
+### Apache Commons Lang
+
+    Copyright 2001-2021 The Apache Software Foundation
+    commons.apache.org/proper/commons-lang/
     Apache 2.0 License
 
 ### SLF4J
@@ -29,11 +29,11 @@ This product may include third party software from the following:
     Copyright (c) 2004-2017 QOS.ch
     slf4j.org
     MIT License
-    
-### Google Guava
 
-    Copyright (c) Google 
-    opensource.google.com/projects/guava
+### Google Gson
+
+    Copyright 2008 Google Inc.
+    github.com/google/gson
     Apache 2.0 License
 
 ### Mockito
@@ -52,3 +52,9 @@ This product may include third party software from the following:
     Copyright (c) JUnit
     junit.org/junit4
     Eclipse Public License 1.0
+
+### JUnitParams
+
+    Copyright (c) JUnitParams
+    pragmatists.github.io/JUnitParams
+    Apache 2.0 License
