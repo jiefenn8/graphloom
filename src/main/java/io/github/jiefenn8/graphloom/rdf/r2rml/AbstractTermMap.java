@@ -157,8 +157,8 @@ public abstract class AbstractTermMap implements TermMap {
      * Abstract class for TermMap builder.
      * <p>
      * It is recommended to defined your extended functionality to this class
-     * and then call them before calling the abstract methods below; With the
-     * exception of overrides.
+     * and then call them before calling the abstract methods below; Except for
+     * overrides.
      */
     public abstract static class AbstractBuilder<T extends AbstractTermMap> {
 

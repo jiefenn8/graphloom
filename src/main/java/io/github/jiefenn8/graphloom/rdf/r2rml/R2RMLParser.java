@@ -19,7 +19,7 @@ import java.util.Set;
  * This class defines the base methods that manages the parsing
  * of rdf mapping document to iterable r2rml terms.
  * <p>
- * All methods in this parser will likely to cross check with
+ * All methods in this parser will likely to cross-check with
  * this instance r2rml model in most cases to complete its call;
  * If a given resource (subject/object) or statement (triple)
  * origin is from another source and not from this instance,
@@ -97,7 +97,7 @@ public class R2RMLParser {
 
     /**
      * Returns a set of resources (subjects) that contains all
-     * valid triples maps defined in the the model. A triples
+     * valid triples maps defined in the model. A triples
      * map must have a logical table and a subject map property
      * to be considered valid.
      *
@@ -302,7 +302,7 @@ public class R2RMLParser {
     //Constant TermMap related parsing
 
     /**
-     * Returns true if given term map is a constant valued term
+     * Returns true if given term map is a constant value term
      * map by constant shortcut reference or as a constant
      * property (predicate).
      *
@@ -315,7 +315,7 @@ public class R2RMLParser {
 
     /**
      * Returns true if given term map has a constant property
-     * (predicate) meaning that it is a constant valued term map.
+     * (predicate) meaning that it is a constant value term map.
      *
      * @param subject the term map resource
      * @return true if the resource contains a constant property
@@ -326,7 +326,7 @@ public class R2RMLParser {
 
     /**
      * Returns true if given term map is a shortcut term property
-     * (predicate) meaning that it is a constant valued term map.
+     * (predicate) meaning that it is a constant value term map.
      *
      * @param triple the term map statement
      * @return true if the statement is a constant shortcut term

@@ -177,6 +177,7 @@ public class R2RMLBuilder {
      *
      * @param tm the statement containing a TermMap to identify
      * @return ValuedType of the TermMap located in statement
+     * @throws ParserException if given statement is not a valid term map
      */
     private ValuedType getTermMapValuedType(Statement tm) {
         if (r2rmlParser.isConstant(tm)) {
