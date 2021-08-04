@@ -61,7 +61,7 @@ public class TriplesMap implements EntityMap {
     }
 
     @Override
-    public Model generateClassTerms(Resource term, Entity entity) {
+    public Model generateClassTerms(Resource term) {
         Model model = ModelFactory.createDefaultModel();
         subjectMap.listEntityClasses().forEach((c) -> {
             model.add(term, RDF.type, c);

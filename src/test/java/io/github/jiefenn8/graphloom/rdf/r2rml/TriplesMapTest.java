@@ -76,7 +76,7 @@ public class TriplesMapTest {
     public void Generate_model_with_term_entity_and_class() {
         when(mockSubjectMap.listEntityClasses()).thenReturn(List.of(ResourceFactory.createResource("CLASS")));
         Resource mockResource = ResourceFactory.createResource("TEST");
-        Model model = triplesMap.generateClassTerms(mockResource, mock(Entity.class));
+        Model model = triplesMap.generateClassTerms(mockResource);
         NodeIterator iter = model.listObjectsOfProperty(RDF.type);
         int size = iter.toList().size();
         assertThat(size, is(1));
@@ -86,7 +86,7 @@ public class TriplesMapTest {
     public void Generate_model_with_term_and_entity_without_class() {
         when(mockSubjectMap.listEntityClasses()).thenReturn(List.of());
         Resource mockResource = ResourceFactory.createResource("TEST");
-        Model model = triplesMap.generateClassTerms(mockResource, mock(Entity.class));
+        Model model = triplesMap.generateClassTerms(mockResource);
         NodeIterator iter = model.listObjectsOfProperty(RDF.type);
         int size = iter.toList().size();
         assertThat(size, is(0));

@@ -64,7 +64,7 @@ public class RDFMapper implements GraphMapper {
             LOGGER.info("Generating triples with '{}'.", id);
             t.getSourceMap().forEachEntity(source, (e) -> {
                 Resource subject = t.generateEntityTerm(e);
-                outputGraph.add(t.generateClassTerms(subject, e));
+                outputGraph.add(t.generateClassTerms(subject));
                 LOGGER.info("Class property triples generated.");
                 outputGraph.add(t.generateNodeTerms(subject, e));
                 LOGGER.info("Node terms generated for entity.");
