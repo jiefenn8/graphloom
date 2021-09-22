@@ -36,7 +36,7 @@ public interface EntityReference {
     String getIteratorDef();
 
     /**
-     * Returns the value of a property in this configuration
+     * Returns the value of a property in this configuration.
      *
      * @param propertyName the given property name to retrieve its value
      * @return the value of the given property otherwise null

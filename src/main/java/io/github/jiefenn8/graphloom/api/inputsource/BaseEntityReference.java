@@ -22,7 +22,7 @@ public class BaseEntityReference implements EntityReference {
     private final Map<String, String> properties = new HashMap<>();
 
     /**
-     * Constructs an InputSourceConfig with the specified payload, type
+     * Constructs an BaseEntityReference with the specified payload, type
      * and iterator definition.
      *
      * @param payload     the payload query to use

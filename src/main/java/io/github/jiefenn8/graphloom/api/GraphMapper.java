@@ -9,14 +9,14 @@ import org.apache.jena.rdf.model.Model;
 
 /**
  * This interface defines the base methods that manages the mapping
- * of a input source using provided mapping configurations.
+ * of an input source using provided mapping configurations.
  */
 public interface GraphMapper {
 
     /**
      * Returns the resulting mapping of input source applied to the config
      * mappings given. Returns an empty model if the given input source or
-     * configuration mappings was not sufficient enough to generate any
+     * configuration mappings was not sufficient to generate any
      * semantic terms.
      *
      * @param inputSource the source containing the data to map over to graph

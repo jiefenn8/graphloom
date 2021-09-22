@@ -98,7 +98,7 @@ public abstract class AbstractTermMap implements TermMap {
 
     /**
      * Returns a generated RDF term using the base value as the column name
-     * identifier to retrieve the value from entity source
+     * identifier to retrieve the value from entity source.
      *
      * @param entity the entity source containing the data for generation
      * @return the value retrieved from source as RDF term
@@ -174,7 +174,7 @@ public abstract class AbstractTermMap implements TermMap {
          *
          * @param baseValue  to be used to generate RDF term for this TermMap
          * @param valuedType to identify the TermMap valued type, this will
-         *                   determine how the base value w
+         *                   determine how the base value will be used
          */
         public AbstractBuilder(RDFNode baseValue, ValuedType valuedType) {
             this.baseValue = baseValue;
@@ -183,7 +183,7 @@ public abstract class AbstractTermMap implements TermMap {
         }
 
         /**
-         * Set the RDF type the TermMap should return after generating a
+         * Set the RDF type the TermMap should return after generating an
          * RDF term.
          *
          * @param termType the term type to return term output as
@@ -206,7 +206,7 @@ public abstract class AbstractTermMap implements TermMap {
         }
 
         /**
-         * Set the RDF term datatype fpr this TermMap.
+         * Set the RDF term data type for this TermMap.
          *
          * @param dataType the datatype that this term will be generated as
          * @return this builder for method chaining

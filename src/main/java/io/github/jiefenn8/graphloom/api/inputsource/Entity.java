@@ -16,7 +16,7 @@ public interface Entity {
 
     /**
      * Returns the value of an entity property. If the property or
-     * value does not exists; Returns null.
+     * value does not exist; Returns null.
      *
      * @param name the name of the entity property
      * @return the value of the given property name, otherwise null

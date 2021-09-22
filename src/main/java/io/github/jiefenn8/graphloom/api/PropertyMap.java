@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * This interface defines the base methods that manages the mapping
- * of entity properties to their graph entity terms.
+ * of entity base properties to their graph entity terms.
  */
 public interface PropertyMap extends UniqueId {
 
