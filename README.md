@@ -12,6 +12,12 @@ Due to the closure of Bintray, our artifact repository has now been migrated to 
 This also means that any releases before this statement date will be unavailable to download. 
 ```
 
+```
+20/12/2021
+With the recent events of Log4j's current security flaw. I recommend developers to exercise extreme cautions when using this library. 
+Please keep watch for any more updates or releases regarding this.
+```
+
 ## Description
 
 A relational database to semantic graph mapping library. Mapping relational database data from a provided interface and mapping rules to generate a semantic graph dataset. 
