@@ -6,18 +6,6 @@ A Java implementation of an RDB to Semantic Graph mapping library.
 
 [![Release](https://img.shields.io/github/v/release/jiefenn8/graphloom)](https://github.com/jiefenn8/graphloom/releases/latest)[![Maven Central](https://img.shields.io/maven-central/v/io.github.jiefenn8.graphloom/graphloom-core?color=blue)](https://search.maven.org/artifact/io.github.jiefenn8.graphloom/graphloom-core)[![javadoc](https://javadoc.io/badge2/io.github.jiefenn8.graphloom/graphloom-core/javadoc.svg)](https://javadoc.io/doc/io.github.jiefenn8.graphloom/graphloom-core) 
 
-```
-30/06/2021
-Due to the closure of Bintray, our artifact repository has now been migrated to Maven Central. 
-This also means that any releases before this statement date will be unavailable to download. 
-```
-
-```
-20/12/2021
-With the recent events of Log4j's current security flaw. I recommend developers to exercise extreme cautions when using this library. 
-Please keep watch for any more updates or releases regarding this.
-```
-
 ## Description
 
 A relational database to semantic graph mapping library. Mapping relational database data from a provided interface and mapping rules to generate a semantic graph dataset. 
